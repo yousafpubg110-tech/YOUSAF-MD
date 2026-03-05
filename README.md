@@ -1,190 +1,248 @@
-# 🤖 YOUSAF-MD v3.0
-### Zero-Config WhatsApp Bot Platform
+<div align="center">
 
-> **Developer:** Muhammad Yousaf Baloch  
-> **Contact:** +92 371 0636110  
-> **GitHub:** https://github.com/yousafpubg110-tech/YOUSAF-MD
+# ⚡ YOUSAF-MD v3.0 ⚡
+### _Zero-Config WhatsApp Bot Platform_
 
----
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=22&duration=3000&pause=800&color=00F2FE&center=true&vCenter=true&width=600&lines=Welcome+To+YOUSAF-MD+v3.0!;Zero-Config+WhatsApp+Bot;Built+By+Muhammad+Yousaf+Baloch;Plug+%26+Play+%7C+No+Setup+Needed!" alt="Typing SVG"/>
 
-## 🔗 Official Links
-| Platform | Link |
-|---|---|
-| 📦 GitHub | https://github.com/yousafpubg110-tech/YOUSAF-MD |
-| 🎵 TikTok | https://tiktok.com/@loser_boy.110 |
-| 📺 YouTube | https://www.youtube.com/@Yousaf_Baloch_Tech |
-| 📢 WhatsApp Channel | https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j |
+</div>
 
 ---
 
-## ⚡ Quick Start (3 Steps)
+<div align="center">
 
-### Step 1 — Install Dependencies
-```bash
-npm install
+[
+
+![GitHub](https://img.shields.io/badge/GitHub-yousafpubg110--tech-181717?style=for-the-badge&logo=github&logoColor=white&labelColor=000000)
+
+](https://github.com/yousafpubg110-tech/YOUSAF-MD)
+[
+
+![JS](https://img.shields.io/badge/Language-JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black&labelColor=000000)
+
+](https://github.com/yousafpubg110-tech/YOUSAF-MD)
+[
+
+![Node](https://img.shields.io/badge/Node.js-v20+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white&labelColor=000000)
+
+](https://nodejs.org)
+[
+
+![Version](https://img.shields.io/badge/Version-3.0.0-blueviolet?style=for-the-badge&labelColor=000000)
+
+](https://github.com/yousafpubg110-tech/YOUSAF-MD)
+
+
+![Views](https://komarev.com/ghpvc/?username=YOUSAF-MD&label=VIEWS&style=for-the-badge&color=ff00ff&labelColor=000000)
+
+
+
+</div>
+
+---
+
+<div align="center">
+
+## 👑 Developer & Owner
+
+### **Muhammad Yousaf Baloch**
+#### _Lead Architect — YOUSAF-MD Platform_
+
+[
+
+![WhatsApp](https://img.shields.io/badge/Contact-+923710636110-25D366?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=000000)
+
+](https://wa.me/923710636110)
+[
+
+![Channel](https://img.shields.io/badge/WhatsApp_Channel-Join_Now!-25D366?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=000000)
+
+](https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j)
+[
+
+![TikTok](https://img.shields.io/badge/TikTok-@loser__boy.110-010101?style=for-the-badge&logo=tiktok&logoColor=white&labelColor=000000)
+
+](https://tiktok.com/@loser_boy.110)
+[
+
+![YouTube](https://img.shields.io/badge/YouTube-@Yousaf__Baloch__Tech-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=000000)
+
+](https://www.youtube.com/@Yousaf_Baloch_Tech)
+
+</div>
+
+---
+
+<div align="center">
+
+## 🌟 What Makes YOUSAF-MD Different?
+┌─────────────────────────────────────────────────┐
+│  ✅  Zero Config   — No MONGO_URI needed         │
+│  ✅  Auto Boot     — Bot starts after pairing    │
+│  ✅  Dual Action   — Welcome sent automatically  │
+│  ✅  100+ Slots    — Multi-user support          │
+│  ✅  Anti-Crash    — Always stays online         │
+└─────────────────────────────────────────────────┘
+</div>
+
+---
+
+<div align="center">
+
+## 🚀 One-Click Deploy
+
+| Platform | Deploy |
+|:---:|:---:|
+| **Heroku** | [
+
+![Heroku](https://img.shields.io/badge/Heroku-Deploy-430098?style=for-the-badge&logo=heroku&logoColor=white&labelColor=000000)
+
+](https://dashboard.heroku.com/new-app?template=https://github.com/yousafpubg110-tech/YOUSAF-MD) |
+| **Koyeb** | [
+
+![Koyeb](https://img.shields.io/badge/Koyeb-Deploy-FF009D?style=for-the-badge&logo=koyeb&logoColor=white&labelColor=000000)
+
+](https://app.koyeb.com/deploy?type=git&repository=yousafpubg110-tech%2FYOUSAF-MD&branch=main) |
+| **Railway** | [
+
+![Railway](https://img.shields.io/badge/Railway-Deploy-6B00FF?style=for-the-badge&logo=railway&logoColor=white&labelColor=000000)
+
+](https://railway.app/new) |
+| **Render** | [
+
+![Render](https://img.shields.io/badge/Render-Deploy-4CAF50?style=for-the-badge&logo=render&logoColor=white&labelColor=000000)
+
+](https://render.com) |
+
+</div>
+
+---
+
+<div align="center">
+
+## 🔗 Get Your Pairing Code
+
+[
+
+![PAIR NOW](https://img.shields.io/badge/⚡_PAIR_YOUR_BOT-Click_Here-00F2FE?style=for-the-badge&labelColor=000000)
+
+](http://localhost:3000)
+
+> `npm start` → Open `http://localhost:3000` → Enter number → Link in WhatsApp
+
+</div>
+
+---
+
+## ⚙️ GitHub Actions — Free Deployment
+
+```yaml
+name: YOUSAF-MD Bot
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [24.x]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          check-latest: true
+
+      - name: Install System Tools
+        run: |
+          sudo apt-get install -y ffmpeg imagemagick
+          pip install yt-dlp
+
+      - name: Install Node Packages
+        run: npm install
+
+      - name: Launch YOUSAF-MD
+        run: npm start
+�
+
+🎮 Bot Features
+Category
+Commands
+⬇️ Downloads
+.play .song .audio .video .yt .tiktok .fb .ig .gdrive
+🎨 Media
+.sticker .toimg .ttp .attp .enhance
+👥 Groups
+.tagall .hidetag .kick .add .promote .demote .groupinfo
+🔧 Tools
+.google .wiki .tts .playstore .weather .calc .time
+🛡️ Safety
+Anti-Delete Auto-Status Auto-Like Anti-Call Anti-Link
+⚙️ Admin
+.settings .set .antidel .antical .antilink .autoview
+ℹ️ Info
+.menu .ping .info .owner
+�
+
+�
+
+🔔 Stay Updated
+�
+￼
+[
+�
+Load image
+](https://www.youtube.com/@Yousaf_Baloch_Tech)
+[
+�
+Load image
+](https://tiktok.com/@loser_boy.110)
+[
+�
+Load image
+](https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j)
+�
+￼
+�
+
+�
+
+⚠️ DISCLAIMER
+IMPORTANT NOTICE
+
+YOUSAF-MD is an independent open-source project. It is not affiliated with, endorsed by, or connected to WhatsApp Inc. or Meta Platforms in any way. Use responsibly — automation misuse may result in account restrictions.
+
+
+�
+�
+
+
+�
+￼
+[
+�
+Load image
+](https://github.com/yousafpubg110-tech/YOUSAF-MD/graphs/contributors)
+[
+�
+Load image
+](https://github.com/yousafpubg110-tech/YOUSAF-MD/stargazers)
+[
+�
+Load image
+](https://github.com/yousafpubg110-tech/YOUSAF-MD/network/members)
+�
+
+
+Built with ❤️ by Muhammad Yousaf Baloch | YOUSAF-MD v3.0
+�
 ```
-
-### Step 2 — Start the System
-```bash
-npm start
-```
-
-### Step 3 — Pair Your Bot
-1. Open your browser → `http://localhost:3000`
-2. Enter your WhatsApp number (with country code, no + or spaces)
-3. Open WhatsApp → **Linked Devices** → **Link a Device**
-4. Enter the code shown on screen
-5. ✅ Done! Check your WhatsApp for the welcome message.
-
----
-
-## 📁 File Structure
-
-```
-YOUSAF-MD/
-├── index.js              ← Master process manager
-├── server.js             ← Web pairing dashboard
-├── config.js             ← Branding & defaults
-├── package.json
-│
-├── lib/
-│   ├── Database.js       ← Internal JSON storage (No MongoDB!)
-│   ├── SessionManager.js ← Dual-action pairing engine
-│   ├── PermissionHandler.js ← Admin detection
-│   └── SettingsHandler.js   ← Feature toggle system
-│
-├── plugins/
-│   ├── loader.js         ← Master plugin injector
-│   ├── info.js           ← .menu .ping .info .owner
-│   ├── settings.js       ← .settings .set (Admin only)
-│   ├── downloader.js     ← .play .song .video .yt .tiktok .fb .ig .gdrive
-│   ├── safety.js         ← Anti-Delete, Auto-Status, Anti-Call, Anti-Link
-│   ├── group.js          ← .tagall .hidetag .kick .add .promote .demote
-│   ├── media.js          ← .sticker .ttp .attp .enhance .toimg
-│   └── tools.js          ← .google .wiki .tts .playstore .weather .calc
-│
-├── sessions/             ← Auto-created session storage
-├── database/             ← Auto-created internal DB
-└── temp/                 ← Auto-created temp files
-```
-
----
-
-## 🎮 Commands
-
-### 📥 Downloaders
-| Command | Description |
-|---|---|
-| `.play [name]` | Download audio (YouTube) |
-| `.song [name]` | Download song |
-| `.audio [name/URL]` | Download audio |
-| `.video [name/URL]` | Download video |
-| `.yt [URL]` | YouTube download |
-| `.tiktok [URL]` | TikTok (No Watermark) |
-| `.fb [URL]` | Facebook video |
-| `.ig [URL]` | Instagram video |
-| `.gdrive [URL]` | Google Drive file |
-
-### 🎨 Media & Stickers
-| Command | Description |
-|---|---|
-| `.sticker` | Image/Video → Sticker |
-| `.toimg` | Sticker → Image |
-| `.ttp [text]` | Text to Picture Sticker |
-| `.attp [text]` | Animated Text Sticker |
-| `.enhance` | Upscale Image 2× |
-
-### 👥 Group Tools
-| Command | Description |
-|---|---|
-| `.tagall` | Tag all members |
-| `.hidetag` | Hidden tag all |
-| `.kick` | Remove member (reply) |
-| `.add [number]` | Add member |
-| `.promote` | Make admin (reply) |
-| `.demote` | Remove admin (reply) |
-| `.groupinfo` | Group details |
-
-### 🔧 Tools
-| Command | Description |
-|---|---|
-| `.google [query]` | Google search |
-| `.wiki [topic]` | Wikipedia |
-| `.tts [text]` | Text to Speech |
-| `.playstore [app]` | Search Play Store |
-| `.weather [city]` | Weather report |
-| `.calc [expr]` | Calculator |
-| `.time [zone]` | Current time |
-
-### ⚙️ Settings (Bot Admin Only)
-| Command | Description |
-|---|---|
-| `.settings` | Full control panel |
-| `.set [feature] on/off` | Toggle any feature |
-| `.antidel` | Toggle Anti-Delete |
-| `.antical` | Toggle Anti-Call |
-| `.antilink` | Toggle Anti-Link |
-
-### ℹ️ Info
-| Command | Description |
-|---|---|
-| `.menu` | Show all commands |
-| `.ping` | Check bot speed |
-| `.info` | Bot info & stats |
-| `.owner` | Developer contact |
-
----
-
-## 🛡️ Safety Features (Auto-Active)
-
-| Feature | Default | Description |
-|---|---|---|
-| Anti-Delete | ✅ ON | Resends deleted messages |
-| Auto-Status View | ✅ ON | Views all contact statuses |
-| Auto-Like Status | ✅ ON | Reacts ❤️ to statuses |
-| Anti-Call | ✅ ON | Auto-rejects incoming calls |
-| Anti-Link | ❌ OFF | Removes links from groups |
-
----
-
-## 🔒 Permission System
-
-- **Bot Admin** (Paired Number) → Full access to `.settings`, all admin commands
-- **Public Users** → Downloaders, Stickers, Group tools (if group admin)
-- **Access Denied** → Any public user trying `.settings` gets a professional refusal
-
----
-
-## 🚀 Deploy Options
-
-### Local (Development)
-```bash
-npm start
-```
-
-### PM2 (Production — Recommended)
-```bash
-npm install -g pm2
-pm2 start index.js --name "yousaf-md"
-pm2 save
-pm2 startup
-```
-
-### Koyeb / Railway / Render
-- Set start command: `node index.js`
-- Port: `3000`
-- No environment variables needed — truly zero-config!
-
----
-
-## ⚠️ Requirements
-
-- Node.js v20+
-- `ffmpeg` installed on system (`apt install ffmpeg` or `brew install ffmpeg`)
-- `yt-dlp` installed (`pip install yt-dlp`)
-- `ImageMagick` for TTP (`apt install imagemagick`)
-
----
-
-*YOUSAF-MD — Built with ❤️ by Muhammad Yousaf Baloch*
-
