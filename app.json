@@ -9,6 +9,12 @@
     },
     {
       "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+    },
+    {
+      "url": "https://github.com/DuckyTeam/heroku-buildpack-imagemagick"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-python"
     }
   ],
   "env": {
@@ -72,5 +78,8 @@
       "value": "3000",
       "required": false
     }
+  },
+  "scripts": {
+    "postdeploy": "pip install yt-dlp"
   }
 }
