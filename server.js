@@ -441,8 +441,9 @@ function notifyConnected(instanceId) {
   io.to('instance_' + instanceId).emit('bot_connected', { instanceId });
 }
 
-server.listen(config.PORT, () => {
-  console.log('[SERVER] ✅ Pairing dashboard running at http://localhost:' + config.PORT);
+const PORT = process.env.PORT || config.PORT || 3000;
+server.listen(PORT, () => {
+  console.log('[SERVER] ✅ Pairing dashboard running at port: ' + PORT);
 });
 
 module.exports = { app, notifyConnected };
