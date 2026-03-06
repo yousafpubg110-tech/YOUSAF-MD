@@ -22,7 +22,7 @@
 
 <div align="center">
 
-<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=900&size=22&duration=2500&pause=700&color=00F2FE&center=true&vCenter=true&width=700&lines=MADE+BY+MR+YOUSAF+BALOCH+—+PROFESSIONAL+MULTI-DEVICE+WHATSAPP+BOT;ONE+DAY+YOU+WILL+MISS+ME..." alt="typing"/>
+<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=900&size=22&duration=2500&pause=700&color=00F2FE&center=true&vCenter=true&width=700&lines=MADE+BY+MR+YOUSAF+BALOCH+%E2%80%94+PROFESSIONAL+MULTI-DEVICE+WHATSAPP+BOT;ONE+DAY+YOU+WILL+MISS+ME..." alt="typing"/>
 
 </div>
 
