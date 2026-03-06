@@ -3,18 +3,19 @@
   "description": "YOUSAF-MD WhatsApp Bot by Muhammad Yousaf Baloch",
   "repository": "https://github.com/yousafpubg110-tech/YOUSAF-MD",
   "keywords": ["whatsapp", "bot", "yousaf-md"],
+  "stack": "heroku-22",
   "buildpacks": [
     {
       "url": "heroku/nodejs"
     },
     {
-      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+      "url": "https://github.com/heroku/heroku-buildpack-activestorage-preview"
     },
     {
-      "url": "https://github.com/DuckyTeam/heroku-buildpack-imagemagick"
+      "url": "https://github.com/mcollina/heroku-buildpack-imagemagick"
     },
     {
-      "url": "https://github.com/heroku/heroku-buildpack-python"
+      "url": "heroku/python"
     }
   ],
   "env": {
