@@ -1,7 +1,5 @@
 // ============================================================
-//   YOUSAF-MD — PLUGIN LOADER (MASTER INJECTOR) [FIXED]
-//   FIXES: Dead import removed | Anti-Delete, Status, Call
-//          events now properly wired to safety plugin
+//   YOUSAF-MD — PLUGIN LOADER (MASTER INJECTOR)
 //   Developer: Muhammad Yousaf Baloch
 // ============================================================
 
@@ -10,6 +8,7 @@
 const { buildContext }   = require('../lib/PermissionHandler');
 const config             = require('../config');
 const safetyPlugin       = require('./safety');
+const autoReplyPlugin    = require('./autoreply');
 
 // All plugin modules
 const plugins = [
@@ -21,6 +20,7 @@ const plugins = [
   require('./media'),
   require('./tools'),
   require('./info'),
+  autoReplyPlugin,
 ];
 
 // ── PARSE COMMAND FROM TEXT ────────────────────────────────
@@ -33,7 +33,7 @@ function parseCommand(text = '') {
   return { command, args, body };
 }
 
-// ── MAIN LOADER — attaches ALL event listeners ─────────────
+// ── MAIN LOADER ────────────────────────────────────────────
 function loader(sock, instanceId) {
 
   // ── 1. MESSAGE HANDLER ─────────────────────────────────
@@ -49,7 +49,7 @@ function loader(sock, instanceId) {
     }
   });
 
-  // ── 2. ANTI-DELETE HOOK (FIXED: now actually wired) ────
+  // ── 2. ANTI-DELETE HOOK ────────────────────────────────
   sock.ev.on('messages.delete', async (update) => {
     try {
       const keys = update?.keys || (update?.key ? [update.key] : []);
@@ -61,7 +61,7 @@ function loader(sock, instanceId) {
     }
   });
 
-  // ── 3. STATUS VIEW & LIKE HOOK (FIXED: now wired) ──────
+  // ── 3. STATUS VIEW & LIKE HOOK ─────────────────────────
   sock.ev.on('messages.upsert', async ({ messages, type }) => {
     if (type !== 'notify') return;
     const statusMsgs = messages.filter(m => m.key?.remoteJid === 'status@broadcast');
@@ -70,7 +70,7 @@ function loader(sock, instanceId) {
     }
   });
 
-  // ── 4. ANTI-CALL HOOK (FIXED: now wired) ───────────────
+  // ── 4. ANTI-CALL HOOK ──────────────────────────────────
   sock.ev.on('call', async (calls) => {
     try {
       await safetyPlugin.onCall(sock, calls, instanceId);
@@ -79,7 +79,7 @@ function loader(sock, instanceId) {
     }
   });
 
-  // ── 5. GROUP PARTICIPANT EVENTS (welcome/goodbye) ───────
+  // ── 5. GROUP PARTICIPANT EVENTS ─────────────────────────
   sock.ev.on('group-participants.update', async (update) => {
     try {
       await handleGroupEvent(sock, update, instanceId);
@@ -92,25 +92,34 @@ function loader(sock, instanceId) {
 // ── MESSAGE DISPATCHER ─────────────────────────────────────
 async function handleMessage(sock, msg, instanceId) {
   if (!msg.message) return;
-  if (msg.key?.remoteJid === 'status@broadcast') return; // handled by status hook
+  if (msg.key?.remoteJid === 'status@broadcast') return;
 
   const ctx = buildContext(sock, msg, instanceId);
 
-  // Extract text from all message types
   const text =
-    msg.message?.conversation                            ||
-    msg.message?.extendedTextMessage?.text               ||
-    msg.message?.imageMessage?.caption                   ||
-    msg.message?.videoMessage?.caption                   ||
-    msg.message?.buttonsResponseMessage?.selectedButtonId ||
+    msg.message?.conversation                                          ||
+    msg.message?.extendedTextMessage?.text                             ||
+    msg.message?.imageMessage?.caption                                 ||
+    msg.message?.videoMessage?.caption                                 ||
+    msg.message?.buttonsResponseMessage?.selectedButtonId              ||
     msg.message?.listResponseMessage?.singleSelectReply?.selectedRowId ||
     '';
+
+  ctx.body = text;
 
   // ── Run passive safety hooks on every message ──────────
   for (const plugin of plugins) {
     if (typeof plugin.onMessage === 'function') {
       await plugin.onMessage(sock, msg, ctx).catch(() => {});
     }
+  }
+
+  // ── AUTO REPLY — personal chat (non-command messages) ──
+  const isPersonalChat = !ctx.jid.endsWith('@g.us');
+  const isCommand      = text.startsWith(config.PREFIX);
+
+  if (isPersonalChat && !msg.key?.fromMe) {
+    await autoReplyPlugin.handleAutoReply(sock, msg, ctx).catch(() => {});
   }
 
   // ── Parse and route command ────────────────────────────
@@ -129,7 +138,7 @@ async function handleMessage(sock, msg, instanceId) {
           text: `⚠️ Error in *.${command}*\n\`${e.message}\``,
         }, { quoted: msg }).catch(() => {});
       });
-      return; // stop after first match
+      return;
     }
   }
 }
@@ -164,4 +173,4 @@ async function handleGroupEvent(sock, update, instanceId) {
 }
 
 module.exports = loader;
-
+    
