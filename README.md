@@ -17,29 +17,29 @@
 ### 🌈 PROJECT BADGES
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.0.0-blueviolet?style=for-the-badge&logo=semver&logoColor=white&labelColor=0d0d1a" alt="Version"/>
+  <img src="https://img.shields.io/badge/Version-3.0.0-blueviolet?style=for-the-badge&logo=semver&logoColor=white&labelColor=0d0d1a"/>
   &nbsp;
-  <img src="https://img.shields.io/badge/Node.js-v20+-00ff88?style=for-the-badge&logo=node.js&logoColor=white&labelColor=0d0d1a" alt="Node.js"/>
+  <img src="https://img.shields.io/badge/Node.js-v20+-00ff88?style=for-the-badge&logo=node.js&logoColor=white&labelColor=0d0d1a"/>
   &nbsp;
-  <img src="https://img.shields.io/badge/License-MIT-ffe600?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=0d0d1a" alt="License"/>
+  <img src="https://img.shields.io/badge/License-MIT-ffe600?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=0d0d1a"/>
   &nbsp;
-  <img src="https://img.shields.io/badge/WhatsApp-Ready-25D366?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=0d0d1a" alt="WhatsApp"/>
+  <img src="https://img.shields.io/badge/WhatsApp-Ready-25D366?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=0d0d1a"/>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-🔥_ACTIVE-ff00c8?style=for-the-badge&labelColor=0d0d1a" alt="Status"/>
+  <img src="https://img.shields.io/badge/Status-🔥_ACTIVE-ff00c8?style=for-the-badge&labelColor=0d0d1a"/>
   &nbsp;
-  <img src="https://img.shields.io/badge/Platform-Multi_Deploy-00fff7?style=for-the-badge&labelColor=0d0d1a" alt="Platform"/>
+  <img src="https://img.shields.io/badge/Platform-Multi_Deploy-00fff7?style=for-the-badge&labelColor=0d0d1a"/>
   &nbsp;
-  <img src="https://img.shields.io/badge/Country-🇵🇰_Pakistan-aa00ff?style=for-the-badge&labelColor=0d0d1a" alt="Country"/>
+  <img src="https://img.shields.io/badge/Country-🇵🇰_Pakistan-aa00ff?style=for-the-badge&labelColor=0d0d1a"/>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/stars/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&labelColor=0d0d1a&color=ffe600" alt="Stars"/>
+  <img src="https://img.shields.io/github/stars/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&labelColor=0d0d1a&color=ffe600"/>
   &nbsp;
-  <img src="https://img.shields.io/github/forks/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&labelColor=0d0d1a&color=00fff7" alt="Forks"/>
+  <img src="https://img.shields.io/github/forks/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&labelColor=0d0d1a&color=00fff7"/>
   &nbsp;
-  <img src="https://img.shields.io/github/issues/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&labelColor=0d0d1a&color=ff00c8" alt="Issues"/>
+  <img src="https://img.shields.io/github/issues/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&labelColor=0d0d1a&color=ff00c8"/>
 </p>
 
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
@@ -52,13 +52,11 @@
 
 ## ⚡ GET YOUR PAIRING CODE
 
-<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=700&size=18&duration=2000&pause=500&color=00FFF7&center=true&vCenter=true&width=600&height=40&lines=🔗+Connect+Your+Bot+in+Seconds!" alt="Pair" />
+<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=700&size=18&duration=2000&pause=500&color=00FFF7&center=true&vCenter=true&width=600&height=40&lines=🔗+Connect+Your+Bot+in+Seconds!"/>
 
-[
+<a href="https://yousaf-md.vercel.app"><img src="https://img.shields.io/badge/⚡_PAIR_YOUR_BOT-GET_SESSION_ID_NOW-00FFF7?style=for-the-badge&labelColor=0d0d1a"/></a>
 
-![](https://img.shields.io/badge/⚡_PAIR_YOUR_BOT-GET_SESSION_ID_NOW-00FFF7?style=for-the-badge&labelColor=0d0d1a)
-
-](https://yousaf-md.vercel.app)
+<br/>
 
 <img src="https://img.shields.io/badge/🔒_Secure-Auto_Delivery_to_WhatsApp-25D366?style=flat-square&labelColor=0d0d1a"/>
 &nbsp;
@@ -72,7 +70,7 @@
 
 ## 🚀 ONE-CLICK DEPLOY — CHOOSE YOUR PLATFORM
 
-<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=700&size=18&duration=2000&pause=500&color=FFE600&center=true&vCenter=true&width=600&height=40&lines=🌍+Deploy+in+Seconds!+%7C+Free+Hosting+Available" alt="Deploy" />
+<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=700&size=18&duration=2000&pause=500&color=FFE600&center=true&vCenter=true&width=600&height=40&lines=🌍+Deploy+in+Seconds!+%7C+Free+Hosting+Available"/>
 
 </div>
 
@@ -82,54 +80,22 @@
 
 ### 🟢 RENDER *(RECOMMENDED)*
 
-[
+<a href="https://render.com/deploy?repo=https://github.com/yousafpubg110-tech/YOUSAF-MD"><img src="https://img.shields.io/badge/🟢_RENDER-DEPLOY_NOW-00C853?style=for-the-badge&labelColor=0d0d1a"/></a>
 
-![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)
-
-](https://render.com/deploy?repo=https://github.com/yousafpubg110-tech/YOUSAF-MD)
-
-
-
-![Free](https://img.shields.io/badge/✅_Free-750hrs%2Fmo-00ff88?style=flat-square&labelColor=0d0d1a)
-
-
-
-
-![Fast](https://img.shields.io/badge/⚡_Fast-Auto_Deploy-00fff7?style=flat-square&labelColor=0d0d1a)
-
-
-
-
-![Easy](https://img.shields.io/badge/🎯_Easy-No_Card_Needed-ffe600?style=flat-square&labelColor=0d0d1a)
-
-
+<img src="https://img.shields.io/badge/✅_Free-750hrs%2Fmo-00ff88?style=flat-square&labelColor=0d0d1a"/>
+<img src="https://img.shields.io/badge/⚡_Fast-Auto_Deploy-00fff7?style=flat-square&labelColor=0d0d1a"/>
+<img src="https://img.shields.io/badge/🎯_Easy-No_Card_Needed-ffe600?style=flat-square&labelColor=0d0d1a"/>
 
 </td>
 <td align="center" width="50%">
 
 ### 🚂 RAILWAY
 
-[
+<a href="https://railway.app/new/template?template=https://github.com/yousafpubg110-tech/YOUSAF-MD"><img src="https://img.shields.io/badge/🚂_RAILWAY-DEPLOY_NOW-6B00FF?style=for-the-badge&labelColor=0d0d1a"/></a>
 
-![Deploy on Railway](https://railway.app/button.svg)
-
-](https://railway.app/new/template?template=https://github.com/yousafpubg110-tech/YOUSAF-MD)
-
-
-
-![Credit](https://img.shields.io/badge/⚠️_$5-Free_Credit-ff6600?style=flat-square&labelColor=0d0d1a)
-
-
-
-
-![Speed](https://img.shields.io/badge/⚡⚡_Ultra-Fast-ff00c8?style=flat-square&labelColor=0d0d1a)
-
-
-
-
-![Simple](https://img.shields.io/badge/💨_Simple-One_Click-aa00ff?style=flat-square&labelColor=0d0d1a)
-
-
+<img src="https://img.shields.io/badge/⚠️_$5-Free_Credit-ff6600?style=flat-square&labelColor=0d0d1a"/>
+<img src="https://img.shields.io/badge/⚡⚡_Ultra-Fast-ff00c8?style=flat-square&labelColor=0d0d1a"/>
+<img src="https://img.shields.io/badge/💨_Simple-One_Click-aa00ff?style=flat-square&labelColor=0d0d1a"/>
 
 </td>
 </tr>
@@ -138,44 +104,20 @@
 
 ### 💜 HEROKU
 
-[
+<a href="https://heroku.com/deploy?template=https://github.com/yousafpubg110-tech/YOUSAF-MD"><img src="https://img.shields.io/badge/💜_HEROKU-DEPLOY_NOW-430098?style=for-the-badge&labelColor=0d0d1a"/></a>
 
-![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)
-
-](https://heroku.com/deploy?template=https://github.com/yousafpubg110-tech/YOUSAF-MD)
-
-
-
-![Premium](https://img.shields.io/badge/🏆_Premium-Professional-ffe600?style=flat-square&labelColor=0d0d1a)
-
-
-
-
-![Reliable](https://img.shields.io/badge/🎯_Reliable-99.9%25_Uptime-00ff88?style=flat-square&labelColor=0d0d1a)
-
-
+<img src="https://img.shields.io/badge/🏆_Premium-Professional-ffe600?style=flat-square&labelColor=0d0d1a"/>
+<img src="https://img.shields.io/badge/🎯_Reliable-99.9%25_Uptime-00ff88?style=flat-square&labelColor=0d0d1a"/>
 
 </td>
 <td align="center" width="50%">
 
 ### 🟣 REPLIT
 
-[
+<a href="https://replit.com/new/github/yousafpubg110-tech/YOUSAF-MD"><img src="https://img.shields.io/badge/🟣_REPLIT-RUN_NOW-AA00FF?style=for-the-badge&labelColor=0d0d1a"/></a>
 
-![Run on Replit](https://replit.com/badge/github/yousafpubg110-tech/YOUSAF-MD)
-
-](https://replit.com/new/github/yousafpubg110-tech/YOUSAF-MD)
-
-
-
-![Browser](https://img.shields.io/badge/💻_Browser-Based-00fff7?style=flat-square&labelColor=0d0d1a)
-
-
-
-
-![Instant](https://img.shields.io/badge/🎮_Instant-Live_Preview-ff00c8?style=flat-square&labelColor=0d0d1a)
-
-
+<img src="https://img.shields.io/badge/💻_Browser-Based-00fff7?style=flat-square&labelColor=0d0d1a"/>
+<img src="https://img.shields.io/badge/🎮_Instant-Live_Preview-ff00c8?style=flat-square&labelColor=0d0d1a"/>
 
 </td>
 </tr>
@@ -187,7 +129,7 @@
 
 ## 🌟 CONNECT WITH MUHAMMAD YOUSAF BALOCH
 
-<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=700&size=18&duration=2000&pause=500&color=FF00C8&center=true&vCenter=true&width=600&height=40&lines=📲+Follow+for+Updates+%7C+Join+the+Community!" alt="Connect" />
+<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=700&size=18&duration=2000&pause=500&color=FF00C8&center=true&vCenter=true&width=600&height=40&lines=📲+Follow+for+Updates+%7C+Join+the+Community!"/>
 
 </div>
 
@@ -195,44 +137,28 @@
 <tr>
 <td align="center" width="25%">
 
-[
-
-![WhatsApp Channel](https://img.shields.io/badge/📱_WhatsApp-JOIN_CHANNEL-25D366?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=0d0d1a)
-
-](https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j)
+<a href="https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j"><img src="https://img.shields.io/badge/📱_WhatsApp-JOIN_CHANNEL-25D366?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=0d0d1a"/></a>
 
 <img src="https://img.shields.io/badge/🔥_Active-Community-25D366?style=flat-square"/>
 
 </td>
 <td align="center" width="25%">
 
-[
-
-![YouTube](https://img.shields.io/badge/🎥_YouTube-SUBSCRIBE-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=0d0d1a)
-
-](https://www.youtube.com/@Yousaf_Baloch_Tech)
+<a href="https://www.youtube.com/@Yousaf_Baloch_Tech"><img src="https://img.shields.io/badge/🎥_YouTube-SUBSCRIBE-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=0d0d1a"/></a>
 
 <img src="https://img.shields.io/badge/🎬_Tech-Tutorials-FF0000?style=flat-square"/>
 
 </td>
 <td align="center" width="25%">
 
-[
-
-![TikTok](https://img.shields.io/badge/🎵_TikTok-FOLLOW_ME-FF0050?style=for-the-badge&logo=tiktok&logoColor=white&labelColor=0d0d1a)
-
-](https://tiktok.com/@loser_boy.110)
+<a href="https://tiktok.com/@loser_boy.110"><img src="https://img.shields.io/badge/🎵_TikTok-FOLLOW_ME-FF0050?style=for-the-badge&logo=tiktok&logoColor=white&labelColor=0d0d1a"/></a>
 
 <img src="https://img.shields.io/badge/📹_Short-Videos-FF0050?style=flat-square"/>
 
 </td>
 <td align="center" width="25%">
 
-[
-
-![Phone](https://img.shields.io/badge/📞_Call_Me-923710636110-00fff7?style=for-the-badge&logo=phone&logoColor=white&labelColor=0d0d1a)
-
-](tel:923710636110)
+<a href="tel:923710636110"><img src="https://img.shields.io/badge/📞_Contact-923710636110-00fff7?style=for-the-badge&labelColor=0d0d1a"/></a>
 
 <img src="https://img.shields.io/badge/💬_Direct-Contact-00fff7?style=flat-square"/>
 
@@ -264,52 +190,52 @@
 |:-:|:----:|:-------:|:------------|:------:|
 | 1 | 📱 | **Phone Pairing** | Link via phone number pairing code | 
 
-![✅](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
+![](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
 
  |
 | 2 | ⚡ | **Instant Generation** | Codes generated in milliseconds | 
 
-![✅](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
+![](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
 
  |
 | 3 | 🎨 | **Ultra Pro UI** | Neon cyberpunk design | 
 
-![✅](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
+![](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
 
  |
 | 4 | 📱 | **Mobile Responsive** | Perfect on all screen sizes | 
 
-![✅](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
+![](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
 
  |
 | 5 | 🔒 | **Secure Sessions** | Encrypted & auto-deleted | 
 
-![✅](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
+![](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
 
  |
 | 6 | 🔄 | **Auto Delivery** | Session ID sent to WhatsApp | 
 
-![✅](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
+![](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
 
  |
 | 7 | 🛡️ | **Rate Limiting** | DDoS & abuse protection | 
 
-![✅](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
+![](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
 
  |
 | 8 | 🌐 | **Multi-Platform** | Deploy anywhere, free | 
 
-![✅](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
+![](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
 
  |
 | 9 | 🎯 | **Zero Config** | No MongoDB, no setup needed | 
 
-![✅](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
+![](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
 
  |
 | 10 | 💎 | **100% Free** | Open source, no hidden costs | 
 
-![✅](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
+![](https://img.shields.io/badge/✅-Active-00ff88?style=flat-square&labelColor=0d0d1a)
 
  |
 
@@ -318,8 +244,6 @@
 <div align="center">
 
 ## 🚀 INSTALLATION GUIDE
-
-<img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&weight=700&size=20&duration=2000&pause=500&color=00FF88&center=true&vCenter=true&width=600&height=40&lines=Choose+your+installation+method+below!" alt="Install" />
 
 </div>
 
@@ -331,14 +255,14 @@ cd YOUSAF-MD
 npm install
 npm start
 🌐 Open browser: http://localhost:3000
-🌐 METHOD 2 — ONE-CLICK CLOUD DEPLOY
-1️⃣ 🟢 RENDER.COM (MOST RECOMMENDED)
-1. Click "Deploy to Render" button above  ☝️
+🌐 METHOD 2 — CLOUD DEPLOY STEPS
+1️⃣ 🟢 RENDER.COM
+1. Click RENDER button above
 2. Sign in / Create free account
 3. Click "Create Web Service"
-4. Wait 2-3 minutes for build
+4. Wait 2-3 minutes
 5. ✅ LIVE!
-2️⃣ 🚂 RAILWAY.APP
+2️⃣ 🚂 RAILWAY
 npm i -g @railway/cli
 railway login
 railway up
@@ -346,7 +270,7 @@ railway up
 heroku login
 heroku create yousaf-md
 git push heroku main
-4️⃣ 🖥️ VPS / SERVER
+4️⃣ 🖥️ VPS
 git clone https://github.com/yousafpubg110-tech/YOUSAF-MD.git
 cd YOUSAF-MD && npm install
 npm install -g pm2
@@ -370,8 +294,8 @@ Step 8 ➡️  ✅ SESSION ID sent to your WhatsApp!
 👨‍💻 CREATOR
 �
 ￼
-�
-￼ ￼
+
+
 
 
 
@@ -389,16 +313,7 @@ Open Source Developer
 
 
 �
-Load image
- 
-�
-Load image
- 
-�
-Load image
- 
-�
-Load image
+￼   ￼   ￼   ￼
 �
 
 �
