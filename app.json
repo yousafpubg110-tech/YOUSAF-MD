@@ -1,0 +1,76 @@
+{
+  "name": "YOUSAF-MD",
+  "description": "YOUSAF-MD WhatsApp Bot by Muhammad Yousaf Baloch",
+  "repository": "https://github.com/yousafpubg110-tech/YOUSAF-MD",
+  "keywords": ["whatsapp", "bot", "yousaf-md"],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+    }
+  ],
+  "env": {
+    "BOT_NAME": {
+      "description": "Bot ka naam",
+      "value": "YOUSAF-MD",
+      "required": true
+    },
+    "OWNER_NUMBER": {
+      "description": "Aapka WhatsApp number (country code ke sath)",
+      "value": "923710636110",
+      "required": true
+    },
+    "PREFIX": {
+      "description": "Bot command prefix",
+      "value": ".",
+      "required": true
+    },
+    "ANTI_DELETE": {
+      "description": "Deleted messages wapas bheje — true ya false",
+      "value": "true",
+      "required": false
+    },
+    "AUTO_STATUS_VIEW": {
+      "description": "Status auto view kare — true ya false",
+      "value": "true",
+      "required": false
+    },
+    "AUTO_LIKE_STATUS": {
+      "description": "Status pe auto like kare — true ya false",
+      "value": "true",
+      "required": false
+    },
+    "ANTI_CALL": {
+      "description": "Calls auto reject kare — true ya false",
+      "value": "true",
+      "required": false
+    },
+    "ANTI_LINK": {
+      "description": "Group mein links delete kare — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "WELCOME_MSG": {
+      "description": "Naye member ko welcome message — true ya false",
+      "value": "true",
+      "required": false
+    },
+    "GOODBYE_MSG": {
+      "description": "Jane wale ko goodbye message — true ya false",
+      "value": "true",
+      "required": false
+    },
+    "AUTO_REACT": {
+      "description": "Messages pe auto react kare — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "PORT": {
+      "description": "Server port",
+      "value": "3000",
+      "required": false
+    }
+  }
+}
