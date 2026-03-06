@@ -15,6 +15,8 @@ const { generatePairingCode } = require('./lib/SessionManager');
 const Database   = require('./lib/Database');
 
 const app    = express();
+app.set('trust proxy', 1); // <--- صرف یہ لائن ایڈ کی گئی ہے ہیروکو پراکسی فکس کرنے کے لیے
+
 const server = http.createServer(app);
 const io     = new Server(server, { cors: { origin: '*' } });
 
