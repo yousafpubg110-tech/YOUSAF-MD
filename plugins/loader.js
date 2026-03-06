@@ -13,6 +13,7 @@ const safetyPlugin       = require('./safety');
 
 // All plugin modules
 const plugins = [
+  require('./menu'),
   require('./settings'),
   require('./downloader'),
   safetyPlugin,
