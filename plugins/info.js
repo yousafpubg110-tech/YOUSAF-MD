@@ -25,6 +25,8 @@ module.exports = {
     },
 
     async info(sock, msg, ctx) {
+      // FIXED: stats.instances removed — new Database has no instances
+      // Using stats.admin and stats.settings instead
       const stats  = Database.stats();
       const uptime = process.uptime();
       const h      = Math.floor(uptime / 3600);
@@ -38,10 +40,10 @@ module.exports = {
 │ 🤖 *Bot :* ${config.BOT_NAME}
 │ ⚡ *Version :* ${config.BOT_VERSION}
 │ ⏱️ *Uptime :* ${h}h ${m}m ${s}s
-│ 👥 *Instances :* ${stats.instances}
+│ 👑 *Admin :* ${stats.admin}
 │ 💾 *DB Size :* ${(stats.size / 1024).toFixed(2)} KB
 │ 🖥️ *Memory :* ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB
-│ 👑 *Dev :* ${config.OWNER_NAME}
+│ 👤 *Dev :* ${config.OWNER_NAME}
 │ 📞 *Contact :* +${config.OWNER_NUMBER}
 └─────────────────────┘
 
@@ -49,10 +51,15 @@ module.exports = {
 > *© Powered By Mr Yousaf Baloch* 🇵🇰
 ❖──────────────────────❖`.trim();
 
-      return sock.sendMessage(ctx.jid, {
-        image: { url: MENU_IMG },
-        caption: text,
-      }, { quoted: msg });
+      // FIXED: image fallback if URL fails
+      try {
+        return await sock.sendMessage(ctx.jid, {
+          image:   { url: MENU_IMG },
+          caption: text,
+        }, { quoted: msg });
+      } catch {
+        return sock.sendMessage(ctx.jid, { text }, { quoted: msg });
+      }
     },
 
     async owner(sock, msg, ctx) {
@@ -67,7 +74,7 @@ module.exports = {
       await sock.sendMessage(ctx.jid, {
         contacts: {
           displayName: config.OWNER_NAME,
-          contacts: [{ vcard }],
+          contacts:    [{ vcard }],
         },
       }, { quoted: msg });
 
@@ -99,10 +106,15 @@ ${config.LINKS.GITHUB}
 > *© Powered By Mr Yousaf Baloch* 🇵🇰
 ❖──────────────────────❖`.trim();
 
-      return sock.sendMessage(ctx.jid, {
-        image: { url: OWNER_IMG },
-        caption: text,
-      }, { quoted: msg });
+      // FIXED: image fallback if URL fails
+      try {
+        return await sock.sendMessage(ctx.jid, {
+          image:   { url: OWNER_IMG },
+          caption: text,
+        }, { quoted: msg });
+      } catch {
+        return sock.sendMessage(ctx.jid, { text }, { quoted: msg });
+      }
     },
 
   },
