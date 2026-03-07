@@ -1,5 +1,6 @@
 // ============================================================
 //   YOUSAF-MD — WEB PAIRING SERVER
+//   Personal Instance - No central DB dependency
 //   Developer: Muhammad Yousaf Baloch
 // ============================================================
 
@@ -12,10 +13,9 @@ const rateLimit  = require('express-rate-limit');
 const path       = require('path');
 const config     = require('./config');
 const { generatePairingCode } = require('./lib/SessionManager');
-const Database   = require('./lib/Database');
 
-const app    = express();
-app.set('trust proxy', 1); // <--- صرف یہ لائن ایڈ کی گئی ہے ہیروکو پراکسی فکس کرنے کے لیے
+const app = express();
+app.set('trust proxy', 1);
 
 const server = http.createServer(app);
 const io     = new Server(server, { cors: { origin: '*' } });
@@ -285,14 +285,17 @@ const DASHBOARD_HTML = `<!DOCTYPE html>
   <div class="clock-date" id="clockDate">Loading...</div>
 
   <div class="logo">YOUSAF-MD</div>
-  <div class="tagline">⚡ Zero-Config WhatsApp Bot Platform v3.0.0</div>
+  <div class="tagline">⚡ Personal WhatsApp Bot v3.0.0</div>
 
   <div class="step">
     <b>Step 1:</b> Enter your WhatsApp number with country code (no + or spaces)<br>
     <b>Example:</b> 923001234567
   </div>
   <div class="step">
-    <b>Step 2:</b> WhatsApp → <b>Linked Devices</b> → <b>Link a Device</b> → Enter code
+    <b>Step 2:</b> Open WhatsApp → <b>Linked Devices</b> → <b>Link a Device</b> → Enter the code below
+  </div>
+  <div class="step">
+    <b>Step 3:</b> Bot will auto-start after you enter the code in WhatsApp ✅
   </div>
 
   <div class="input-group">
@@ -303,7 +306,7 @@ const DASHBOARD_HTML = `<!DOCTYPE html>
   <div class="code-display" id="codeBox">
     <div class="code-label">🔑 Enter this code in WhatsApp</div>
     <div class="code-value" id="codeValue">----</div>
-    <div class="code-expire">Code expires in 60 seconds</div>
+    <div class="code-expire">Code expires in 60 seconds — Enter it in WhatsApp quickly!</div>
     <button class="btn-copy" id="copyBtn" onclick="copyCode()">📋 Copy Code</button>
   </div>
 
@@ -364,30 +367,31 @@ const DASHBOARD_HTML = `<!DOCTYPE html>
     showStatus('⏳ Connecting to WhatsApp servers...','info');
 
     try {
-      const res  = await fetch('/api/pair',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ phone }),
+      const res  = await fetch('/api/pair', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ phone }),
       });
       const data = await res.json();
 
       if (data.error) {
-        showStatus('❌ '+data.error,'error');
-        btn.disabled = false;
+        showStatus('❌ ' + data.error, 'error');
+        btn.disabled  = false;
         btn.innerHTML = '⚡ Get Code';
         return;
       }
 
       document.getElementById('codeValue').textContent = data.code;
       document.getElementById('codeBox').classList.add('show');
-      document.getElementById('copyBtn').className = 'btn-copy';
-      document.getElementById('copyBtn').textContent = '📋 Copy Code';
-      showStatus('✅ Code ready! Enter it in WhatsApp → Linked Devices → Link a Device','success');
+      document.getElementById('copyBtn').className    = 'btn-copy';
+      document.getElementById('copyBtn').textContent  = '📋 Copy Code';
+      showStatus('✅ Code ready! Now open WhatsApp → Linked Devices → Link a Device → Enter this code', 'success');
       btn.innerHTML = '🔄 Regenerate';
       btn.disabled  = false;
-      socket.emit('watch',{ instanceId: data.instanceId });
-    } catch(e) {
-      showStatus('❌ Server error. Please try again.','error');
+
+      socket.emit('watch', { instanceId: data.instanceId });
+    } catch (e) {
+      showStatus('❌ Server error. Please try again.', 'error');
       btn.disabled  = false;
       btn.innerHTML = '⚡ Get Code';
     }
@@ -395,21 +399,21 @@ const DASHBOARD_HTML = `<!DOCTYPE html>
 
   function copyCode() {
     const code = document.getElementById('codeValue').textContent;
-    if (code==='----') return;
-    navigator.clipboard.writeText(code).then(()=>{
+    if (code === '----') return;
+    navigator.clipboard.writeText(code).then(() => {
       const btn = document.getElementById('copyBtn');
       btn.textContent = '✅ Copied!';
       btn.className   = 'btn-copy copied';
-      setTimeout(()=>{ btn.textContent='📋 Copy Code'; btn.className='btn-copy'; },2000);
+      setTimeout(() => { btn.textContent = '📋 Copy Code'; btn.className = 'btn-copy'; }, 2000);
     });
   }
 
-  socket.on('bot_connected',()=>{
-    showStatus('🟢 Bot is LIVE! Check your WhatsApp for welcome message.','success');
+  socket.on('bot_connected', () => {
+    showStatus('🟢 Bot is LIVE! Check your WhatsApp for welcome message.', 'success');
   });
 
-  document.getElementById('phoneInput').addEventListener('keydown',(e)=>{
-    if(e.key==='Enter') requestCode();
+  document.getElementById('phoneInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') requestCode();
   });
 </script>
 </body>
@@ -431,8 +435,6 @@ app.post('/api/pair', limiter, async (req, res) => {
   }
 });
 
-app.get('/api/stats', (req, res) => res.json(Database.stats()));
-
 io.on('connection', (socket) => {
   socket.on('watch', ({ instanceId }) => {
     if (instanceId) socket.join('instance_' + instanceId);
@@ -445,7 +447,7 @@ function notifyConnected(instanceId) {
 
 const PORT = process.env.PORT || config.PORT || 3000;
 server.listen(PORT, () => {
-  console.log('[SERVER] ✅ Pairing dashboard running at port: ' + PORT);
+  console.log('[SERVER] Pairing dashboard running at port: ' + PORT);
 });
 
 module.exports = { app, notifyConnected };
