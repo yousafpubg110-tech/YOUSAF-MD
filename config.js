@@ -33,6 +33,7 @@ const config = {
   TEMP_DIR:     './temp',
 
   // ── SERVER ────────────────────────────────────────────────
+  // process.env.PORT is required for Heroku
   PORT: process.env.PORT || 3000,
 
   // ── DEPLOYMENT TYPE ───────────────────────────────────────
@@ -50,95 +51,16 @@ const config = {
     AUTO_REACT:       true,
   },
 
-  // ── MENU TEXT ─────────────────────────────────────────────
-  MENU_TEXT: (prefix) => `
-꧁༺ 🤖 *YOUSAF-MD v3.0* 🤖 ༻꧂
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📋 *GENERAL COMMANDS*
-┌─────────────────────
-│ ${prefix}menu — تمام commands دیکھیں
-│ ${prefix}ping — Bot کی speed چیک کریں
-│ ${prefix}info — Bot کی معلومات
-│ ${prefix}owner — Developer سے رابطہ
-└─────────────────────
-
-⚙️ *SETTINGS COMMANDS*
-┌─────────────────────
-│ ${prefix}settings — مکمل settings panel
-│ ${prefix}set [feature] [on/off] — setting بدلیں
-│ ${prefix}antidel — Anti-Delete toggle
-│ ${prefix}antical — Anti-Call toggle
-│ ${prefix}antilink — Anti-Link toggle
-│ ${prefix}autolike — Auto-Like Status toggle
-│ ${prefix}autoview — Auto-View Status toggle
-└─────────────────────
-
-🛡️ *SAFETY FEATURES*
-┌─────────────────────
-│ ✅ Anti-Delete — Delete ہونے والے messages واپس لائے
-│ ✅ Anti-Call — نامعلوم calls reject کرے
-│ ✅ Anti-Link — Groups میں links block کرے
-│ ✅ Auto-Status View — Status خود دیکھے
-│ ✅ Auto-Like Status — Status پر like کرے
-└─────────────────────
-
-👥 *GROUP COMMANDS*
-┌─────────────────────
-│ ${prefix}kick @tag — Member نکالیں
-│ ${prefix}add [number] — Member شامل کریں
-│ ${prefix}promote @tag — Admin بنائیں
-│ ${prefix}demote @tag — Admin سے ہٹائیں
-│ ${prefix}link — Group link لیں
-│ ${prefix}revoke — Group link بدلیں
-│ ${prefix}tagall — سب کو tag کریں
-│ ${prefix}mute — Group band کریں
-│ ${prefix}unmute — Group کھولیں
-└─────────────────────
-
-🎵 *DOWNLOADER COMMANDS*
-┌─────────────────────
-│ ${prefix}yt [link] — YouTube video download
-│ ${prefix}ytmp3 [link] — YouTube audio download
-│ ${prefix}tiktok [link] — TikTok video download
-│ ${prefix}insta [link] — Instagram video download
-└─────────────────────
-
-🎨 *MEDIA COMMANDS*
-┌─────────────────────
-│ ${prefix}sticker — Image کو sticker بنائیں
-│ ${prefix}toimg — Sticker کو image بنائیں
-│ ${prefix}enhance — Image quality بہتر کریں
-└─────────────────────
-
-🛠️ *TOOLS COMMANDS*
-┌─────────────────────
-│ ${prefix}translate [text] — متن ترجمہ کریں
-│ ${prefix}weather [city] — موسم دیکھیں
-│ ${prefix}calc [expression] — حساب لگائیں
-│ ${prefix}tts [text] — Text to speech
-└─────────────────────
-
-💬 *AUTO-REPLY*
-┌─────────────────────
-│ hi / hello / سلام — خودکار جواب
-│ how are you — خودکار جواب
-└─────────────────────
-
-❖──────────────────────────────❖
-👑 *Developer:* Muhammad Yousaf Baloch
-📢 WhatsApp Channel join کریں!
-❖──────────────────────────────❖`.trim(),
-
-  // ── WELCOME MESSAGE (NO SESSION ID) ───────────────────────
+  // ── WELCOME MESSAGE — NO SESSION ID ───────────────────────
+  // Called from SessionManager with phone number only
   WELCOME_TEXT: (phone) => `
 ꧁༺ 🤖 *YOUSAF-MD* 🤖 ༻꧂
 
-┌─────────────────────┐
+┌─────────────────────────┐
 │ ✅ *Bot Connected!*
 │ 📱 *Number:* +${phone}
 │ ⚡ *Status:* Online & Active
-└─────────────────────┘
+└─────────────────────────┘
 
 📌 *Quick Start:*
    • *.menu* — تمام commands دیکھیں
@@ -154,6 +76,92 @@ const config = {
 ❖──────────────────────❖
 > *© Powered By Mr Yousaf Baloch* 🇵🇰
 ❖──────────────────────❖`.trim(),
+
+  // ── MENU TEXT ─────────────────────────────────────────────
+  // Used by info.js .menu command
+  MENU_TEXT: (prefix) => `
+꧁༺ 🤖 *YOUSAF-MD v3.0* 🤖 ༻꧂
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 *GENERAL*
+┌─────────────────────
+│ ${prefix}menu     — یہ menu
+│ ${prefix}ping     — Bot speed چیک
+│ ${prefix}info     — Bot معلومات
+│ ${prefix}owner    — Developer contact
+└─────────────────────
+
+⚙️ *SETTINGS (Admin Only)*
+┌─────────────────────
+│ ${prefix}settings  — مکمل settings panel
+│ ${prefix}set [feature] [on/off]
+│ ${prefix}antidel   — Anti-Delete toggle
+│ ${prefix}antical   — Anti-Call toggle
+│ ${prefix}antilink  — Anti-Link toggle
+│ ${prefix}autolike  — Auto-Like Status toggle
+│ ${prefix}autoview  — Auto-View Status toggle
+└─────────────────────
+
+🛡️ *SAFETY FEATURES*
+┌─────────────────────
+│ ✅ Anti-Delete
+│ ✅ Anti-Call
+│ ✅ Anti-Link
+│ ✅ Auto-Status View
+│ ✅ Auto-Like Status
+└─────────────────────
+
+👥 *GROUP (Admin Only)*
+┌─────────────────────
+│ ${prefix}kick @tag    — Member نکالیں
+│ ${prefix}add [number] — Member شامل کریں
+│ ${prefix}promote @tag — Admin بنائیں
+│ ${prefix}demote @tag  — Admin سے ہٹائیں
+│ ${prefix}link         — Group link
+│ ${prefix}revoke       — Group link بدلیں
+│ ${prefix}tagall       — سب کو tag کریں
+│ ${prefix}mute         — Group band کریں
+│ ${prefix}unmute       — Group کھولیں
+└─────────────────────
+
+🎵 *DOWNLOADERS*
+┌─────────────────────
+│ ${prefix}yt [link]     — YouTube video
+│ ${prefix}ytmp3 [link]  — YouTube audio
+│ ${prefix}tiktok [link] — TikTok video
+│ ${prefix}insta [link]  — Instagram video
+│ ${prefix}play [name]   — Song search & download
+└─────────────────────
+
+🎨 *MEDIA*
+┌─────────────────────
+│ ${prefix}sticker  — Image to sticker
+│ ${prefix}toimg    — Sticker to image
+│ ${prefix}enhance  — Image quality بہتر کریں
+│ ${prefix}ttp      — Text to sticker
+└─────────────────────
+
+🛠️ *TOOLS*
+┌─────────────────────
+│ ${prefix}translate [text] — ترجمہ
+│ ${prefix}weather [city]   — موسم
+│ ${prefix}calc [expression]— حساب
+│ ${prefix}tts [text]       — Text to speech
+│ ${prefix}wiki [topic]     — Wikipedia
+│ ${prefix}google [query]   — Google search
+└─────────────────────
+
+💬 *AI AUTO-REPLY*
+┌─────────────────────
+│ Personal chat میں AI سے بات کریں
+│ Roman Urdu / Urdu / English سب چلتا ہے
+│ ${prefix}clearchat — Chat history صاف کریں
+└─────────────────────
+
+❖──────────────────────────────❖
+👑 *Developer:* Muhammad Yousaf Baloch
+📢 Channel join کریں!
+❖──────────────────────────────❖`.trim(),
 
 };
 
