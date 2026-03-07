@@ -43,13 +43,13 @@ const config = {
   // ── DEFAULT FEATURE FLAGS — reads from env vars ───────────
   get DEFAULTS() {
     return {
-      ANTI_DELETE:      process.env.ANTI_DELETE      !== 'false',
-      AUTO_STATUS_VIEW: process.env.AUTO_STATUS_VIEW !== 'false',
-      AUTO_LIKE_STATUS: process.env.AUTO_LIKE_STATUS !== 'false',
-      ANTI_CALL:        process.env.ANTI_CALL        === 'true',
+      ANTI_DELETE:      process.env.ANTI_DELETE      !== 'true',
+      AUTO_STATUS_VIEW: process.env.AUTO_STATUS_VIEW !== 'true',
+      AUTO_LIKE_STATUS: process.env.AUTO_LIKE_STATUS !== 'true',
+      ANTI_CALL:        process.env.ANTI_CALL        === 'false',
       ANTI_LINK:        process.env.ANTI_LINK        === 'true',
-      WELCOME_MSG:      process.env.WELCOME_MSG      === 'true',
-      GOODBYE_MSG:      process.env.GOODBYE_MSG      === 'true',
+      WELCOME_MSG:      process.env.WELCOME_MSG      === 'false',
+      GOODBYE_MSG:      process.env.GOODBYE_MSG      === 'falas',
       AUTO_REACT:       process.env.AUTO_REACT       === 'true',
     };
   },
