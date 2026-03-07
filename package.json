@@ -34,7 +34,7 @@
     "ws": "^8.18.0",
     "yt-search": "^2.10.4",
     "node-fetch": "^2.7.0",
-    "mime-types": "^2.1.35",
+    "mime-types": "^3.0.2",
     "tesseract.js": "^5.1.0",
     "cheerio": "^1.0.0",
     "form-data": "^4.0.0",
