@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:4facfe,50:a18cd1,100:00f2fe&height=200&section=header&text=YOUSAF-MD%20v3.0&fontSize=60&fontColor=ffffff&fontAlignY=38&desc=Zero-Config%20WhatsApp%20Bot%20Platform&descAlignY=58&descColor=ffffff&animation=fadeIn" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:4facfe,50:a18cd1,100:00f2fe&height=200&section=header&text=YOUSAF-MD%20v3.0&fontSize=60&fontColor=ffffff&fontAlignY=38&desc=Personal%20WhatsApp%20Bot&descAlignY=58&descColor=ffffff&animation=fadeIn" width="100%"/>
 
 <img src="assets/banner.jpg" width="100%" alt="YOUSAF-MD Banner"/>
 
@@ -22,7 +22,7 @@
 
 <div align="center">
 
-<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=900&size=22&duration=2500&pause=700&color=00F2FE&center=true&vCenter=true&width=700&lines=MADE+BY+MR+YOUSAF+BALOCH+%E2%80%94+PROFESSIONAL+MULTI-DEVICE+WHATSAPP+BOT;ONE+DAY+YOU+WILL+MISS+ME..." alt="typing"/>
+<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=900&size=22&duration=2500&pause=700&color=00F2FE&center=true&vCenter=true&width=700&lines=MADE+BY+MR+YOUSAF+BALOCH+%E2%80%94+PERSONAL+WHATSAPP+BOT;ONE+DAY+YOU+WILL+MISS+ME..." alt="typing"/>
 
 </div>
 
@@ -67,12 +67,13 @@
 | ![](https://img.shields.io/badge/🛡️_AUTO_FEATURES-FF0000?style=flat-square&logoColor=white) | Auto-Status View, Anti-Delete, Anti-Call, Auto-Like | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
 | ![](https://img.shields.io/badge/🔧_SEARCH_ENGINE-00BFFF?style=flat-square&logoColor=white) | Google, YouTube, Wikipedia, Weather, Calculator | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
 | ![](https://img.shields.io/badge/🎵_MUSIC_TOOLS-9B59B6?style=flat-square&logoColor=white) | Play, Song, Audio Download, TTS Voice | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
+| ![](https://img.shields.io/badge/🤖_AI_AUTO_REPLY-4facfe?style=flat-square&logoColor=white) | Roman Urdu / Urdu / English — Claude AI Powered | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
 | ![](https://img.shields.io/badge/🔒_GROUP_PROTECT-E74C3C?style=flat-square&logoColor=white) | Anti-Link, Anti-Spam, Bot Admin Control Panel | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
 | ![](https://img.shields.io/badge/⚙️_SETTINGS-2ECC71?style=flat-square&logoColor=white) | .settings .set — Full Admin Control Panel | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
 
 <br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=16&duration=1500&pause=300&color=FFD700&center=true&vCenter=true&width=600&lines=💎+500%2B+COMMANDS+AVAILABLE!+💎" alt="commands"/>
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=16&duration=1500&pause=300&color=FFD700&center=true&vCenter=true&width=600&lines=💎+100%2B+COMMANDS+AVAILABLE!+💎" alt="commands"/>
 
 </div>
 
@@ -80,21 +81,94 @@
 
 <div align="center">
 
-## 🚀 ONE-CLICK DEPLOY
+## 🚀 DEPLOY ON ANY PLATFORM
 
 [![](https://img.shields.io/badge/━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━-000000?style=for-the-badge)](https://github.com/yousafpubg110-tech/YOUSAF-MD)
 
+> # ⚠️ IMPORTANT — READ BEFORE PAIRING ⚠️
+> ## 🚨 DEPLOY FIRST — PAIRING CODE COMES AFTER DEPLOY 🚨
+> ### پہلے Deploy کریں — Pairing Code Deploy کے بعد ملے گا
+> **Bot کو بغیر Pairing کے Deploy کریں — Deploy ہونے کے بعد آپ کو خود بخود Pairing کا آپشن ملے گا**
+
+<br/>
+
+### ☁️ CLOUD PLATFORMS — ONE CLICK DEPLOY
+
 [![](https://img.shields.io/badge/🟣_HEROKU-DEPLOY_NOW-430098?style=for-the-badge&logo=heroku&logoColor=white&labelColor=000000)](https://dashboard.heroku.com/new-app?template=https://github.com/yousafpubg110-tech/YOUSAF-MD)
 [![](https://img.shields.io/badge/🔴_KOYEB-DEPLOY_NOW-FF009D?style=for-the-badge&logo=koyeb&logoColor=white&labelColor=000000)](https://app.koyeb.com/deploy?type=git&repository=yousafpubg110-tech%2FYOUSAF-MD&branch=main)
+[![](https://img.shields.io/badge/🔵_RAILWAY-DEPLOY_NOW-6B00FF?style=for-the-badge&logo=railway&logoColor=white&labelColor=000000)](https://railway.app/new/github/yousafpubg110-tech/YOUSAF-MD)
+[![](https://img.shields.io/badge/🟢_RENDER-DEPLOY_NOW-4CAF50?style=for-the-badge&logo=render&logoColor=white&labelColor=000000)](https://render.com/deploy?repo=https://github.com/yousafpubg110-tech/YOUSAF-MD)
 
-[![](https://img.shields.io/badge/🔵_RAILWAY-DEPLOY_NOW-6B00FF?style=for-the-badge&logo=railway&logoColor=white&labelColor=000000)](https://railway.app/new)
-[![](https://img.shields.io/badge/🟢_RENDER-DEPLOY_NOW-4CAF50?style=for-the-badge&logo=render&logoColor=white&labelColor=000000)](https://render.com)
+<br/>
 
-[![](https://img.shields.io/badge/⚡_GET_PAIR_CODE-CONNECT_YOUR_BOT-00F2FE?style=for-the-badge&labelColor=000000)](http://localhost:3000)
+[![](https://img.shields.io/badge/🔶_REPLIT-DEPLOY_NOW-F26207?style=for-the-badge&logo=replit&logoColor=white&labelColor=000000)](https://replit.com/github/yousafpubg110-tech/YOUSAF-MD)
+[![](https://img.shields.io/badge/⬛_VERCEL-DEPLOY_NOW-ffffff?style=for-the-badge&logo=vercel&logoColor=black&labelColor=000000)](https://vercel.com/new/clone?repository-url=https://github.com/yousafpubg110-tech/YOUSAF-MD)
+[![](https://img.shields.io/badge/🟡_GLITCH-DEPLOY_NOW-3333FF?style=for-the-badge&logo=glitch&logoColor=white&labelColor=000000)](https://glitch.com/edit/#!/import/github/yousafpubg110-tech/YOUSAF-MD)
+[![](https://img.shields.io/badge/🔷_CYCLIC-DEPLOY_NOW-0078D4?style=for-the-badge&logoColor=white&labelColor=000000)](https://app.cyclic.sh/api/app/deploy/yousafpubg110-tech/YOUSAF-MD)
+
+<br/>
+
+### 🖥️ VPS / DEDICATED SERVER PLATFORMS
+
+[![](https://img.shields.io/badge/🟠_DIGITALOCEAN-OPEN-0080FF?style=for-the-badge&logo=digitalocean&logoColor=white&labelColor=000000)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/yousafpubg110-tech/YOUSAF-MD)
+[![](https://img.shields.io/badge/🟡_AWS-OPEN-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white&labelColor=000000)](https://aws.amazon.com/getting-started/hands-on/deploy-nodejs-web-app)
+[![](https://img.shields.io/badge/🔵_AZURE-OPEN-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white&labelColor=000000)](https://azure.microsoft.com/en-us/products/app-service)
+[![](https://img.shields.io/badge/🔵_GOOGLE_CLOUD-OPEN-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white&labelColor=000000)](https://cloud.google.com/run)
+[![](https://img.shields.io/badge/🔴_ORACLE_CLOUD-OPEN_(FREE)-F80000?style=for-the-badge&logo=oracle&logoColor=white&labelColor=000000)](https://www.oracle.com/cloud/free)
+[![](https://img.shields.io/badge/🟥_CONTABO_VPS-OPEN-FF0000?style=for-the-badge&logoColor=white&labelColor=000000)](https://contabo.com)
+
+<br/>
 
 [![](https://img.shields.io/badge/━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━-000000?style=for-the-badge)](https://github.com/yousafpubg110-tech/YOUSAF-MD)
 
 </div>
+
+---
+
+<div align="center">
+
+## 📋 DEPLOY STEPS (ALL PLATFORMS)
+
+| # | STEP | ACTION |
+|:---:|:---|:---|
+| 1️⃣ | **Fork Repository** | GitHub پر Fork button دبائیں |
+| 2️⃣ | **Choose Platform** | اوپر سے کوئی بھی platform منتخب کریں |
+| 3️⃣ | **Deploy Bot** | Deploy کریں — **بغیر Pairing کے** |
+| 4️⃣ | **Open App URL** | Deploy ہونے کے بعد app کا URL کھولیں |
+| 5️⃣ | **Enter Phone Number** | اپنا WhatsApp نمبر ڈالیں |
+| 6️⃣ | **Get Pairing Code** | Screen پر Code آئے گا (XXXX-XXXX) |
+| 7️⃣ | **Link WhatsApp** | WhatsApp → Linked Devices → Link a Device |
+| 8️⃣ | **Bot Auto-Starts** | Welcome message آئے گا ✅ |
+
+</div>
+
+---
+
+**✠ VPS / LINUX MANUAL DEPLOY GUIDE ✠**
+
+```bash
+# Step 1: Update system
+sudo apt update && sudo apt upgrade -y
+
+# Step 2: Install Node.js 20 + FFmpeg
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs ffmpeg git imagemagick
+
+# Step 3: Clone repository
+git clone https://github.com/yousafpubg110-tech/YOUSAF-MD.git
+cd YOUSAF-MD
+
+# Step 4: Install dependencies
+npm install
+
+# Step 5: Start bot (Pairing dashboard opens)
+npm start
+
+# Step 6: Keep running 24/7 with PM2
+npm install -g pm2
+pm2 start index.js --name YOUSAF-MD
+pm2 save && pm2 startup
+```
 
 ---
 
@@ -114,14 +188,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [24.x]
+        node-version: [20.x]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           check-latest: true
-      - run: sudo apt-get install -y ffmpeg imagemagick && pip install yt-dlp
+      - run: sudo apt-get install -y ffmpeg imagemagick
       - run: npm install
       - run: npm start
 ```
