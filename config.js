@@ -9,14 +9,16 @@
 const config = {
 
   // ── BRANDING ──────────────────────────────────────────────
-  BOT_NAME:    'YOUSAF-MD',
+  BOT_NAME:    process.env.BOT_NAME    || 'YOUSAF-MD',
   BOT_VERSION: '3.0.0',
   BOT_TAGLINE: 'Personal WhatsApp Bot',
 
   // ── OWNER / DEVELOPER ─────────────────────────────────────
-  OWNER_NAME:   'Muhammad Yousaf Baloch',
-  OWNER_NUMBER: '923710636110',
-  OWNER_JID:    '923710636110@s.whatsapp.net',
+  OWNER_NAME:   process.env.OWNER_NAME   || 'Muhammad Yousaf Baloch',
+  OWNER_NUMBER: process.env.OWNER_NUMBER || '923710636110',
+  get OWNER_JID() {
+    return (process.env.OWNER_NUMBER || '923710636110') + '@s.whatsapp.net';
+  },
 
   // ── SOCIAL LINKS ──────────────────────────────────────────
   LINKS: {
@@ -27,7 +29,7 @@ const config = {
   },
 
   // ── BOT DEFAULTS ──────────────────────────────────────────
-  PREFIX:       '.',
+  PREFIX:       process.env.PREFIX || '.',
   SESSION_DIR:  './sessions',
   DATABASE_DIR: './database',
   TEMP_DIR:     './temp',
@@ -38,19 +40,21 @@ const config = {
   // ── DEPLOYMENT TYPE ───────────────────────────────────────
   DEPLOYMENT_TYPE: 'personal-instance',
 
-  // ── DEFAULT FEATURE FLAGS ─────────────────────────────────
-  DEFAULTS: {
-    ANTI_DELETE:      true,
-    AUTO_STATUS_VIEW: true,
-    AUTO_LIKE_STATUS: true,
-    ANTI_CALL:        false,
-    ANTI_LINK:        true,
-    WELCOME_MSG:      false,
-    GOODBYE_MSG:      false,
-    AUTO_REACT:       true,
+  // ── DEFAULT FEATURE FLAGS — reads from env vars ───────────
+  get DEFAULTS() {
+    return {
+      ANTI_DELETE:      process.env.ANTI_DELETE      !== 'false',
+      AUTO_STATUS_VIEW: process.env.AUTO_STATUS_VIEW !== 'false',
+      AUTO_LIKE_STATUS: process.env.AUTO_LIKE_STATUS !== 'false',
+      ANTI_CALL:        process.env.ANTI_CALL        === 'true',
+      ANTI_LINK:        process.env.ANTI_LINK        === 'true',
+      WELCOME_MSG:      process.env.WELCOME_MSG      === 'true',
+      GOODBYE_MSG:      process.env.GOODBYE_MSG      === 'true',
+      AUTO_REACT:       process.env.AUTO_REACT       === 'true',
+    };
   },
 
-  // ── WELCOME MESSAGE — NO SESSION ID ───────────────────────
+  // ── WELCOME MESSAGE ───────────────────────────────────────
   WELCOME_TEXT: (phone) => `
 ꧁༺ 🤖 *YOUSAF-MD* 🤖 ༻꧂
 
