@@ -3,36 +3,31 @@
   "description": "YOUSAF-MD WhatsApp Bot by Muhammad Yousaf Baloch",
   "repository": "https://github.com/yousafpubg110-tech/YOUSAF-MD",
   "keywords": ["whatsapp", "bot", "yousaf-md"],
-  "stack": "heroku-22",
+  "stack": "heroku-24",
   "buildpacks": [
-    {
-      "url": "heroku/nodejs"
-    },
-    {
-      "url": "https://github.com/heroku/heroku-buildpack-activestorage-preview"
-    },
-    {
-      "url": "https://github.com/mcollina/heroku-buildpack-imagemagick"
-    },
-    {
-      "url": "heroku/python"
-    }
+    { "url": "heroku/nodejs" },
+    { "url": "https://github.com/heroku/heroku-buildpack-activestorage-preview" },
+    { "url": "https://github.com/mcollina/heroku-buildpack-imagemagick" }
   ],
   "env": {
     "BOT_NAME": {
       "description": "Bot ka naam",
       "value": "YOUSAF-MD",
-      "required": true
+      "required": false
+    },
+    "OWNER_NAME": {
+      "description": "Aapka naam",
+      "value": "Bot Owner",
+      "required": false
     },
     "OWNER_NUMBER": {
-      "description": "Aapka WhatsApp number (country code ke sath)",
-      "value": "923710636110",
+      "description": "Aapka WhatsApp number (country code ke sath, bina + ke) — Example: 923001234567",
       "required": true
     },
     "PREFIX": {
       "description": "Bot command prefix",
       "value": ".",
-      "required": true
+      "required": false
     },
     "ANTI_DELETE": {
       "description": "Deleted messages wapas bheje — true ya false",
@@ -51,7 +46,7 @@
     },
     "ANTI_CALL": {
       "description": "Calls auto reject kare — true ya false",
-      "value": "true",
+      "value": "false",
       "required": false
     },
     "ANTI_LINK": {
@@ -61,12 +56,12 @@
     },
     "WELCOME_MSG": {
       "description": "Naye member ko welcome message — true ya false",
-      "value": "true",
+      "value": "false",
       "required": false
     },
     "GOODBYE_MSG": {
       "description": "Jane wale ko goodbye message — true ya false",
-      "value": "true",
+      "value": "false",
       "required": false
     },
     "AUTO_REACT": {
@@ -74,13 +69,9 @@
       "value": "false",
       "required": false
     },
-    "PORT": {
-      "description": "Server port",
-      "value": "3000",
+    "ANTHROPIC_API_KEY": {
+      "description": "Claude AI API key for auto-reply (optional)",
       "required": false
     }
-  },
-  "scripts": {
-    "postdeploy": "pip install yt-dlp"
   }
 }
