@@ -1,7 +1,6 @@
 // ============================================================
-//   YOUSAF-MD — SETTINGS PLUGIN [FIXED]
-//   FIXES: .antidel double-execution removed (applyCommand +
-//          toggle were both firing, causing inconsistent state)
+//   YOUSAF-MD — SETTINGS PLUGIN
+//   Added: .public and .private commands
 //   Developer: Muhammad Yousaf Baloch
 // ============================================================
 
@@ -12,7 +11,7 @@ const SettingsHandler = require('../lib/SettingsHandler');
 module.exports = {
   commands: {
 
-    // ── .settings — Show full control panel ──────────────
+    // ── .settings ─────────────────────────────────────────
     async settings(sock, msg, ctx) {
       const auth = ctx.checkAdmin('.settings');
       if (!auth.allowed) {
@@ -37,8 +36,35 @@ module.exports = {
       return sock.sendMessage(ctx.jid, { text: result.message }, { quoted: msg });
     },
 
-    // ── .antidel — Toggle Anti-Delete ────────────────────
-    // FIXED: was calling both applyCommand AND toggle — now only toggle
+    // ── .public — Bot کو سب کے لیے کھولیں ────────────────
+    async public(sock, msg, ctx) {
+      const auth = ctx.checkAdmin('.public');
+      if (!auth.allowed) {
+        return sock.sendMessage(ctx.jid, { text: auth.message }, { quoted: msg });
+      }
+      const settings      = SettingsHandler.get(ctx.sender);
+      settings.BOT_MODE   = true;
+      SettingsHandler.save(ctx.sender, settings);
+      return sock.sendMessage(ctx.jid, {
+        text: `🌐 *Bot Mode Changed!*\n\n✅ Bot اب *PUBLIC* ہے\nسب لوگ commands use کر سکتے ہیں۔`,
+      }, { quoted: msg });
+    },
+
+    // ── .private — Bot صرف Admin کے لیے ──────────────────
+    async private(sock, msg, ctx) {
+      const auth = ctx.checkAdmin('.private');
+      if (!auth.allowed) {
+        return sock.sendMessage(ctx.jid, { text: auth.message }, { quoted: msg });
+      }
+      const settings      = SettingsHandler.get(ctx.sender);
+      settings.BOT_MODE   = false;
+      SettingsHandler.save(ctx.sender, settings);
+      return sock.sendMessage(ctx.jid, {
+        text: `🔒 *Bot Mode Changed!*\n\n✅ Bot اب *PRIVATE* ہے\nصرف Bot Admin commands use کر سکتا ہے۔`,
+      }, { quoted: msg });
+    },
+
+    // ── .antidel ──────────────────────────────────────────
     async antidel(sock, msg, ctx) {
       const auth = ctx.checkAdmin('.antidel');
       if (!auth.allowed) {
@@ -50,7 +76,7 @@ module.exports = {
       }, { quoted: msg });
     },
 
-    // ── .antical — Toggle Anti-Call ───────────────────────
+    // ── .antical ──────────────────────────────────────────
     async antical(sock, msg, ctx) {
       const auth = ctx.checkAdmin('.antical');
       if (!auth.allowed) {
@@ -62,7 +88,7 @@ module.exports = {
       }, { quoted: msg });
     },
 
-    // ── .antilink — Toggle Anti-Link ──────────────────────
+    // ── .antilink ─────────────────────────────────────────
     async antilink(sock, msg, ctx) {
       const auth = ctx.checkAdmin('.antilink');
       if (!auth.allowed) {
@@ -74,7 +100,7 @@ module.exports = {
       }, { quoted: msg });
     },
 
-    // ── .autolike — Toggle Auto-Like Status ───────────────
+    // ── .autolike ─────────────────────────────────────────
     async autolike(sock, msg, ctx) {
       const auth = ctx.checkAdmin('.autolike');
       if (!auth.allowed) {
@@ -86,7 +112,7 @@ module.exports = {
       }, { quoted: msg });
     },
 
-    // ── .autoview — Toggle Auto-View Status ───────────────
+    // ── .autoview ─────────────────────────────────────────
     async autoview(sock, msg, ctx) {
       const auth = ctx.checkAdmin('.autoview');
       if (!auth.allowed) {
@@ -97,6 +123,7 @@ module.exports = {
         text: `👁️ *Auto-Status View* → ${newVal ? '🟢 ENABLED' : '🔴 DISABLED'}`,
       }, { quoted: msg });
     },
+
   },
 };
-          
+        
