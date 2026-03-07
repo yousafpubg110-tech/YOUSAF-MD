@@ -1,6 +1,6 @@
 // ============================================================
 //   YOUSAF-MD — PLUGIN LOADER
-//   Added: BOT_MODE check (public/private)
+//   Fixed: buildContext correct import, BOT_MODE added
 //   Developer: Muhammad Yousaf Baloch
 // ============================================================
 
@@ -93,29 +93,26 @@ async function handleMessage(sock, msg, instanceId) {
 
   ctx.body = text;
 
-  // Passive hooks — safety plugin وغیرہ
   for (const plugin of plugins) {
     if (typeof plugin.onMessage === 'function') {
       await plugin.onMessage(sock, msg, ctx).catch(() => {});
     }
   }
 
-  // Command check
   const parsed = parseCommand(text);
 
   if (parsed) {
     const { command, args, body } = parsed;
 
-    // ── BOT MODE CHECK ──────────────────────────────────
-    // .public اور .private ہمیشہ صرف admin کے لیے ہیں
-    const adminOnlyCommands = ['public', 'private', 'settings', 'set', 'antidel',
-                               'antical', 'antilink', 'autolike', 'autoview'];
+    const adminOnlyCommands = [
+      'public', 'private', 'settings', 'set',
+      'antidel', 'antical', 'antilink', 'autolike', 'autoview',
+    ];
 
-    const adminJid   = Database.getAdmin();
-    const settings   = adminJid ? SettingsHandler.get(adminJid) : {};
-    const isPublic   = settings.BOT_MODE === true;
+    const adminJid = Database.getAdmin();
+    const settings = adminJid ? SettingsHandler.get(adminJid) : {};
+    const isPublic = settings.BOT_MODE === true;
 
-    // Private mode میں — صرف admin commands چلا سکتا ہے
     if (!isPublic && !ctx.isBotAdmin && !adminOnlyCommands.includes(command)) {
       await sock.sendMessage(ctx.jid, {
         text: `🔒 *Bot is in Private Mode*\nصرف Bot Admin commands use کر سکتا ہے۔`,
@@ -139,7 +136,6 @@ async function handleMessage(sock, msg, instanceId) {
     return;
   }
 
-  // Auto-reply صرف personal chat میں
   if (!ctx.isGroup && !msg.key?.fromMe) {
     await autoReplyPlugin.handleAutoReply(sock, msg, ctx).catch(() => {});
   }
@@ -173,4 +169,3 @@ async function handleGroupEvent(sock, update) {
 }
 
 module.exports = loader;
-    
