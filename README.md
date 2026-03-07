@@ -87,8 +87,8 @@
 
 > # ⚠️ IMPORTANT — READ BEFORE PAIRING ⚠️
 > ## 🚨 DEPLOY FIRST — PAIRING CODE COMES AFTER DEPLOY 🚨
-> ### پہلے Deploy کریں — Pairing Code Deploy کے بعد ملے گا
-> **Bot کو بغیر Pairing کے Deploy کریں — Deploy ہونے کے بعد آپ کو خود بخود Pairing کا آپشن ملے گا**
+> ### DO NOT PAIR BEFORE DEPLOYING — DEPLOY FIRST, PAIRING OPTION WILL APPEAR AUTOMATICALLY AFTER DEPLOY
+> **Deploy the bot WITHOUT pairing — After deployment, the pairing option will appear on its own**
 
 <br/>
 
@@ -131,14 +131,14 @@
 
 | # | STEP | ACTION |
 |:---:|:---|:---|
-| 1️⃣ | **Fork Repository** | GitHub پر Fork button دبائیں |
-| 2️⃣ | **Choose Platform** | اوپر سے کوئی بھی platform منتخب کریں |
-| 3️⃣ | **Deploy Bot** | Deploy کریں — **بغیر Pairing کے** |
-| 4️⃣ | **Open App URL** | Deploy ہونے کے بعد app کا URL کھولیں |
-| 5️⃣ | **Enter Phone Number** | اپنا WhatsApp نمبر ڈالیں |
-| 6️⃣ | **Get Pairing Code** | Screen پر Code آئے گا (XXXX-XXXX) |
+| 1️⃣ | **Fork Repository** | Click the Fork button on GitHub |
+| 2️⃣ | **Choose Platform** | Select any platform from the buttons above |
+| 3️⃣ | **Deploy Bot** | Deploy the bot — **WITHOUT pairing** |
+| 4️⃣ | **Open App URL** | Open your app URL after deployment completes |
+| 5️⃣ | **Enter Phone Number** | Enter your WhatsApp number on the dashboard |
+| 6️⃣ | **Get Pairing Code** | Code will appear on screen (XXXX-XXXX) |
 | 7️⃣ | **Link WhatsApp** | WhatsApp → Linked Devices → Link a Device |
-| 8️⃣ | **Bot Auto-Starts** | Welcome message آئے گا ✅ |
+| 8️⃣ | **Bot Auto-Starts** | Welcome message will arrive ✅ |
 
 </div>
 
