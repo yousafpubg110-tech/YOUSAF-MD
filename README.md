@@ -36,7 +36,7 @@
 
 <div align="center">
 
-## 💎 POWERED BY MR YOUSAF BALOCH 💎
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FFD700,50:FF6B35,100:FF009D&height=50&text=💎+POWERED+BY+MR+YOUSAF+BALOCH+💎&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
 
 <img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=700&size=18&duration=2000&pause=600&color=FFD700&center=true&vCenter=true&width=500&lines=Muhammad+Yousaf+Baloch;Lead+Architect+—+YOUSAF-MD+Platform;Developer+%7C+Creator+%7C+Owner" alt="dev"/>
 
@@ -57,7 +57,7 @@
 
 <div align="center">
 
-## ⚛️ BOT FEATURES ⚛️
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:4facfe,50:a18cd1,100:00f2fe&height=50&text=⚛️+BOT+FEATURES+⚛️&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
 
 | 🎯 CATEGORY | ✨ FEATURES | 📊 STATUS |
 |:---:|:---|:---:|
@@ -81,7 +81,7 @@
 
 <div align="center">
 
-## 🚀 DEPLOY ON ANY PLATFORM
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:6B00FF,50:FF009D,100:FF6B35&height=50&text=🚀+DEPLOY+ON+ANY+PLATFORM&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
 
 [![](https://img.shields.io/badge/━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━-000000?style=for-the-badge)](https://github.com/yousafpubg110-tech/YOUSAF-MD)
 
@@ -127,7 +127,7 @@
 
 <div align="center">
 
-## 📋 DEPLOY STEPS (ALL PLATFORMS)
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:00CC44,50:00F2FE,100:4facfe&height=50&text=📋+DEPLOY+STEPS+(ALL+PLATFORMS)&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
 
 | # | STEP | ACTION |
 |:---:|:---|:---|
@@ -171,7 +171,7 @@
 
 <div align="center">
 
-## 📱 SOCIAL MEDIA LINKS
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0050,50:FF009D,100:FFD700&height=50&text=📱+SOCIAL+MEDIA+LINKS&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
 
 <table>
   <tr>
@@ -211,7 +211,7 @@
 
 <img src="https://i.imgur.com/dBaSKWF.gif" height="35" width="100%"/>
 
-## ⚠️ DISCLAIMER
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0000,50:FF6B35,100:FFD700&height=50&text=⚠️+DISCLAIMER&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
 
 <div style="background:#000000;border-left:6px solid #00F2FE;padding:16px 20px;border-radius:0 16px 16px 0;box-shadow:0 0 30px #00F2FE44;text-align:left;max-width:600px">
 <h3 style="color:#FFD700;font-family:Orbitron,sans-serif;margin:0 0 10px 0">⚠️ IMPORTANT NOTICE</h3>
