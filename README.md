@@ -142,63 +142,30 @@
 
 </div>
 
----
+<div align="center">
 
-**✠ VPS / LINUX MANUAL DEPLOY GUIDE ✠**
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF6B35,50:FF009D,100:6B00FF&height=50&text=🖥️+VPS+%2F+LINUX+MANUAL+DEPLOY&fontSize=20&fontColor=ffffff&animation=fadeIn" width="100%"/>
 
-```bash
-# Step 1: Update system
-sudo apt update && sudo apt upgrade -y
+| STEP | COMMAND |
+|:---:|:---|
+| ![](https://img.shields.io/badge/1-UPDATE-FF6B35?style=for-the-badge) | `sudo apt update && sudo apt upgrade -y` |
+| ![](https://img.shields.io/badge/2-NODE.JS-FF009D?style=for-the-badge) | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo -E bash - && sudo apt install -y nodejs ffmpeg git imagemagick` |
+| ![](https://img.shields.io/badge/3-CLONE-9B00FF?style=for-the-badge) | `git clone https://github.com/yousafpubg110-tech/YOUSAF-MD.git && cd YOUSAF-MD` |
+| ![](https://img.shields.io/badge/4-INSTALL-0080FF?style=for-the-badge) | `npm install` |
+| ![](https://img.shields.io/badge/5-START-00CC44?style=for-the-badge) | `npm start` — Dashboard opens → Enter phone → Get Pairing Code |
+| ![](https://img.shields.io/badge/6-PM2_24%2F7-FFD700?style=for-the-badge) | `npm i -g pm2 && pm2 start index.js --name YOUSAF-MD && pm2 save && pm2 startup` |
 
-# Step 2: Install Node.js 20 + FFmpeg
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs ffmpeg git imagemagick
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:00F2FE,50:FFD700,100:00CC44&height=50&text=⚙️+GITHUB+WORKFLOW+AUTO+DEPLOY&fontSize=20&fontColor=000000&animation=fadeIn" width="100%"/>
 
-# Step 3: Clone repository
-git clone https://github.com/yousafpubg110-tech/YOUSAF-MD.git
-cd YOUSAF-MD
+| | WORKFLOW CONFIG |
+|:---:|:---|
+| ![](https://img.shields.io/badge/NODE-20.x-00F2FE?style=for-the-badge&logo=nodedotjs) | `node-version: [20.x]` |
+| ![](https://img.shields.io/badge/OS-Ubuntu_Latest-FFD700?style=for-the-badge&logo=ubuntu&logoColor=black) | `runs-on: ubuntu-latest` |
+| ![](https://img.shields.io/badge/DEPS-FFmpeg+ImageMagick-00CC44?style=for-the-badge) | `sudo apt-get install -y ffmpeg imagemagick` |
+| ![](https://img.shields.io/badge/INSTALL-npm_install-FF6B35?style=for-the-badge&logo=npm) | `npm install` |
+| ![](https://img.shields.io/badge/START-npm_start-FF009D?style=for-the-badge) | `npm start` |
 
-# Step 4: Install dependencies
-npm install
-
-# Step 5: Start bot (Pairing dashboard opens)
-npm start
-
-# Step 6: Keep running 24/7 with PM2
-npm install -g pm2
-pm2 start index.js --name YOUSAF-MD
-pm2 save && pm2 startup
-```
-
----
-
-**✠ FREE DEPLOYMENT — GITHUB WORKFLOW ✠**
-
-```yaml
-name: YOUSAF-MD Bot
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          check-latest: true
-      - run: sudo apt-get install -y ffmpeg imagemagick
-      - run: npm install
-      - run: npm start
-```
+</div>
 
 ---
 
