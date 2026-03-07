@@ -19,6 +19,9 @@ fs.ensureDirSync(TEMP);
 
 const MAX_SIZE_MB = 250;
 
+// FIXED: ytdl agent to bypass YouTube bot detection
+const ytdlAgent = ytdl.createAgent();
+
 function safeUnlink(...paths) {
   for (const p of paths) if (p) fs.unlink(p).catch(() => {});
 }
@@ -46,6 +49,7 @@ async function handleAudio(sock, msg, ctx, query) {
       const stream = ytdl(video.url, {
         filter:  'audioonly',
         quality: 'highestaudio',
+        agent:   ytdlAgent, // FIXED
       });
       const writer = fs.createWriteStream(outPath);
       stream.pipe(writer);
@@ -77,7 +81,6 @@ async function handleAudio(sock, msg, ctx, query) {
 }
 
 // ── VIDEO DOWNLOADER ──────────────────────────────────────
-// Default: 480p — if user writes "720" at end: 720p
 async function handleVideo(sock, msg, ctx, query, quality = '480p') {
   await sendWait(sock, ctx.jid, msg);
   const outPath = path.join(TEMP, `video_${Date.now()}.mp4`);
@@ -86,21 +89,20 @@ async function handleVideo(sock, msg, ctx, query, quality = '480p') {
     const url   = isUrl ? query : (await searchYouTube(query))?.url;
     if (!url) return sock.sendMessage(ctx.jid, { text: '❌ No results found.' }, { quoted: msg });
 
-    // 480p = format 135 (video) + 140 (audio) merged
-    // 720p = format 136 (video) + 140 (audio) merged
-    // ytdl videoandaudio filter picks closest available
-    const qualityLabel = quality === '720p' ? 'highestvideo' : 'lowestvideo';
-
     await new Promise((resolve, reject) => {
       const stream = ytdl(url, {
         filter:  'videoandaudio',
         quality: quality === '720p' ? '136' : '135',
+        agent:   ytdlAgent, // FIXED
       });
       const writer = fs.createWriteStream(outPath);
       stream.pipe(writer);
-      stream.on('error', (err) => {
-        // fallback if exact quality not found
-        const fallback = ytdl(url, { filter: 'videoandaudio', quality: 'lowest' });
+      stream.on('error', () => {
+        const fallback = ytdl(url, {
+          filter: 'videoandaudio',
+          quality: 'lowest',
+          agent:   ytdlAgent,
+        });
         const w2 = fs.createWriteStream(outPath);
         fallback.pipe(w2);
         fallback.on('error', reject);
@@ -276,11 +278,16 @@ async function handleTrailer(sock, msg, ctx, query, quality = '480p') {
       const stream = ytdl(video.url, {
         filter:  'videoandaudio',
         quality: quality === '720p' ? '136' : '135',
+        agent:   ytdlAgent, // FIXED
       });
       const writer = fs.createWriteStream(outPath);
       stream.pipe(writer);
-      stream.on('error', (err) => {
-        const fallback = ytdl(video.url, { filter: 'videoandaudio', quality: 'lowest' });
+      stream.on('error', () => {
+        const fallback = ytdl(video.url, {
+          filter:  'videoandaudio',
+          quality: 'lowest',
+          agent:   ytdlAgent,
+        });
         const w2 = fs.createWriteStream(outPath);
         fallback.pipe(w2);
         fallback.on('error', reject);
@@ -313,18 +320,11 @@ async function handleTrailer(sock, msg, ctx, query, quality = '480p') {
 
 // ── PLAYSTORE SEARCH ──────────────────────────────────────
 async function handlePlayStore(sock, msg, ctx, query) {
-  await sendWait(sock, ctx.jid, msg);
   try {
     const searchUrl = `https://play.google.com/store/search?q=${encodeURIComponent(query)}&c=apps`;
-    const text = `📱 *Play Store: ${query}*
-
-🔍 *Search Results:*
-${searchUrl}
-
-> _Search by YOUSAF-MD_`;
-
-    await sock.sendMessage(ctx.jid, { text }, { quoted: msg });
-
+    await sock.sendMessage(ctx.jid, {
+      text: `📱 *Play Store: ${query}*\n\n🔍 *Search Results:*\n${searchUrl}\n\n> _Search by YOUSAF-MD_`,
+    }, { quoted: msg });
   } catch (e) {
     sock.sendMessage(ctx.jid, { text: `❌ Play Store search failed:\n${e.message}` }, { quoted: msg });
   }
@@ -335,7 +335,6 @@ async function handleImageSearch(sock, msg, ctx, query) {
   await sendWait(sock, ctx.jid, msg);
   const outPath = path.join(TEMP, `img_${Date.now()}.jpg`);
   try {
-    // Step 1: get vqd token
     const initRes = await axios.get(
       `https://duckduckgo.com/?q=${encodeURIComponent(query)}&iax=images&ia=images`,
       { timeout: 10000, headers: { 'User-Agent': 'Mozilla/5.0' } }
@@ -344,27 +343,21 @@ async function handleImageSearch(sock, msg, ctx, query) {
     if (!vqdMatch) throw new Error('Could not initialize image search.');
     const vqd = vqdMatch[1];
 
-    // Step 2: get image results
     const imgRes = await axios.get(
       `https://duckduckgo.com/i.js?q=${encodeURIComponent(query)}&vqd=${vqd}&o=json&p=1`,
       {
         timeout: 10000,
-        headers: {
-          'User-Agent': 'Mozilla/5.0',
-          'Referer':    'https://duckduckgo.com/',
-        },
+        headers: { 'User-Agent': 'Mozilla/5.0', 'Referer': 'https://duckduckgo.com/' },
       }
     );
 
     const results = imgRes.data?.results;
     if (!results || results.length === 0) throw new Error('No images found.');
 
-    // Pick random from top 5
     const pick     = results[Math.floor(Math.random() * Math.min(5, results.length))];
     const imageUrl = pick.image;
     if (!imageUrl) throw new Error('No image URL found.');
 
-    // Step 3: download image
     const dlRes = await axios.get(imageUrl, {
       responseType: 'arraybuffer',
       timeout:      20000,
@@ -391,7 +384,7 @@ function parseQuality(body) {
   return { query, quality: is720 ? '720p' : '480p' };
 }
 
-// ── COMMANDS ───────────────────────────────────────────────
+// ── COMMANDS ──────────────────────────────────────────────
 module.exports = {
   commands: {
 
@@ -466,7 +459,6 @@ module.exports = {
     async gdrive(sock, msg, ctx, args, body) {
       if (!body) return sock.sendMessage(ctx.jid, { text: '❌ Usage: .gdrive [Google Drive link]' }, { quoted: msg });
       await sendWait(sock, ctx.jid, msg);
-
       const outPath = path.join(TEMP, `gdrive_${Date.now()}.bin`);
       try {
         const match  = body.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -493,4 +485,3 @@ module.exports = {
     },
   },
 };
-        
