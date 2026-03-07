@@ -1,0 +1,50 @@
+# ============================================================
+#   YOUSAF-MD — Dependabot Configuration
+#   Automatically checks for dependency updates on GitHub
+#   Developer: Muhammad Yousaf Baloch
+# ============================================================
+
+version: 2
+
+updates:
+
+  # npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Asia/Karachi"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "yousafpubg110-tech"
+    assignees:
+      - "yousafpubg110-tech"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"
+    ignore:
+      # Ignore major version bumps — test manually
+      - dependency-name: "@whiskeysockets/baileys"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "socket.io"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "express"
+        update-types: ["version-update:semver-major"]
+
+  # GitHub Actions (if used in future)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Asia/Karachi"
+    open-pull-requests-limit: 5
+    labels:
+      - "github-actions"
+      - "automated"
