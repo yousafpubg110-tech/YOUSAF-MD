@@ -1,15 +1,17 @@
 // ============================================================
 //   YOUSAF-MD — PLUGIN LOADER
-//   Fixed: all plugins included, correct group event handler
+//   Added: BOT_MODE check (public/private)
 //   Developer: Muhammad Yousaf Baloch
 // ============================================================
 
 'use strict';
 
-const { buildContext } = require('../lib/PermissionHandler');
-const config           = require('../config');
-const safetyPlugin     = require('./safety');
-const autoReplyPlugin  = require('./autoreply');
+const { buildContext }  = require('../lib/PermissionHandler');
+const config            = require('../config');
+const Database          = require('../lib/Database');
+const SettingsHandler   = require('../lib/SettingsHandler');
+const safetyPlugin      = require('./safety');
+const autoReplyPlugin   = require('./autoreply');
 
 const plugins = [
   require('./menu'),
@@ -34,7 +36,6 @@ function parseCommand(text = '') {
 
 function loader(sock, instanceId) {
 
-  // Single messages.upsert handler — no duplicate
   sock.ev.on('messages.upsert', async ({ messages, type }) => {
     if (type !== 'notify') return;
 
@@ -54,9 +55,7 @@ function loader(sock, instanceId) {
   sock.ev.on('messages.delete', async (update) => {
     try {
       const keys = update?.keys || (update?.key ? [update.key] : []);
-      if (keys.length) {
-        await safetyPlugin.onDeletedMessage(sock, keys, instanceId);
-      }
+      if (keys.length) await safetyPlugin.onDeletedMessage(sock, keys, instanceId);
     } catch (e) {
       console.error('[LOADER] Anti-delete error:', e.message);
     }
@@ -94,18 +93,36 @@ async function handleMessage(sock, msg, instanceId) {
 
   ctx.body = text;
 
-  // Passive onMessage hooks
+  // Passive hooks — safety plugin وغیرہ
   for (const plugin of plugins) {
     if (typeof plugin.onMessage === 'function') {
       await plugin.onMessage(sock, msg, ctx).catch(() => {});
     }
   }
 
-  // Command check first
+  // Command check
   const parsed = parseCommand(text);
 
   if (parsed) {
     const { command, args, body } = parsed;
+
+    // ── BOT MODE CHECK ──────────────────────────────────
+    // .public اور .private ہمیشہ صرف admin کے لیے ہیں
+    const adminOnlyCommands = ['public', 'private', 'settings', 'set', 'antidel',
+                               'antical', 'antilink', 'autolike', 'autoview'];
+
+    const adminJid   = Database.getAdmin();
+    const settings   = adminJid ? SettingsHandler.get(adminJid) : {};
+    const isPublic   = settings.BOT_MODE === true;
+
+    // Private mode میں — صرف admin commands چلا سکتا ہے
+    if (!isPublic && !ctx.isBotAdmin && !adminOnlyCommands.includes(command)) {
+      await sock.sendMessage(ctx.jid, {
+        text: `🔒 *Bot is in Private Mode*\nصرف Bot Admin commands use کر سکتا ہے۔`,
+      }, { quoted: msg }).catch(() => {});
+      return;
+    }
+
     for (const plugin of plugins) {
       if (!plugin.commands) continue;
       const handler = plugin.commands[command];
@@ -122,17 +139,14 @@ async function handleMessage(sock, msg, instanceId) {
     return;
   }
 
-  // Auto-reply only for personal chat non-commands
+  // Auto-reply صرف personal chat میں
   if (!ctx.isGroup && !msg.key?.fromMe) {
     await autoReplyPlugin.handleAutoReply(sock, msg, ctx).catch(() => {});
   }
 }
 
-// FIXED: uses Database.getAdmin() instead of getInstance()
 async function handleGroupEvent(sock, update) {
   const { id: groupJid, participants, action } = update;
-  const Database        = require('../lib/Database');
-  const SettingsHandler = require('../lib/SettingsHandler');
 
   const adminJid = Database.getAdmin();
   if (!adminJid) return;
@@ -159,3 +173,4 @@ async function handleGroupEvent(sock, update) {
 }
 
 module.exports = loader;
+    
