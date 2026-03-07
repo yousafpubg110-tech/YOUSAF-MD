@@ -41,11 +41,11 @@ const config = {
     ANTI_DELETE:      true,
     AUTO_STATUS_VIEW: true,
     AUTO_LIKE_STATUS: true,
-    ANTI_CALL:        true,
-    ANTI_LINK:        false,
-    WELCOME_MSG:      true,
-    GOODBYE_MSG:      true,
-    AUTO_REACT:       false,
+    ANTI_CALL:        false,
+    ANTI_LINK:        true,
+    WELCOME_MSG:      false,
+    GOODBYE_MSG:      false,
+    AUTO_REACT:       true,
   },
 
   // ── WELCOME MESSAGE ───────────────────────────────────────
