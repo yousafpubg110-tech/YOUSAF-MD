@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:4facfe,50:a18cd1,100:00f2fe&height=200&section=header&text=YOUSAF-MD%20v3.0&fontSize=60&fontColor=ffffff&fontAlignY=38&desc=Personal%20WhatsApp%20Bot&descAlignY=58&descColor=ffffff&animation=fadeIn" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:FFD700,20:FF6B35,40:FF009D,60:9B00FF,80:00F2FE,100:00CC44&height=220&section=header&text=⚡%20YOUSAF-MD%20v3.0%20⚡&fontSize=65&fontColor=ffffff&fontAlignY=38&desc=🔥%20Personal%20WhatsApp%20Bot%20🔥&descAlignY=60&descColor=FFD700&animation=fadeIn&stroke=ffffff&strokeWidth=2" width="100%"/>
 
 <img src="assets/banner.jpg" width="100%" alt="YOUSAF-MD Banner"/>
 
@@ -229,6 +229,6 @@
 
 <br/>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00f2fe,50:a18cd1,100:4facfe&height=120&section=footer&text=YOUSAF-MD+v3.0&fontSize=28&fontColor=ffffff&fontAlignY=65&animation=fadeIn" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00CC44,20:00F2FE,40:9B00FF,60:FF009D,80:FF6B35,100:FFD700&height=130&section=footer&text=⚡%20YOUSAF-MD%20v3.0%20⚡&fontSize=30&fontColor=ffffff&fontAlignY=65&animation=fadeIn&stroke=ffffff&strokeWidth=1" width="100%"/>
 
 </div>
