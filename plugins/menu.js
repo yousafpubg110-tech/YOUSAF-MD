@@ -8,18 +8,25 @@
 
 const config = require('../config');
 
-const MENU_IMG = 'https://raw.githubusercontent.com/yousafpubg110-tech/YOUSAF-MD/main/assets/menu.jpg';
+// Uptime helper
+function getUptime() {
+  const uptime = process.uptime();
+  const h      = Math.floor(uptime / 3600);
+  const m      = Math.floor((uptime % 3600) / 60);
+  const s      = Math.floor(uptime % 60);
+  return `${h > 0 ? h + 'h ' : ''}${m}m ${s}s`;
+}
 
-const MENU_TEXT = (prefix, uptime) => `
+const MENU_TEXT = (prefix) => `
 ꧁༺ 🤖 *YOUSAF-MD* 🤖 ༻꧂
 
 ┌─────────────────────┐
 │ 👑 *Owner :* Mr Yousaf Baloch
-│ ⚡ *Version :* 3.0.0
+│ ⚡ *Version :* ${config.BOT_VERSION}
 │ 📜 *Commands :* 100+
 │ 🌐 *Platform :* Multi-Device
 │ 📦 *Prefix :* ${prefix}
-│ ⏱️ *Runtime :* ${uptime}
+│ ⏱️ *Runtime :* ${getUptime()}
 │ 🔥 *Status :* Active & Online
 └─────────────────────┘
 
@@ -223,28 +230,30 @@ module.exports = {
   commands: {
 
     async menu(sock, msg, ctx) {
-      const uptime    = process.uptime();
-      const h         = Math.floor(uptime / 3600);
-      const m         = Math.floor((uptime % 3600) / 60);
-      const s         = Math.floor(uptime % 60);
-      const uptimeStr = `${h > 0 ? h + 'h ' : ''}${m}m ${s}s`;
-
-      return sock.sendMessage(ctx.jid, {
-        image: { url: MENU_IMG },
-        caption: MENU_TEXT(config.PREFIX, uptimeStr),
-        buttons: [
-          {
-            buttonId: 'whatsapp_channel',
-            buttonText: { displayText: '📢 Join WhatsApp Channel' },
-            type: 1,
-            nativeFlowInfo: {
-              name: 'open_url',
-              paramsJson: JSON.stringify({ url: config.LINKS.WHATSAPP }),
+      // Try with image first, fallback to text only if image fails
+      try {
+        return await sock.sendMessage(ctx.jid, {
+          image:   { url: 'https://raw.githubusercontent.com/yousafpubg110-tech/YOUSAF-MD/main/assets/menu.jpg' },
+          caption: MENU_TEXT(config.PREFIX),
+          buttons: [
+            {
+              buttonId:   'whatsapp_channel',
+              buttonText: { displayText: '📢 Join WhatsApp Channel' },
+              type:       1,
+              nativeFlowInfo: {
+                name:       'open_url',
+                paramsJson: JSON.stringify({ url: config.LINKS.WHATSAPP }),
+              },
             },
-          },
-        ],
-        headerType: 4,
-      }, { quoted: msg });
+          ],
+          headerType: 4,
+        }, { quoted: msg });
+      } catch {
+        // Fallback — text only if image fails
+        return sock.sendMessage(ctx.jid, {
+          text: MENU_TEXT(config.PREFIX),
+        }, { quoted: msg });
+      }
     },
 
   },
