@@ -35,14 +35,14 @@ const config = {
   DEPLOYMENT_TYPE: 'personal-instance',
 
   DEFAULTS: {
-    ANTI_DELETE:      process.env.ANTI_DE  !== 'false',
-    AUTO_STATUS_VIEW: process.env.AUTO_ST  !== 'false',
-    AUTO_LIKE_STATUS: process.env.AUTO_LI  !== 'false',
-    ANTI_CALL:        process.env.ANTI_CA  === 'true',
-    ANTI_LINK:        process.env.ANTI_LI  !== 'false',
-    WELCOME_MSG:      process.env.WELCOME  === 'true',
-    GOODBYE_MSG:      process.env.GOODBYE  === 'true',
-    AUTO_REACT:       process.env.AUTO_RE  !== 'false',
+    ANTI_DELETE:      process.env.ANTI_DE  !== 'true',
+    AUTO_STATUS_VIEW: process.env.AUTO_ST  !== 'true',
+    AUTO_LIKE_STATUS: process.env.AUTO_LI  !== 'true',
+    ANTI_CALL:        process.env.ANTI_CA  === 'false',
+    ANTI_LINK:        process.env.ANTI_LI  !== 'true',
+    WELCOME_MSG:      process.env.WELCOME  === 'false',
+    GOODBYE_MSG:      process.env.GOODBYE  === 'false',
+    AUTO_REACT:       process.env.AUTO_RE  !== 'true',
   },
 
   WELCOME_TEXT: (phone) => `
