@@ -1,12 +1,12 @@
 // ============================================================
 //   YOUSAF-MD — PLUGIN LOADER
-//   Fixed: Public mode — سب commands چلا سکتے ہیں
 //   Developer: Muhammad Yousaf Baloch
 // ============================================================
 
 'use strict';
 
 const { buildContext }  = require('../lib/PermissionHandler');
+const { isBotAdmin }    = require('../lib/PermissionHandler');
 const config            = require('../config');
 const Database          = require('../lib/Database');
 const SettingsHandler   = require('../lib/SettingsHandler');
@@ -38,7 +38,6 @@ function loader(sock, instanceId) {
 
   sock.ev.on('messages.upsert', async ({ messages, type }) => {
     if (type !== 'notify') return;
-
     for (const msg of messages) {
       try {
         if (msg.key?.remoteJid === 'status@broadcast') {
@@ -64,9 +63,7 @@ function loader(sock, instanceId) {
   sock.ev.on('call', async (calls) => {
     try {
       await safetyPlugin.onCall(sock, calls, instanceId);
-    } catch (e) {
-      console.error('[LOADER] Anti-call error:', e.message);
-    }
+    } catch {}
   });
 
   sock.ev.on('group-participants.update', async (update) => {
@@ -81,19 +78,19 @@ function loader(sock, instanceId) {
 async function handleMessage(sock, msg, instanceId) {
   if (!msg.message) return;
 
-  const ctx  = buildContext(sock, msg, instanceId);
+  const ctx     = buildContext(sock, msg, instanceId);
+  const fromMe  = msg.key?.fromMe || false;
+  const sender  = ctx.sender;
+
   const text =
-    msg.message?.conversation                                          ||
-    msg.message?.extendedTextMessage?.text                             ||
-    msg.message?.imageMessage?.caption                                 ||
-    msg.message?.videoMessage?.caption                                 ||
-    msg.message?.buttonsResponseMessage?.selectedButtonId              ||
-    msg.message?.listResponseMessage?.singleSelectReply?.selectedRowId ||
+    msg.message?.conversation ||
+    msg.message?.extendedTextMessage?.text ||
+    msg.message?.imageMessage?.caption ||
+    msg.message?.videoMessage?.caption ||
     '';
 
   ctx.body = text;
 
-  // Passive hooks — ہر message پر
   for (const plugin of plugins) {
     if (typeof plugin.onMessage === 'function') {
       await plugin.onMessage(sock, msg, ctx).catch(() => {});
@@ -101,58 +98,55 @@ async function handleMessage(sock, msg, instanceId) {
   }
 
   const parsed = parseCommand(text);
-
-  if (parsed) {
-    const { command, args, body } = parsed;
-
-    // صرف settings والی commands admin کے لیے ہیں
-    const adminOnlyCommands = [
-      'settings', 'set', 'antidel', 'antical',
-      'antilink', 'autolike', 'autoview',
-    ];
-
-    if (adminOnlyCommands.includes(command) && !ctx.isBotAdmin) {
-      await sock.sendMessage(ctx.jid, {
-        text: `╔══════════════════════════╗\n║  🚫 *ACCESS DENIED*        ║\n╚══════════════════════════╝\n\n⚠️ The command *.${command}* is restricted to the *Bot Admin* only.`,
-      }, { quoted: msg }).catch(() => {});
-      return;
-    }
-
-    // باقی سب commands سب کے لیے کھلی ہیں
-    for (const plugin of plugins) {
-      if (!plugin.commands) continue;
-      const handler = plugin.commands[command];
-      if (typeof handler === 'function') {
-        await handler(sock, msg, ctx, args, body).catch((e) => {
-          console.error(`[PLUGIN:${command}] Error:`, e.message);
-          sock.sendMessage(ctx.jid, {
-            text: `⚠️ Error in *.${command}*\n\`${e.message}\``,
-          }, { quoted: msg }).catch(() => {});
-        });
-        return;
-      }
+  if (!parsed) {
+    if (!ctx.isGroup && !fromMe) {
+      await autoReplyPlugin.handleAutoReply(sock, msg, ctx).catch(() => {});
     }
     return;
   }
 
-  // Auto-reply صرف personal chat میں
-  if (!ctx.isGroup && !msg.key?.fromMe) {
-    await autoReplyPlugin.handleAutoReply(sock, msg, ctx).catch(() => {});
+  const { command, args, body } = parsed;
+
+  const adminOnlyCommands = [
+    'settings', 'set', 'antidel', 'antical',
+    'antilink', 'autolike', 'autoview',
+  ];
+
+  // Admin check: fromMe (bot ka message) ya isBotAdmin
+  const isAdmin = fromMe || isBotAdmin(sender);
+
+  if (adminOnlyCommands.includes(command) && !isAdmin) {
+    await sock.sendMessage(ctx.jid, {
+      text: '🚫 *ACCESS DENIED*\n\nThis command is for Bot Admin only.',
+    }, { quoted: msg }).catch(() => {});
+    return;
+  }
+
+  for (const plugin of plugins) {
+    if (!plugin.commands) continue;
+    const handler = plugin.commands[command];
+    if (typeof handler === 'function') {
+      await handler(sock, msg, ctx, args, body).catch((e) => {
+        console.error(`[PLUGIN:${command}] Error:`, e.message);
+        sock.sendMessage(ctx.jid, {
+          text: `Error in .${command}: ${e.message}`,
+        }, { quoted: msg }).catch(() => {});
+      });
+      return;
+    }
   }
 }
 
 async function handleGroupEvent(sock, update) {
   const { id: groupJid, participants, action } = update;
-
   const adminJid = Database.getAdmin();
   if (!adminJid) return;
-
   const settings = SettingsHandler.get(adminJid);
 
   if (action === 'add' && settings.WELCOME_MSG) {
     for (const participant of participants) {
       await sock.sendMessage(groupJid, {
-        text:     `👋 Welcome @${participant.split('@')[0]} to the group!\n\n_YOUSAF-MD_`,
+        text: `Welcome @${participant.split('@')[0]}!\n\n_YOUSAF-MD_`,
         mentions: [participant],
       }).catch(() => {});
     }
@@ -161,7 +155,7 @@ async function handleGroupEvent(sock, update) {
   if (action === 'remove' && settings.GOODBYE_MSG) {
     for (const participant of participants) {
       await sock.sendMessage(groupJid, {
-        text:     `👋 Goodbye @${participant.split('@')[0]}!\n\n_YOUSAF-MD_`,
+        text: `Goodbye @${participant.split('@')[0]}!\n\n_YOUSAF-MD_`,
         mentions: [participant],
       }).catch(() => {});
     }
@@ -169,3 +163,4 @@ async function handleGroupEvent(sock, update) {
 }
 
 module.exports = loader;
+  
