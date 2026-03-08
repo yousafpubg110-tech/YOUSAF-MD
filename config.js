@@ -1,23 +1,22 @@
 // ============================================================
 //   YOUSAF-MD — MASTER CONFIGURATION FILE
+//   Fixed: OWNER_NUMBER env سے آتا ہے، hardcoded نہیں
 //   Developer: Muhammad Yousaf Baloch
-//   Fixed: OWNER_JID dynamic, DEFAULTS from env, BOT_MODE added
 // ============================================================
 
 'use strict';
 
+const OWNER_NUMBER = (process.env.OWNER_NUMBER || process.env.OWNER_N || '').replace(/\D/g, '');
+
 const config = {
 
-  BOT_NAME:    process.env.BOT_NAME    || 'YOUSAF-MD',
+  BOT_NAME:    process.env.BOT_NAM || 'YOUSAF-MD',
   BOT_VERSION: '3.0.0',
   BOT_TAGLINE: 'Personal WhatsApp Bot',
 
-  OWNER_NAME:   process.env.OWNER_NAME   || 'Muhammad Yousaf Baloch',
-  OWNER_NUMBER: process.env.OWNER_NUMBER || '923710636110',
-
-  get OWNER_JID() {
-    return (process.env.OWNER_NUMBER || '923710636110') + '@s.whatsapp.net';
-  },
+  OWNER_NAME:   'Muhammad Yousaf Baloch',
+  OWNER_NUMBER: OWNER_NUMBER,
+  OWNER_JID:    OWNER_NUMBER ? OWNER_NUMBER + '@s.whatsapp.net' : '',
 
   LINKS: {
     GITHUB:   'https://github.com/yousafpubg110-tech/YOUSAF-MD',
@@ -35,18 +34,15 @@ const config = {
 
   DEPLOYMENT_TYPE: 'personal-instance',
 
-  get DEFAULTS() {
-    return {
-      BOT_MODE:         process.env.BOT_MODE         === 'true',
-      ANTI_DELETE:      process.env.ANTI_DELETE      !== 'false',
-      AUTO_STATUS_VIEW: process.env.AUTO_STATUS_VIEW !== 'false',
-      AUTO_LIKE_STATUS: process.env.AUTO_LIKE_STATUS !== 'false',
-      ANTI_CALL:        process.env.ANTI_CALL        === 'true',
-      ANTI_LINK:        process.env.ANTI_LINK        === 'true',
-      WELCOME_MSG:      process.env.WELCOME_MSG      === 'true',
-      GOODBYE_MSG:      process.env.GOODBYE_MSG      === 'true',
-      AUTO_REACT:       process.env.AUTO_REACT       === 'true',
-    };
+  DEFAULTS: {
+    ANTI_DELETE:      process.env.ANTI_DE  !== 'false',
+    AUTO_STATUS_VIEW: process.env.AUTO_ST  !== 'false',
+    AUTO_LIKE_STATUS: process.env.AUTO_LI  !== 'false',
+    ANTI_CALL:        process.env.ANTI_CA  === 'true',
+    ANTI_LINK:        process.env.ANTI_LI  !== 'false',
+    WELCOME_MSG:      process.env.WELCOME  === 'true',
+    GOODBYE_MSG:      process.env.GOODBYE  === 'true',
+    AUTO_REACT:       process.env.AUTO_RE  !== 'false',
   },
 
   WELCOME_TEXT: (phone) => `
@@ -62,8 +58,6 @@ const config = {
    • *.menu* — تمام commands دیکھیں
    • *.settings* — Bot کنٹرول کریں
    • *.ping* — Bot چیک کریں
-   • *.public* — Bot کو public کریں
-   • *.private* — Bot کو private کریں
 
 🔗 *Official Links:*
    📢 https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j
