@@ -5,13 +5,12 @@
 
 'use strict';
 
-const { buildContext }  = require('../lib/PermissionHandler');
-const { isBotAdmin }    = require('../lib/PermissionHandler');
-const config            = require('../config');
-const Database          = require('../lib/Database');
-const SettingsHandler   = require('../lib/SettingsHandler');
-const safetyPlugin      = require('./safety');
-const autoReplyPlugin   = require('./autoreply');
+const { buildContext } = require('../lib/PermissionHandler');
+const config           = require('../config');
+const Database         = require('../lib/Database');
+const SettingsHandler  = require('../lib/SettingsHandler');
+const safetyPlugin     = require('./safety');
+const autoReplyPlugin  = require('./autoreply');
 
 const plugins = [
   require('./menu'),
@@ -78,10 +77,7 @@ function loader(sock, instanceId) {
 async function handleMessage(sock, msg, instanceId) {
   if (!msg.message) return;
 
-  const ctx     = buildContext(sock, msg, instanceId);
-  const fromMe  = msg.key?.fromMe || false;
-  const sender  = ctx.sender;
-
+  const ctx  = buildContext(sock, msg, instanceId);
   const text =
     msg.message?.conversation ||
     msg.message?.extendedTextMessage?.text ||
@@ -98,29 +94,15 @@ async function handleMessage(sock, msg, instanceId) {
   }
 
   const parsed = parseCommand(text);
+
   if (!parsed) {
-    if (!ctx.isGroup && !fromMe) {
+    if (!ctx.isGroup && !msg.key?.fromMe) {
       await autoReplyPlugin.handleAutoReply(sock, msg, ctx).catch(() => {});
     }
     return;
   }
 
   const { command, args, body } = parsed;
-
-  const adminOnlyCommands = [
-    'settings', 'set', 'antidel', 'antical',
-    'antilink', 'autolike', 'autoview',
-  ];
-
-  // Admin check: fromMe (bot ka message) ya isBotAdmin
-  const isAdmin = fromMe || isBotAdmin(sender);
-
-  if (adminOnlyCommands.includes(command) && !isAdmin) {
-    await sock.sendMessage(ctx.jid, {
-      text: '🚫 *ACCESS DENIED*\n\nThis command is for Bot Admin only.',
-    }, { quoted: msg }).catch(() => {});
-    return;
-  }
 
   for (const plugin of plugins) {
     if (!plugin.commands) continue;
@@ -163,4 +145,3 @@ async function handleGroupEvent(sock, update) {
 }
 
 module.exports = loader;
-  
