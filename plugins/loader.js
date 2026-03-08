@@ -1,6 +1,6 @@
 // ============================================================
 //   YOUSAF-MD — PLUGIN LOADER
-//   Fixed: buildContext correct import, BOT_MODE added
+//   Fixed: Public mode — سب commands چلا سکتے ہیں
 //   Developer: Muhammad Yousaf Baloch
 // ============================================================
 
@@ -93,6 +93,7 @@ async function handleMessage(sock, msg, instanceId) {
 
   ctx.body = text;
 
+  // Passive hooks — ہر message پر
   for (const plugin of plugins) {
     if (typeof plugin.onMessage === 'function') {
       await plugin.onMessage(sock, msg, ctx).catch(() => {});
@@ -104,22 +105,20 @@ async function handleMessage(sock, msg, instanceId) {
   if (parsed) {
     const { command, args, body } = parsed;
 
+    // صرف settings والی commands admin کے لیے ہیں
     const adminOnlyCommands = [
-      'public', 'private', 'settings', 'set',
-      'antidel', 'antical', 'antilink', 'autolike', 'autoview',
+      'settings', 'set', 'antidel', 'antical',
+      'antilink', 'autolike', 'autoview',
     ];
 
-    const adminJid = Database.getAdmin();
-    const settings = adminJid ? SettingsHandler.get(adminJid) : {};
-    const isPublic = settings.BOT_MODE === true;
-
-    if (!isPublic && !ctx.isBotAdmin && !adminOnlyCommands.includes(command)) {
+    if (adminOnlyCommands.includes(command) && !ctx.isBotAdmin) {
       await sock.sendMessage(ctx.jid, {
-        text: `🔒 *Bot is in Private Mode*\nصرف Bot Admin commands use کر سکتا ہے۔`,
+        text: `╔══════════════════════════╗\n║  🚫 *ACCESS DENIED*        ║\n╚══════════════════════════╝\n\n⚠️ The command *.${command}* is restricted to the *Bot Admin* only.`,
       }, { quoted: msg }).catch(() => {});
       return;
     }
 
+    // باقی سب commands سب کے لیے کھلی ہیں
     for (const plugin of plugins) {
       if (!plugin.commands) continue;
       const handler = plugin.commands[command];
@@ -136,6 +135,7 @@ async function handleMessage(sock, msg, instanceId) {
     return;
   }
 
+  // Auto-reply صرف personal chat میں
   if (!ctx.isGroup && !msg.key?.fromMe) {
     await autoReplyPlugin.handleAutoReply(sock, msg, ctx).catch(() => {});
   }
