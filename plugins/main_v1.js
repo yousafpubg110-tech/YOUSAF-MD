@@ -1,9 +1,9 @@
 /*
 ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
-┃   YOUSAF-BALOCH-MD  •  main_v1         ┃
-┃   Commands: alive ping runtime info    ┃
-┃             menu                       ┃
-┃        Created by MR YOUSAF BALOCH     ┃
+┃   YOUSAF-MD  •  main_v1               ┃
+┃   Commands: alive ping runtime info   ┃
+┃             menu public private       ┃
+┃        Created by MR YOUSAF BALOCH    ┃
 ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
 */
 import os from 'os';
@@ -13,7 +13,6 @@ function fmtUp(s){const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=Math.
 function fmtBytes(b){if(b>=1e9)return(b/1e9).toFixed(1)+' GB';if(b>=1e6)return(b/1e6).toFixed(1)+' MB';return(b/1e3).toFixed(1)+' KB';}
 function greet(){const h=new Date(new Date().toLocaleString('en',{timeZone:'Asia/Karachi'})).getHours();if(h>=5&&h<12)return'🌅 Good Morning!';if(h>=12&&h<16)return'☀️ Good Afternoon!';if(h>=16&&h<20)return'🌆 Good Evening!';return'🌙 Good Night!';}
 
-// Full ownerFooter for main/menu commands only
 function ownerFooter() {
   return `╭─『 👑 *${OWNER.BOT_NAME}* 』
 │ 👤 *Owner:*   ${OWNER.FULL_NAME}
@@ -30,7 +29,7 @@ async function aliveHandler({sock,msg,from,sender}) {
   try {
     await msg.react('✅');
     const senderNum=sender?.split('@')[0]||'User'; const uptime=process.uptime();
-    await msg.reply(`╭━━━『 🤖 *${OWNER.BOT_NAME}* 』━━━╮\n\n👋 *Hello +${senderNum}!*\n${greet()}\n\n✅ *Bot is Active & Running!*\n\n📊 *Stats:*\n├ ⏱️ *Uptime:* ${fmtUp(uptime)}\n├ 👑 *Owner:* ${OWNER.FULL_NAME}\n├ 📞 *Contact:* +${OWNER.NUMBER}\n├ ✨ *Version:* ${OWNER.VERSION||'2.0.0'}\n├ 🔧 *Prefix:* ${CONFIG.PREFIX}\n└ 🟢 *Status:* Online\n\n${ownerFooter()}\n╰━━━━━━━━━━━━━━━━━━━━━━━━╯`);
+    await msg.reply(`╭━━━『 🤖 *${OWNER.BOT_NAME}* 』━━━╮\n\n👋 *Hello +${senderNum}!*\n${greet()}\n\n✅ *Bot is Active & Running!*\n\n📊 *Stats:*\n├ ⏱️ *Uptime:* ${fmtUp(uptime)}\n├ 👑 *Owner:* ${OWNER.FULL_NAME}\n├ 📞 *Contact:* +${OWNER.NUMBER}\n├ ✨ *Version:* ${OWNER.VERSION||'2.0.0'}\n├ 🔧 *Prefix:* ${CONFIG.PREFIX}\n├ 🌐 *Mode:* ${CONFIG.MODE}\n└ 🟢 *Status:* Online\n\n${ownerFooter()}\n╰━━━━━━━━━━━━━━━━━━━━━━━━╯`);
   } catch (e) { try { await msg.react('❌'); await msg.reply(`❌ _${e.message}_`); } catch (_) {} }
 }
 
@@ -54,7 +53,7 @@ async function infoHandler({msg,sender}) {
     await msg.react('🔍');
     const uptime=process.uptime(); const totalMem=os.totalmem(); const freeMem=os.freemem(); const usedMem=totalMem-freeMem;
     const senderNum=sender?.split('@')[0]||'User';
-    await msg.reply(`╭━━━『 🤖 *BOT INFO* 』━━━╮\n\n👋 *Requested by:* +${senderNum}\n\n╭─『 🤖 *Bot Details* 』\n│ ✨ *Name:*    ${OWNER.BOT_NAME}\n│ 📌 *Version:* ${OWNER.VERSION||'2.0.0'}\n│ 👑 *Owner:*   ${OWNER.FULL_NAME}\n│ 📞 *Contact:* +${OWNER.NUMBER}\n│ 🔧 *Prefix:*  ${CONFIG.PREFIX}\n│ 🌐 *Mode:*    ${CONFIG.MODE||'public'}\n╰──────────────────────────\n\n╭─『 💻 *System Stats* 』\n│ ⏱️  *Uptime:*  ${fmtUp(uptime)}\n│ 🖥️  *OS:*      ${os.platform()} (${os.arch()})\n│ 📦 *Node.js:* ${process.version}\n│ 💾 *RAM:*     ${fmtBytes(usedMem)} / ${fmtBytes(totalMem)}\n│ 🔢 *CPU Cores:* ${os.cpus().length}\n╰──────────────────────────\n\n${ownerFooter()}\n╰━━━━━━━━━━━━━━━━━━━━━━━━╯`);
+    await msg.reply(`╭━━━『 🤖 *BOT INFO* 』━━━╮\n\n👋 *Requested by:* +${senderNum}\n\n╭─『 🤖 *Bot Details* 』\n│ ✨ *Name:*    ${OWNER.BOT_NAME}\n│ 📌 *Version:* ${OWNER.VERSION||'2.0.0'}\n│ 👑 *Owner:*   ${OWNER.FULL_NAME}\n│ 📞 *Contact:* +${OWNER.NUMBER}\n│ 🔧 *Prefix:*  ${CONFIG.PREFIX}\n│ 🌐 *Mode:*    ${CONFIG.MODE}\n╰──────────────────────────\n\n╭─『 💻 *System Stats* 』\n│ ⏱️  *Uptime:*  ${fmtUp(uptime)}\n│ 🖥️  *OS:*      ${os.platform()} (${os.arch()})\n│ 📦 *Node.js:* ${process.version}\n│ 💾 *RAM:*     ${fmtBytes(usedMem)} / ${fmtBytes(totalMem)}\n│ 🔢 *CPU Cores:* ${os.cpus().length}\n╰──────────────────────────\n\n${ownerFooter()}\n╰━━━━━━━━━━━━━━━━━━━━━━━━╯`);
   } catch (e) { try { await msg.react('❌'); await msg.reply(`❌ _${e.message}_`); } catch (_) {} }
 }
 
@@ -73,6 +72,7 @@ ${greet()}
 📅 *Date:* ${date}
 🕐 *Time:* ${time}
 ⏱️ *Uptime:* ${fmtUp(uptime)}
+🌐 *Mode:* ${CONFIG.MODE}
 
 ╭─『 📋 *MAIN MENU* 』
 
@@ -127,23 +127,67 @@ ${greet()}
 │ ℹ️ *BOT*
 │  ❯ .alive .ping .runtime .info .menu
 │  ❯ .owner .support
+│  ❯ .public .private
 
 ╰─────────────────────────
 
 ${ownerFooter()}
 ╰━━━━━━━━━━━━━━━━━━━━━━━━╯`;
-    try {
-      const menuThumb=Buffer.from('');
-      await sock.sendMessage(from,{text:menuText},{quoted:msg});
-    } catch (_) { await msg.reply(menuText); }
+    await sock.sendMessage(from,{text:menuText},{quoted:msg});
     await msg.react('✅');
   } catch (e) { try { await msg.react('❌'); await msg.reply(`❌ _${e.message}_`); } catch (_) {} }
 }
 
+// ═══════════════════════════════════════════════════════════════════
+//  PUBLIC MODE — deployer/owner only
+// ═══════════════════════════════════════════════════════════════════
+
+async function publicHandler({msg, isDeployer, isOwner}) {
+  try {
+    if (!isDeployer && !isOwner) {
+      return msg.reply(
+        `❌ *Permission Denied!*\n\nOnly the bot deployer can change bot mode.\n${SYSTEM.SHORT_WATERMARK}`
+      );
+    }
+    CONFIG.MODE = 'public';
+    await msg.react('🌐');
+    await msg.reply(
+      `╭━━━『 🌐 *MODE CHANGED* 』━━━╮\n\n` +
+      `✅ *Bot is now in PUBLIC mode!*\n\n` +
+      `Everyone can use bot commands now.\n\n` +
+      `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM.SHORT_WATERMARK}`
+    );
+  } catch (e) { try { await msg.react('❌'); await msg.reply(`❌ _${e.message}_`); } catch (_) {} }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  PRIVATE MODE — deployer/owner only
+// ═══════════════════════════════════════════════════════════════════
+
+async function privateHandler({msg, isDeployer, isOwner}) {
+  try {
+    if (!isDeployer && !isOwner) {
+      return msg.reply(
+        `❌ *Permission Denied!*\n\nOnly the bot deployer can change bot mode.\n${SYSTEM.SHORT_WATERMARK}`
+      );
+    }
+    CONFIG.MODE = 'private';
+    await msg.react('🔒');
+    await msg.reply(
+      `╭━━━『 🔒 *MODE CHANGED* 』━━━╮\n\n` +
+      `✅ *Bot is now in PRIVATE mode!*\n\n` +
+      `Only deployer and owner can use bot commands now.\n\n` +
+      `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM.SHORT_WATERMARK}`
+    );
+  } catch (e) { try { await msg.react('❌'); await msg.reply(`❌ _${e.message}_`); } catch (_) {} }
+}
+
 export default [
-  {command:['alive','active','bot'],name:'alive',category:'Info',description:'Check if bot is online',usage:'.alive',cooldown:5,handler:aliveHandler},
-  {command:['ping','speed'],       name:'ping', category:'Info',description:'Check bot latency',usage:'.ping',cooldown:5,handler:pingHandler},
-  {command:['runtime','uptime'],   name:'runtime',category:'Info',description:'Bot running time',usage:'.runtime',cooldown:5,handler:runtimeHandler},
-  {command:['info','botinfo','sysinfo'],name:'info',category:'Info',description:'Bot and system info',usage:'.info',cooldown:5,handler:infoHandler},
-  {command:['menu','help','list'], name:'menu', category:'Info',description:'Show all commands',usage:'.menu',cooldown:5,handler:menuHandler},
+  {command:['alive','active','bot'],    name:'alive',   category:'Info',description:'Check if bot is online',  usage:'.alive',   cooldown:5, handler:aliveHandler},
+  {command:['ping','speed'],            name:'ping',    category:'Info',description:'Check bot latency',       usage:'.ping',    cooldown:5, handler:pingHandler},
+  {command:['runtime','uptime'],        name:'runtime', category:'Info',description:'Bot running time',        usage:'.runtime', cooldown:5, handler:runtimeHandler},
+  {command:['info','botinfo','sysinfo'],name:'info',    category:'Info',description:'Bot and system info',     usage:'.info',    cooldown:5, handler:infoHandler},
+  {command:['menu','help','list'],      name:'menu',    category:'Info',description:'Show all commands',       usage:'.menu',    cooldown:5, handler:menuHandler},
+  {command:['public'],                  name:'public',  category:'Owner',description:'Set bot to public mode', usage:'.public',  cooldown:3, deployerOnly:true, handler:publicHandler},
+  {command:['private'],                 name:'private', category:'Owner',description:'Set bot to private mode',usage:'.private', cooldown:3, deployerOnly:true, handler:privateHandler},
 ];
