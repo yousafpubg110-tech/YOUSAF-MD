@@ -31,14 +31,14 @@ export const OWNER = Object.freeze({
   YOUTUBE:        'https://www.youtube.com/@Yousaf_Baloch_Tech',
   TIKTOK:         'https://tiktok.com/@loser_boy.110',
   CHANNEL:        'https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j',
-  GITHUB:         'https://github.com/musakhanbaloch03-sad',
+  GITHUB:         'https://github.com/yousafpubg110-tech',
   WHATSAPP:       'https://wa.me/923710636110',
 
   // This bot repo
-  REPO:           'https://github.com/musakhanbaloch03-sad/YOUSAF-MD',
+  REPO:           'https://github.com/yousafpubg110-tech/YOUSAF-MD',
 
-  // Second bot repo (YOUSAF-BALOCH-MD is a separate bot)
-  REPO_BALOCH_MD: 'https://github.com/musakhanbaloch03-sad/YOUSAF-BALOCH-MD',
+  // Second bot repo
+  REPO_BALOCH_MD: 'https://github.com/yousafpubg110-tech/YOUSAF-BALOCH-MD',
 });
 
 // ═══════════════════════════════════════════════════════════════════
@@ -112,10 +112,10 @@ export const CONFIG = {
   ANTI_CALL:      process.env.ANTI_CALL      === 'true',
   ANTI_VIEW_ONCE: process.env.ANTI_VIEW_ONCE === 'true',
 
-  WELCOME:          process.env.WELCOME          === 'true',
-  GOODBYE:          process.env.GOODBYE          === 'true',
-  MAX_WARN:         parseInt(process.env.MAX_WARN)      || 3,
-  ANTI_SPAM_LIMIT:  parseInt(process.env.ANTI_SPAM_LIMIT) || 5,
+  WELCOME:         process.env.WELCOME           === 'true',
+  GOODBYE:         process.env.GOODBYE           === 'true',
+  MAX_WARN:        parseInt(process.env.MAX_WARN)        || 3,
+  ANTI_SPAM_LIMIT: parseInt(process.env.ANTI_SPAM_LIMIT) || 5,
 
   MONGODB_URI: process.env.MONGODB_URI || '',
   DB_TYPE:     process.env.MONGODB_URI ? 'mongodb' : 'json',
@@ -210,7 +210,7 @@ function initJsonDatabase() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 5]  OWNER FOOTER — always shows Yousaf's info
+//  [SECTION 5]  OWNER FOOTER
 // ═══════════════════════════════════════════════════════════════════
 
 export function ownerFooter() {
@@ -250,7 +250,6 @@ export function isOwnerOnlyCommand(commandName) {
   return OWNER_ONLY_COMMANDS.includes(commandName?.toLowerCase());
 }
 
-// Backward compatibility
 export function isRestrictedCommand(commandName) {
   return isDeployerOnlyCommand(commandName);
 }
