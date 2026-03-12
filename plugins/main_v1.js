@@ -478,8 +478,9 @@ async function menuHandler({sock,msg,from,sender}){
           caption: menuText,
         },{quoted:msg});
       }catch(captionErr){
-        // Fallback if caption too long for some clients
+        // Fallback if caption too long
         console.error('[MENU] caption fallback:',captionErr.message);
         await sock.sendMessage(from,{
           image  : thumbBuf,
-          caption: `🚀 *${OWNER.BOT_NAME}* — Ultra Pro Max\n👑 *By ${OWNER.FULL_NAME}*\n\n⏳ Loading menu
+          caption: `🚀 *${OWNER.BOT_NAME}* — Ultra Pro Max\n👑 *By ${OWNER.FULL_NAME}*\n\n⏳ Loading menu...`,
+        },{
