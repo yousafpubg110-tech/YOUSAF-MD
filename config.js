@@ -7,11 +7,15 @@
  */
 
 import { config } from 'dotenv';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { join } from 'path';
+
 config();
 
 // ═══════════════════════════════════════════════════════════════════
 //  [SECTION 1]  🔒 OWNER IDENTITY — LOCKED — READ ONLY
 //  ⚠️  DO NOT MODIFY — HARD-CODED — IMMUTABLE
+//  یہ معلومات کبھی نہیں بدلیں گی — ہر جگہ یہی نظر آئیں گی
 // ═══════════════════════════════════════════════════════════════════
 
 export const OWNER = Object.freeze({
@@ -33,7 +37,9 @@ export const OWNER = Object.freeze({
 });
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 1-B]  🔑 DEPLOYER — LEVEL 2 BOT ADMIN
+//  [SECTION 1-B]  🔑 DEPLOYER — LEVEL 2
+//  جو کوئی بھی بوٹ اپنے نمبر پر لگائے وہ DEPLOYER ہے
+//  DEPLOYER_NUMBER=923001234567,923007654321 (comma separated)
 // ═══════════════════════════════════════════════════════════════════
 
 function loadDeployers() {
@@ -48,17 +54,30 @@ function loadDeployers() {
 export const DEPLOYERS = Object.freeze(loadDeployers());
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 1-C]  🚫 RESTRICTED COMMANDS — DEPLOYER+ ONLY
+//  [SECTION 1-C]  🚫 DEPLOYER-ONLY COMMANDS
+//  یہ commands صرف DEPLOYER یا OWNER یوز کر سکتا ہے
+//  عام یوزر یہ کبھی نہیں چلا سکتا
 // ═══════════════════════════════════════════════════════════════════
 
-export const RESTRICTED_COMMANDS = Object.freeze([
+export const DEPLOYER_ONLY_COMMANDS = Object.freeze([
   'setting', 'settings', 'set', 'config', 'configure',
   'antilink', 'antiviewonce', 'antispam', 'antibad', 'anticall',
   'autoread', 'autostatus', 'autoreact', 'autolike',
+  'autotyping', 'autorecord',
   'kick', 'add', 'promote', 'demote', 'linkgroup', 'revoke',
   'mute', 'unmute', 'close', 'open',
   'restart', 'shutdown', 'block', 'unblock', 'ban', 'unban',
-  'broadcast', 'bc', 'eval', 'exec', 'shell', 'update',
+  'broadcast', 'bc', 'update',
+  'setprefix', 'setmode', 'setname', 'setwelcome', 'setgoodbye',
+]);
+
+// ═══════════════════════════════════════════════════════════════════
+//  [SECTION 1-D]  👑 OWNER-ONLY COMMANDS
+//  صرف Yousaf (OWNER) یوز کر سکتا ہے — deployer بھی نہیں
+// ═══════════════════════════════════════════════════════════════════
+
+export const OWNER_ONLY_COMMANDS = Object.freeze([
+  'eval', 'exec', 'shell',
 ]);
 
 // ═══════════════════════════════════════════════════════════════════
@@ -118,7 +137,9 @@ export const SYSTEM = Object.freeze({
 });
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 4]  ✅ DATABASE INITIALIZER
+//  [SECTION 4]  ✅ DATABASE INITIALIZER — BUG FIXED
+//  پرانے کوڈ میں non-async function میں await تھا — crash ہوتا تھا
+//  اب fs اور path اوپر import ہیں — کوئی مسئلہ نہیں
 // ═══════════════════════════════════════════════════════════════════
 
 export async function initDatabase() {
@@ -139,13 +160,11 @@ export async function initDatabase() {
   }
 }
 
+// BUG FIX: async ہٹایا، اوپر سے import کی ہوئی fs/path use کی
 function initJsonDatabase() {
   try {
-    const { existsSync, mkdirSync, writeFileSync } = await import('fs');
-    const path = await import('path');
-
     const dbDir  = SYSTEM.DB_DIR;
-    const dbFile = path.join(dbDir, 'database.json');
+    const dbFile = join(dbDir, 'database.json');
 
     if (!existsSync(dbDir)) mkdirSync(dbDir, { recursive: true });
 
@@ -170,7 +189,7 @@ function initJsonDatabase() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 5]  ✅ ownerFooter() FUNCTION
+//  [SECTION 5]  ✅ ownerFooter() — ہمیشہ OWNER کی info دکھاتا ہے
 // ═══════════════════════════════════════════════════════════════════
 
 export function ownerFooter() {
@@ -185,29 +204,40 @@ _⚡ ${OWNER.BOT_NAME} v${OWNER.VERSION}_`;
 
 // ═══════════════════════════════════════════════════════════════════
 //  [SECTION 6]  ✅ PERMISSION HELPER FUNCTIONS
+//  3 levels: OWNER (1) > DEPLOYER (2) > USER (3)
 // ═══════════════════════════════════════════════════════════════════
 
 export function isOwner(sender) {
-  return sender?.split('@')[0] === OWNER.NUMBER;
+  if (!sender) return false;
+  return sender.split('@')[0] === OWNER.NUMBER;
 }
 
 export function isDeployer(sender) {
   if (!sender) return false;
   const num = sender.split('@')[0];
-  if (num === OWNER.NUMBER) return true;
+  if (num === OWNER.NUMBER) return true;   // OWNER ہمیشہ DEPLOYER بھی ہے
   return DEPLOYERS.includes(num);
 }
 
+export function isDeployerOnlyCommand(commandName) {
+  return DEPLOYER_ONLY_COMMANDS.includes(commandName?.toLowerCase());
+}
+
+export function isOwnerOnlyCommand(commandName) {
+  return OWNER_ONLY_COMMANDS.includes(commandName?.toLowerCase());
+}
+
+// پرانی function — backward compatibility کے لیے رکھی
 export function isRestrictedCommand(commandName) {
-  return RESTRICTED_COMMANDS.includes(commandName?.toLowerCase());
+  return isDeployerOnlyCommand(commandName);
 }
 
 export function getPermLevel(sender) {
   if (!sender) return 3;
   const num = sender.split('@')[0];
-  if (num === OWNER.NUMBER) return 1;
-  if (DEPLOYERS.includes(num)) return 2;
-  return 3;
+  if (num === OWNER.NUMBER) return 1;        // OWNER
+  if (DEPLOYERS.includes(num)) return 2;     // DEPLOYER
+  return 3;                                  // USER
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -243,15 +273,17 @@ export function validateConfig() {
 export default {
   OWNER,
   DEPLOYERS,
-  RESTRICTED_COMMANDS,
+  DEPLOYER_ONLY_COMMANDS,
+  OWNER_ONLY_COMMANDS,
   CONFIG,
   SYSTEM,
   initDatabase,
   ownerFooter,
   isOwner,
   isDeployer,
+  isDeployerOnlyCommand,
+  isOwnerOnlyCommand,
   isRestrictedCommand,
   getPermLevel,
   validateConfig,
 };
-    
