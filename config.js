@@ -1,6 +1,6 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════╗
- * ║            YOUSAF-BALOCH-MD — CORE CONFIGURATION                ║
+ * ║            YOUSAF-MD — CORE CONFIGURATION                       ║
  * ║            Created by: Muhammad Yousaf Baloch                   ║
  * ║            Version: 2.0.0  |  500+ Commands                     ║
  * ╚══════════════════════════════════════════════════════════════════╝
@@ -13,33 +13,37 @@ import { join } from 'path';
 config();
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 1]  🔒 OWNER IDENTITY — LOCKED — READ ONLY
-//  ⚠️  DO NOT MODIFY — HARD-CODED — IMMUTABLE
-//  یہ معلومات کبھی نہیں بدلیں گی — ہر جگہ یہی نظر آئیں گی
+//  [SECTION 1]  OWNER IDENTITY — LOCKED — READ ONLY
+//  DO NOT MODIFY — HARD-CODED — IMMUTABLE
 // ═══════════════════════════════════════════════════════════════════
 
 export const OWNER = Object.freeze({
-  NAME:      'Yousuf Baloch',
+  NAME:      'Yousaf Baloch',
   FULL_NAME: 'Muhammad Yousaf Baloch',
   NUMBER:    '923710636110',
   JID:       '923710636110@s.whatsapp.net',
-  BOT_NAME:  'YOUSAF-BALOCH-MD',
+  BOT_NAME:  'YOUSAF-MD',
   VERSION:   '2.0.0',
   YEAR:      '2026',
   COUNTRY:   'Pakistan',
 
-  YOUTUBE:  'https://www.youtube.com/@Yousaf_Baloch_Tech',
-  TIKTOK:   'https://tiktok.com/@loser_boy.110',
-  CHANNEL:  'https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j',
-  GITHUB:   'https://github.com/musakhanbaloch03-sad',
-  REPO:     'https://github.com/musakhanbaloch03-sad/YOUSAF-BALOCH-MD',
-  WHATSAPP: 'https://wa.me/923710636110',
+  // Social media links — DO NOT REMOVE
+  YOUTUBE:        'https://www.youtube.com/@Yousaf_Baloch_Tech',
+  TIKTOK:         'https://tiktok.com/@loser_boy.110',
+  CHANNEL:        'https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j',
+  GITHUB:         'https://github.com/musakhanbaloch03-sad',
+  WHATSAPP:       'https://wa.me/923710636110',
+
+  // This bot repo
+  REPO:           'https://github.com/musakhanbaloch03-sad/YOUSAF-MD',
+
+  // Second bot repo (YOUSAF-BALOCH-MD is a separate bot)
+  REPO_BALOCH_MD: 'https://github.com/musakhanbaloch03-sad/YOUSAF-BALOCH-MD',
 });
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 1-B]  🔑 DEPLOYER — LEVEL 2
-//  جو کوئی بھی بوٹ اپنے نمبر پر لگائے وہ DEPLOYER ہے
-//  DEPLOYER_NUMBER=923001234567,923007654321 (comma separated)
+//  [SECTION 1-B]  DEPLOYER — LEVEL 2 BOT ADMIN
+//  The person who deploys the bot on their number
 // ═══════════════════════════════════════════════════════════════════
 
 function loadDeployers() {
@@ -54,9 +58,8 @@ function loadDeployers() {
 export const DEPLOYERS = Object.freeze(loadDeployers());
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 1-C]  🚫 DEPLOYER-ONLY COMMANDS
-//  یہ commands صرف DEPLOYER یا OWNER یوز کر سکتا ہے
-//  عام یوزر یہ کبھی نہیں چلا سکتا
+//  [SECTION 1-C]  DEPLOYER-ONLY COMMANDS
+//  Only deployer or owner can use these
 // ═══════════════════════════════════════════════════════════════════
 
 export const DEPLOYER_ONLY_COMMANDS = Object.freeze([
@@ -72,8 +75,8 @@ export const DEPLOYER_ONLY_COMMANDS = Object.freeze([
 ]);
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 1-D]  👑 OWNER-ONLY COMMANDS
-//  صرف Yousaf (OWNER) یوز کر سکتا ہے — deployer بھی نہیں
+//  [SECTION 1-D]  OWNER-ONLY COMMANDS
+//  Only Muhammad Yousaf Baloch (original owner) can use these
 // ═══════════════════════════════════════════════════════════════════
 
 export const OWNER_ONLY_COMMANDS = Object.freeze([
@@ -81,7 +84,7 @@ export const OWNER_ONLY_COMMANDS = Object.freeze([
 ]);
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 2]  ✅ BOT SETTINGS
+//  [SECTION 2]  BOT SETTINGS
 // ═══════════════════════════════════════════════════════════════════
 
 export const CONFIG = {
@@ -96,27 +99,38 @@ export const CONFIG = {
   AUTO_READ_STATUS: process.env.AUTO_READ_STATUS === 'true',
   AUTO_LIKE_STATUS: process.env.AUTO_LIKE_STATUS === 'true',
   AUTO_REACT:       process.env.AUTO_REACT       === 'true',
+  AUTO_TYPING:      process.env.AUTO_TYPING      === 'true',
+  AUTO_RECORDING:   process.env.AUTO_RECORDING   === 'true',
+  AUTO_BIO:         process.env.AUTO_BIO         === 'true',
+  AUTO_REPLY:       process.env.AUTO_REPLY        === 'true',
+  AUTO_DOWNLOAD:    process.env.AUTO_DOWNLOAD     === 'true',
 
+  ANTI_DELETE:    process.env.ANTI_DELETE    === 'true',
   ANTI_LINK:      process.env.ANTI_LINK      === 'true',
   ANTI_BAD:       process.env.ANTI_BAD       === 'true',
   ANTI_SPAM:      process.env.ANTI_SPAM      === 'true',
   ANTI_CALL:      process.env.ANTI_CALL      === 'true',
   ANTI_VIEW_ONCE: process.env.ANTI_VIEW_ONCE === 'true',
 
-  WELCOME:  process.env.WELCOME  === 'true',
-  GOODBYE:  process.env.GOODBYE  === 'true',
-  MAX_WARN: parseInt(process.env.MAX_WARN) || 3,
+  WELCOME:          process.env.WELCOME          === 'true',
+  GOODBYE:          process.env.GOODBYE          === 'true',
+  MAX_WARN:         parseInt(process.env.MAX_WARN)      || 3,
+  ANTI_SPAM_LIMIT:  parseInt(process.env.ANTI_SPAM_LIMIT) || 5,
 
   MONGODB_URI: process.env.MONGODB_URI || '',
   DB_TYPE:     process.env.MONGODB_URI ? 'mongodb' : 'json',
-  DB_PATH:     process.env.DB_PATH || './database',
+  DB_PATH:     process.env.DB_PATH     || './database',
+
+  SUPPORT_GROUP: process.env.SUPPORT_GROUP || OWNER.CHANNEL,
+  SCRIPT_LINK:   process.env.SCRIPT_LINK   || OWNER.REPO,
 
   HEROKU_APP_NAME: process.env.HEROKU_APP_NAME || '',
   KEEP_ALIVE_URL:  process.env.KEEP_ALIVE_URL  || '',
+  RENDER_APP_URL:  process.env.RENDER_APP_URL  || '',
 };
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 3]  ⚙️  SYSTEM CONSTANTS
+//  [SECTION 3]  SYSTEM CONSTANTS
 // ═══════════════════════════════════════════════════════════════════
 
 export const SYSTEM = Object.freeze({
@@ -128,18 +142,26 @@ export const SYSTEM = Object.freeze({
   DB_DIR          : './database',
   LOGS_DIR        : './logs',
   MAX_FILE_SIZE   : 100 * 1024 * 1024,
-  COOLDOWN_MS     : 3000,
+  COOLDOWN_MS     : parseInt(process.env.COOLDOWN_DEFAULT) || 3000,
   COMMAND_TIMEOUT : 30000,
 
-  WATERMARK:       `\n\n┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n⚡ *${OWNER.BOT_NAME}* by *${OWNER.FULL_NAME}*\n┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄`,
-  SHORT_WATERMARK: `\n_⚡ ${OWNER.BOT_NAME}_`,
-  FOOTER:          `👑 Owner: ${OWNER.FULL_NAME}\n📢 ${OWNER.CHANNEL}`,
+  WATERMARK:
+    `\n\n┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n` +
+    `⚡ *YOUSAF-MD* by *${OWNER.FULL_NAME}*\n` +
+    `┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄`,
+
+  SHORT_WATERMARK: `\n_⚡ YOUSAF-MD_`,
+
+  FOOTER:
+    `👑 Owner: ${OWNER.FULL_NAME}\n` +
+    `📱 +${OWNER.NUMBER}\n` +
+    `📢 ${OWNER.CHANNEL}\n` +
+    `▶️ ${OWNER.YOUTUBE}\n` +
+    `🎵 ${OWNER.TIKTOK}`,
 });
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 4]  ✅ DATABASE INITIALIZER — BUG FIXED
-//  پرانے کوڈ میں non-async function میں await تھا — crash ہوتا تھا
-//  اب fs اور path اوپر import ہیں — کوئی مسئلہ نہیں
+//  [SECTION 4]  DATABASE INITIALIZER
 // ═══════════════════════════════════════════════════════════════════
 
 export async function initDatabase() {
@@ -152,7 +174,7 @@ export async function initDatabase() {
       console.log('[DB] ✅ MongoDB connected successfully!');
       return 'mongodb';
     } catch (err) {
-      console.warn('[DB] ⚠️  MongoDB failed! Falling back to JSON database...');
+      console.warn('[DB] ⚠️  MongoDB failed! Falling back to JSON...');
       return initJsonDatabase();
     }
   } else {
@@ -160,7 +182,6 @@ export async function initDatabase() {
   }
 }
 
-// BUG FIX: async ہٹایا، اوپر سے import کی ہوئی fs/path use کی
 function initJsonDatabase() {
   try {
     const dbDir  = SYSTEM.DB_DIR;
@@ -189,22 +210,24 @@ function initJsonDatabase() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 5]  ✅ ownerFooter() — ہمیشہ OWNER کی info دکھاتا ہے
+//  [SECTION 5]  OWNER FOOTER — always shows Yousaf's info
 // ═══════════════════════════════════════════════════════════════════
 
 export function ownerFooter() {
-  return `
-╭━━━━━━━━━━━━━━━━━━━━━━╮
-┃ 👑 *${OWNER.FULL_NAME}*
-┃ 📱 +${OWNER.NUMBER}
-┃ 📢 ${OWNER.CHANNEL}
-╰━━━━━━━━━━━━━━━━━━━━━━╯
-_⚡ ${OWNER.BOT_NAME} v${OWNER.VERSION}_`;
+  return (
+    `╭━━━━━━━━━━━━━━━━━━━━━━╮\n` +
+    `┃ 👑 *${OWNER.FULL_NAME}*\n` +
+    `┃ 📱 +${OWNER.NUMBER}\n` +
+    `┃ 📢 ${OWNER.CHANNEL}\n` +
+    `┃ ▶️  ${OWNER.YOUTUBE}\n` +
+    `┃ 🎵 ${OWNER.TIKTOK}\n` +
+    `╰━━━━━━━━━━━━━━━━━━━━━━╯\n` +
+    `_⚡ YOUSAF-MD v${OWNER.VERSION}_`
+  );
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  [SECTION 6]  ✅ PERMISSION HELPER FUNCTIONS
-//  3 levels: OWNER (1) > DEPLOYER (2) > USER (3)
+//  [SECTION 6]  PERMISSION HELPERS
 // ═══════════════════════════════════════════════════════════════════
 
 export function isOwner(sender) {
@@ -215,7 +238,7 @@ export function isOwner(sender) {
 export function isDeployer(sender) {
   if (!sender) return false;
   const num = sender.split('@')[0];
-  if (num === OWNER.NUMBER) return true;   // OWNER ہمیشہ DEPLOYER بھی ہے
+  if (num === OWNER.NUMBER) return true;
   return DEPLOYERS.includes(num);
 }
 
@@ -227,7 +250,7 @@ export function isOwnerOnlyCommand(commandName) {
   return OWNER_ONLY_COMMANDS.includes(commandName?.toLowerCase());
 }
 
-// پرانی function — backward compatibility کے لیے رکھی
+// Backward compatibility
 export function isRestrictedCommand(commandName) {
   return isDeployerOnlyCommand(commandName);
 }
@@ -235,9 +258,9 @@ export function isRestrictedCommand(commandName) {
 export function getPermLevel(sender) {
   if (!sender) return 3;
   const num = sender.split('@')[0];
-  if (num === OWNER.NUMBER) return 1;        // OWNER
-  if (DEPLOYERS.includes(num)) return 2;     // DEPLOYER
-  return 3;                                  // USER
+  if (num === OWNER.NUMBER) return 1;
+  if (DEPLOYERS.includes(num)) return 2;
+  return 3;
 }
 
 // ═══════════════════════════════════════════════════════════════════
