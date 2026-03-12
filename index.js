@@ -32,43 +32,52 @@ import {
   initDatabase,
   isOwner,
   isDeployer,
-  isRestrictedCommand,
+  isDeployerOnlyCommand,
+  isOwnerOnlyCommand,
 } from './config.js';
 
+import { registerEvents }      from './lib/EventHandler.js';
+import { checkCooldown, cleanExpiredCooldowns } from './lib/CooldownManager.js';
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
+const require   = createRequire(import.meta.url);
 
-// Express keep-alive
-const app = express();
+// ═══════════════════════════════════════════════════════════════════
+//  EXPRESS — KEEP ALIVE
+// ═══════════════════════════════════════════════════════════════════
+
+const app  = express();
 const PORT = process.env.PORT || 3000;
-app.get('/', (req, res) => res.send(`YOUSAF-BALOCH-MD is running! ✅\nVersion: ${OWNER.VERSION}`));
-app.listen(PORT, () => console.log(`✅ Express server running on port ${PORT}`));
 
-const logger = pino({ level: 'silent' });
+app.get('/', (req, res) => {
+  res.send(`${OWNER.BOT_NAME} is running! ✅\nVersion: ${OWNER.VERSION}`);
+});
+
+app.listen(PORT, () => {
+  console.log(chalk.green(`✅ Express server running on port ${PORT}`));
+});
+
+// ═══════════════════════════════════════════════════════════════════
+//  GLOBALS
+// ═══════════════════════════════════════════════════════════════════
+
+const logger  = pino({ level: 'silent' });
 const plugins = new Map();
 
 // ═══════════════════════════════════════════════════════════════════
-//  PERMISSION LEVELS
-//  Level 1 = OWNER   (Yousaf — hardcoded, immutable)
-//  Level 2 = DEPLOYER (jo bhi bot apne number par lagaye)
-//  Level 3 = USER     (group ke aam members)
+//  DEPLOYER-ONLY COMMANDS
+//  Only the person who deployed the bot can use these
 // ═══════════════════════════════════════════════════════════════════
 
-/**
- * DEPLOYER_ONLY commands — sirf deployer/owner yeh use kar sakta hai:
- * - Settings on/off karna
- * - Kick, ban, mute, promote, demote
- * - Bot ko configure karna
- */
 const DEPLOYER_ONLY_COMMANDS = new Set([
   'setting', 'settings', 'set', 'config', 'configure',
   'antilink', 'antiviewonce', 'antispam', 'antibad', 'anticall',
   'autoread', 'autostatus', 'autoreact', 'autolike',
-  'autolike', 'autotyping', 'autorecord',
+  'autotyping', 'autorecord',
   'kick', 'add', 'promote', 'demote', 'linkgroup', 'revoke',
   'mute', 'unmute', 'close', 'open',
   'restart', 'shutdown', 'block', 'unblock', 'ban', 'unban',
-  'broadcast', 'bc', 'eval', 'exec', 'shell', 'update',
+  'broadcast', 'bc', 'update',
   'setprefix', 'setmode', 'setname', 'setwelcome', 'setgoodbye',
 ]);
 
@@ -78,6 +87,7 @@ const DEPLOYER_ONLY_COMMANDS = new Set([
 
 async function loadPlugins() {
   const pluginsDir = join(__dirname, SYSTEM.PLUGINS_DIR);
+
   if (!existsSync(pluginsDir)) {
     console.log(chalk.yellow('[PLUGINS] Creating plugins directory...'));
     mkdirSync(pluginsDir, { recursive: true });
@@ -97,14 +107,17 @@ async function loadPlugins() {
     return;
   }
 
-  let loaded = 0, failed = 0;
+  let loaded = 0;
+  let failed = 0;
 
   for (const file of files) {
     try {
-      const mod = await import(`file://${join(pluginsDir, file)}`);
+      const mod     = await import(`file://${join(pluginsDir, file)}`);
       const handler = mod.default;
+
       if (!handler) { failed++; continue; }
 
+      // Support ARRAY export: export default [ {...}, {...} ]
       if (Array.isArray(handler)) {
         let regCount = 0;
         for (const item of handler) {
@@ -122,6 +135,7 @@ async function loadPlugins() {
         continue;
       }
 
+      // Support SINGLE export: export default { command, handler }
       let commandNames = [];
       if (handler.command instanceof RegExp) {
         commandNames = handler.command.source
@@ -134,6 +148,7 @@ async function loadPlugins() {
       }
 
       if (!commandNames.length) { failed++; continue; }
+
       for (const name of commandNames) {
         plugins.set(name, {
           ...handler,
@@ -141,6 +156,7 @@ async function loadPlugins() {
         });
       }
       loaded++;
+
     } catch (err) {
       failed++;
       console.error(chalk.red(`[PLUGINS] ❌ ${file}:`), err.message);
@@ -160,16 +176,16 @@ async function handleMessage(sock, msg) {
   try {
     if (!msg.message) return;
 
-    const from   = msg.key.remoteJid;
-    const sender = msg.key.participant || msg.key.remoteJid;
+    const from    = msg.key.remoteJid;
+    const sender  = msg.key.participant || msg.key.remoteJid;
     const isGroup = from.endsWith('@g.us');
 
-    // ── Permission levels ────────────────────────────────────────
-    const ownerCheck    = isOwner(sender);      // Level 1 — Yousaf only
-    const deployerCheck = isDeployer(sender);   // Level 2 — jo bhi bot lagaye
+    // ── Permission levels ──────────────────────────────────────────
+    const ownerCheck    = isOwner(sender);    // Level 1 — Yousaf only
+    const deployerCheck = isDeployer(sender); // Level 2 — whoever deployed
 
-    // ── Group admin status ────────────────────────────────────────
-    let isAdmin   = false;
+    // ── Group admin status ─────────────────────────────────────────
+    let isAdmin    = false;
     let isBotAdmin = false;
 
     if (isGroup) {
@@ -181,17 +197,17 @@ async function handleMessage(sock, msg) {
         const botJid = sock.user.id.replace(/:.*@/, '@');
         isAdmin    = admins.includes(sender);
         isBotAdmin = admins.includes(botJid);
-      } catch { /* defaults false */ }
+      } catch { /* defaults stay false */ }
     }
 
-    // ── Get message text ──────────────────────────────────────────
+    // ── Get message text ───────────────────────────────────────────
     const msgType = Object.keys(msg.message)[0];
     let text = '';
 
     if (msgType === 'conversation') {
       text = msg.message.conversation;
     } else if (msgType === 'extendedTextMessage') {
-      text = msg.message.extendedTextMessage.text;
+      text = msg.message.extendedTextMessage?.text || '';
     }
 
     if (!text) return;
@@ -206,49 +222,78 @@ async function handleMessage(sock, msg) {
     const plugin = plugins.get(command);
     if (!plugin) return;
 
-    // ═══════════════════════════════════════════════════════════
-    //  PERMISSION GATE — 3 LEVELS
-    // ═══════════════════════════════════════════════════════════
+    // ── Private MODE — only deployer/owner can use bot ─────────────
+    if (CONFIG.MODE === 'private' && !ownerCheck && !deployerCheck) return;
 
-    // [1] ownerOnly — sirf Yousaf (OWNER) use kar sakta hai
-    //     Example: eval, shell, exec
+    // ═══════════════════════════════════════════════════════════════
+    //  PERMISSION GATE
+    // ═══════════════════════════════════════════════════════════════
+
+    // [1] ownerOnly — only Yousaf
     if (plugin.ownerOnly && !ownerCheck) {
       return sock.sendMessage(from, {
-        text: `❌ *Owner Only Command!*\n\nYeh command sirf bot ke original owner use kar sakte hain.\n${SYSTEM.SHORT_WATERMARK}`,
+        text:
+          `❌ *Owner Only Command!*\n\n` +
+          `This command can only be used by the original bot owner.\n` +
+          `${SYSTEM.SHORT_WATERMARK}`,
       }, { quoted: msg });
     }
 
-    // [2] deployerOnly — deployer ya owner use kar sakta hai
-    //     Example: settings, kick, ban, antilink on/off
-    const isDeployerOnlyCmd = DEPLOYER_ONLY_COMMANDS.has(command) || plugin.deployerOnly;
-    if (isDeployerOnlyCmd && !deployerCheck && !ownerCheck) {
+    // [2] deployerOnly — deployer or owner
+    const isDeployerCmd = DEPLOYER_ONLY_COMMANDS.has(command) || plugin.deployerOnly;
+    if (isDeployerCmd && !deployerCheck && !ownerCheck) {
       return sock.sendMessage(from, {
-        text: `❌ *Permission Denied!*\n\nYeh command sirf woh use kar sakta hai jisne bot deploy kiya ho.\n${SYSTEM.SHORT_WATERMARK}`,
+        text:
+          `❌ *Permission Denied!*\n\n` +
+          `This command can only be used by the person who deployed this bot.\n` +
+          `${SYSTEM.SHORT_WATERMARK}`,
       }, { quoted: msg });
     }
 
-    // [3] groupOnly — sirf group mein kaam karta hai
+    // [3] groupOnly
     if (plugin.groupOnly && !isGroup) {
       return sock.sendMessage(from, {
-        text: `❌ *Group Only!*\n\nYeh command sirf group mein use ho sakti hai.\n${SYSTEM.SHORT_WATERMARK}`,
+        text:
+          `❌ *Group Only!*\n\n` +
+          `This command can only be used inside a group.\n` +
+          `${SYSTEM.SHORT_WATERMARK}`,
       }, { quoted: msg });
     }
 
-    // [4] adminOnly — sirf group admin use kar sakta hai
+    // [4] adminOnly
     if (plugin.adminOnly && !isAdmin && !deployerCheck && !ownerCheck) {
       return sock.sendMessage(from, {
-        text: `❌ *Admins Only!*\n\nYeh command sirf group admins use kar sakte hain.\n${SYSTEM.SHORT_WATERMARK}`,
+        text:
+          `❌ *Admins Only!*\n\n` +
+          `This command can only be used by group admins.\n` +
+          `${SYSTEM.SHORT_WATERMARK}`,
       }, { quoted: msg });
     }
 
-    // [5] botAdmin — bot ka admin hona zaroori hai
+    // [5] botAdmin required
     if (plugin.botAdmin && !isBotAdmin) {
       return sock.sendMessage(from, {
-        text: `❌ *Bot ko pehle admin banao!*\n\nYeh command chalane ke liye bot ka group admin hona zaroori hai.\n${SYSTEM.SHORT_WATERMARK}`,
+        text:
+          `❌ *Make me admin first!*\n\n` +
+          `This command requires the bot to be a group admin.\n` +
+          `${SYSTEM.SHORT_WATERMARK}`,
       }, { quoted: msg });
     }
 
-    // ── Execute plugin ────────────────────────────────────────────
+    // ── Cooldown check (skip for owner/deployer) ───────────────────
+    if (!ownerCheck && !deployerCheck) {
+      const { onCooldown, remaining } = checkCooldown(sender, command);
+      if (onCooldown) {
+        return sock.sendMessage(from, {
+          text:
+            `⏳ *Slow down!*\n\n` +
+            `Please wait *${remaining}s* before using .${command} again.\n` +
+            `${SYSTEM.SHORT_WATERMARK}`,
+        }, { quoted: msg });
+      }
+    }
+
+    // ── Execute plugin ─────────────────────────────────────────────
     await plugin.handler({
       sock,
       msg,
@@ -260,8 +305,7 @@ async function handleMessage(sock, msg) {
       isDeployer: deployerCheck,
       isAdmin,
       isBotAdmin,
-      // OWNER info — read only, plugins mein use karne ke liye
-      ownerInfo:  OWNER,
+      ownerInfo:  OWNER,  // read-only owner info for plugins
     });
 
   } catch (error) {
@@ -270,7 +314,7 @@ async function handleMessage(sock, msg) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  CONNECTION HANDLER
+//  WHATSAPP CONNECTION
 // ═══════════════════════════════════════════════════════════════════
 
 async function connectToWhatsApp() {
@@ -301,7 +345,7 @@ async function connectToWhatsApp() {
     const { connection, lastDisconnect, qr } = update;
 
     if (qr) {
-      console.log(chalk.yellow('[CONNECTION] 📱 QR code ready — scan to connect'));
+      console.log(chalk.yellow('[CONNECTION] Scan QR code to connect'));
     }
 
     if (connection === 'close') {
@@ -310,23 +354,36 @@ async function connectToWhatsApp() {
           ? lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut
           : true;
 
-      console.log(chalk.red('[CONNECTION] ❌ Closed:'), lastDisconnect?.error?.message);
+      console.log(chalk.red('[CONNECTION] Closed:'), lastDisconnect?.error?.message);
 
       if (shouldReconnect) {
-        console.log(chalk.yellow('[CONNECTION] 🔄 Reconnecting...'));
+        console.log(chalk.yellow('[CONNECTION] Reconnecting...'));
         connectToWhatsApp();
       } else {
-        console.log(chalk.red('[CONNECTION] 🚫 Logged out. Delete session folder and restart.'));
+        console.log(chalk.red('[CONNECTION] Logged out. Delete session folder and restart.'));
       }
 
     } else if (connection === 'open') {
       console.log(chalk.green('[CONNECTION] ✅ Connected!'));
-      console.log(chalk.cyan(`[INFO] 🤖 ${OWNER.BOT_NAME} | 👑 ${OWNER.FULL_NAME} | 🔧 ${CONFIG.PREFIX} | 🌐 ${CONFIG.MODE}`));
+      console.log(chalk.cyan(
+        `[INFO] Bot: ${OWNER.BOT_NAME} | Owner: ${OWNER.FULL_NAME} | Prefix: ${CONFIG.PREFIX} | Mode: ${CONFIG.MODE}`
+      ));
+
+      // Load plugins
       await loadPlugins();
+
+      // Init database
       await initDatabase();
+
+      // Register all group/call/anti-link/anti-bad events
+      registerEvents(sock);
+
+      // Auto-clean expired cooldowns every 5 minutes
+      setInterval(() => cleanExpiredCooldowns(), 5 * 60 * 1000);
     }
   });
 
+  // Command handler
   sock.ev.on('messages.upsert', async (m) => {
     if (m.type === 'notify') {
       for (const msg of m.messages) {
@@ -342,11 +399,11 @@ async function connectToWhatsApp() {
 //  START
 // ═══════════════════════════════════════════════════════════════════
 
-console.log(chalk.green('[STARTUP] 🚀 Starting YOUSAF-BALOCH-MD...'));
+console.log(chalk.green('[STARTUP] Starting YOUSAF-BALOCH-MD...'));
 
 const errors = validateConfig();
 if (errors.length > 0) {
-  console.error(chalk.red('[CONFIG] ❌ Errors:'));
+  console.error(chalk.red('[CONFIG] Validation errors:'));
   errors.forEach(e => console.error(chalk.red('  -'), e));
   process.exit(1);
 }
@@ -354,12 +411,12 @@ if (errors.length > 0) {
 [SYSTEM.SESSION_DIR, SYSTEM.TEMP_DIR, SYSTEM.PLUGINS_DIR, SYSTEM.DB_DIR, SYSTEM.LOGS_DIR].forEach(dir => {
   if (!existsSync(dir)) {
     mkdirSync(dir, { recursive: true });
-    console.log(chalk.blue(`[SETUP] 📁 Created: ${dir}`));
+    console.log(chalk.blue(`[SETUP] Created directory: ${dir}`));
   }
 });
 
 connectToWhatsApp().catch(err => {
-  console.error(chalk.red('[FATAL] ❌'), err.message);
+  console.error(chalk.red('[FATAL]'), err.message);
   process.exit(1);
 });
 
