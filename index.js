@@ -32,8 +32,6 @@ import {
   initDatabase,
   isOwner,
   isDeployer,
-  isDeployerOnlyCommand,
-  isOwnerOnlyCommand,
 } from './config.js';
 
 import { registerEvents }                       from './lib/EventHandler.js';
@@ -194,12 +192,41 @@ async function loadPlugins() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+//  MSG WRAPPERS
+//  تمام plugins کے لیے msg.react() اور msg.reply() کام کریں گے
+// ═══════════════════════════════════════════════════════════════════
+
+function attachMsgHelpers(sock, msg) {
+  const from   = msg.key.remoteJid;
+  const quoted = msg;
+
+  // msg.react('emoji')
+  msg.react = async (emoji) => {
+    try {
+      await sock.sendMessage(from, {
+        react: { text: emoji, key: msg.key },
+      });
+    } catch (_) {}
+  };
+
+  // msg.reply('text')
+  msg.reply = async (text) => {
+    try {
+      await sock.sendMessage(from, { text }, { quoted });
+    } catch (_) {}
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════
 //  MESSAGE HANDLER
 // ═══════════════════════════════════════════════════════════════════
 
 async function handleMessage(sock, msg) {
   try {
     if (!msg.message) return;
+
+    // ── Attach helpers so all plugins can use msg.react / msg.reply ─
+    attachMsgHelpers(sock, msg);
 
     const from    = msg.key.remoteJid;
     const sender  = msg.key.participant || msg.key.remoteJid;
@@ -326,12 +353,48 @@ async function handleMessage(sock, msg) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+//  WELCOME MESSAGE — Bot connect ہونے پر deployer کو notify کرے
+// ═══════════════════════════════════════════════════════════════════
+
+async function sendConnectedNotification(sock) {
+  try {
+    const deployers = process.env.DEPLOYER_NUMBER || '';
+    if (!deployers.trim()) return;
+
+    const numbers = deployers
+      .split(',')
+      .map(n => n.trim().replace(/[^0-9]/g, ''))
+      .filter(n => n.length >= 7);
+
+    for (const num of numbers) {
+      const jid = `${num}@s.whatsapp.net`;
+      await sock.sendMessage(jid, {
+        text:
+          `╭━━━『 ✅ *BOT CONNECTED* 』━━━╮\n\n` +
+          `🤖 *${OWNER.BOT_NAME}* has connected successfully!\n\n` +
+          `📊 *Details:*\n` +
+          `├ 👑 *Owner:*   ${OWNER.FULL_NAME}\n` +
+          `├ ✨ *Version:* ${OWNER.VERSION}\n` +
+          `├ 🔧 *Prefix:*  ${CONFIG.PREFIX}\n` +
+          `├ 🌐 *Mode:*    ${CONFIG.MODE.toUpperCase()}\n` +
+          `└ 🟢 *Status:*  Online\n\n` +
+          `💡 Type *${CONFIG.PREFIX}menu* to see all commands!\n\n` +
+          `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n` +
+          `_⚡ ${OWNER.BOT_NAME} by ${OWNER.FULL_NAME}_`,
+      });
+    }
+  } catch (e) {
+    console.error('[NOTIFY] Failed to send connected notification:', e.message);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
 //  WHATSAPP CONNECTION
 // ═══════════════════════════════════════════════════════════════════
 
 async function connectToWhatsApp() {
-  const { state, saveCreds }   = await useMultiFileAuthState(SYSTEM.SESSION_DIR);
-  const { version, isLatest }  = await fetchLatestBaileysVersion();
+  const { state, saveCreds }  = await useMultiFileAuthState(SYSTEM.SESSION_DIR);
+  const { version, isLatest } = await fetchLatestBaileysVersion();
 
   console.log(chalk.cyan(figlet.textSync('YOUSAF-BALOCH-MD', { font: 'Standard' })));
   console.log(gradient.pastel(
@@ -348,7 +411,7 @@ async function connectToWhatsApp() {
     },
     browser: Browsers.macOS('Desktop'),
     generateHighQualityLinkPreview: true,
-    syncFullHistory: true,
+    syncFullHistory: false,
   });
 
   sock.ev.on('creds.update', saveCreds);
@@ -385,6 +448,9 @@ async function connectToWhatsApp() {
       await initDatabase();
       registerEvents(sock);
       setInterval(() => cleanExpiredCooldowns(), 5 * 60 * 1000);
+
+      // Deployer کو connected notification بھیجو
+      setTimeout(() => sendConnectedNotification(sock), 3000);
     }
   });
 
