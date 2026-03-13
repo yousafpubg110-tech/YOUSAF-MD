@@ -32,6 +32,9 @@ import {
   initDatabase,
   isOwner,
   isDeployer,
+  isAdminLevel,
+  canUseCommand,
+  cleanNumber,
 } from './config.js';
 
 import { registerEvents }                       from './lib/EventHandler.js';
@@ -89,22 +92,6 @@ app.listen(PORT, () => {
 
 const logger  = pino({ level: 'silent' });
 const plugins = new Map();
-
-// ═══════════════════════════════════════════════════════════════════
-//  DEPLOYER-ONLY COMMANDS
-// ═══════════════════════════════════════════════════════════════════
-
-const DEPLOYER_ONLY_COMMANDS = new Set([
-  'setting', 'settings', 'set', 'config', 'configure',
-  'antilink', 'antiviewonce', 'antispam', 'antibad', 'anticall',
-  'autoread', 'autostatus', 'autoreact', 'autolike',
-  'autotyping', 'autorecord',
-  'kick', 'add', 'promote', 'demote', 'linkgroup', 'revoke',
-  'mute', 'unmute', 'close', 'open',
-  'restart', 'shutdown', 'block', 'unblock', 'ban', 'unban',
-  'broadcast', 'bc', 'update',
-  'setprefix', 'setmode', 'setname', 'setwelcome', 'setgoodbye',
-]);
 
 // ═══════════════════════════════════════════════════════════════════
 //  PLUGIN LOADER
@@ -224,31 +211,34 @@ async function handleMessage(sock, msg) {
 
     attachMsgHelpers(sock, msg);
 
-    const from      = msg.key.remoteJid;
-    const isGroup   = from.endsWith('@g.us');
+    const from    = msg.key.remoteJid;
+    const isGroup = from.endsWith('@g.us');
 
-    // ── FIX: WhatsApp multi-device JID — remove :deviceId before matching
+    // WhatsApp multi-device JID fix — remove :deviceId
     const rawSender = msg.key.participant || msg.key.remoteJid;
     const sender    = rawSender?.replace(/:.*@/, '@') || rawSender;
 
     const ownerCheck    = isOwner(sender);
     const deployerCheck = isDeployer(sender);
 
-    let isAdmin    = false;
-    let isBotAdmin = false;
+    // ── Group admin list ───────────────────────────────────────────
+    let groupAdmins = [];
+    let isAdmin     = false;
+    let isBotAdmin  = false;
 
     if (isGroup) {
       try {
-        const meta   = await sock.groupMetadata(from);
-        const admins = meta.participants
+        const meta  = await sock.groupMetadata(from);
+        groupAdmins = meta.participants
           .filter(p => p.admin === 'admin' || p.admin === 'superadmin')
           .map(p => p.id);
         const botJid = sock.user.id.replace(/:.*@/, '@');
-        isAdmin    = admins.includes(sender);
-        isBotAdmin = admins.includes(botJid);
+        isAdmin    = groupAdmins.includes(sender);
+        isBotAdmin = groupAdmins.includes(botJid);
       } catch { /* defaults stay false */ }
     }
 
+    // ── Get message text ───────────────────────────────────────────
     const msgType = Object.keys(msg.message)[0];
     let text = '';
 
@@ -270,10 +260,18 @@ async function handleMessage(sock, msg) {
     const plugin = plugins.get(command);
     if (!plugin) return;
 
+    // ── Private mode ───────────────────────────────────────────────
     if (CONFIG.MODE === 'private' && !ownerCheck && !deployerCheck) return;
 
-    // ── Permission Gate ────────────────────────────────────────────
+    // ═══════════════════════════════════════════════════════════════
+    //  PERMISSION GATE — canUseCommand() سے check
+    //  Owner    ✅ سب کچھ
+    //  Deployer ✅ سب کچھ
+    //  Admin    ✅ group settings + management
+    //  User     ✅ عام commands — ❌ settings on/off نہیں
+    // ═══════════════════════════════════════════════════════════════
 
+    // plugin میں ownerOnly flag ہے تو صرف Owner
     if (plugin.ownerOnly && !ownerCheck) {
       return sock.sendMessage(from, {
         text:
@@ -283,8 +281,31 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
-    const isDeployerCmd = DEPLOYER_ONLY_COMMANDS.has(command) || plugin.deployerOnly;
-    if (isDeployerCmd && !deployerCheck && !ownerCheck) {
+    // canUseCommand check — config.js میں defined permission levels
+    if (!canUseCommand(command, sender, groupAdmins)) {
+      // Deployer only commands
+      const { DEPLOYER_ONLY_COMMANDS, ADMIN_COMMANDS } = await import('./config.js');
+      if (DEPLOYER_ONLY_COMMANDS.includes(command)) {
+        return sock.sendMessage(from, {
+          text:
+            `❌ *Permission Denied!*\n\n` +
+            `This command can only be used by the person who deployed this bot.\n` +
+            `${SYSTEM.SHORT_WATERMARK}`,
+        }, { quoted: msg });
+      }
+      if (ADMIN_COMMANDS.includes(command)) {
+        return sock.sendMessage(from, {
+          text:
+            `❌ *Admins Only!*\n\n` +
+            `This command can only be used by group admins, deployer or owner.\n` +
+            `${SYSTEM.SHORT_WATERMARK}`,
+        }, { quoted: msg });
+      }
+      return;
+    }
+
+    // plugin میں deployerOnly flag ہے
+    if (plugin.deployerOnly && !deployerCheck && !ownerCheck) {
       return sock.sendMessage(from, {
         text:
           `❌ *Permission Denied!*\n\n` +
@@ -293,6 +314,7 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
+    // groupOnly
     if (plugin.groupOnly && !isGroup) {
       return sock.sendMessage(from, {
         text:
@@ -302,6 +324,7 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
+    // adminOnly flag
     if (plugin.adminOnly && !isAdmin && !deployerCheck && !ownerCheck) {
       return sock.sendMessage(from, {
         text:
@@ -311,6 +334,7 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
+    // botAdmin required
     if (plugin.botAdmin && !isBotAdmin) {
       return sock.sendMessage(from, {
         text:
@@ -320,6 +344,7 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
+    // cooldown — owner/deployer exempt
     if (!ownerCheck && !deployerCheck) {
       const { onCooldown, remaining } = checkCooldown(sender, command);
       if (onCooldown) {
@@ -332,6 +357,7 @@ async function handleMessage(sock, msg) {
       }
     }
 
+    // ── Execute plugin ─────────────────────────────────────────────
     await plugin.handler({
       sock,
       msg,
@@ -343,6 +369,7 @@ async function handleMessage(sock, msg) {
       isDeployer: deployerCheck,
       isAdmin,
       isBotAdmin,
+      groupAdmins,
       ownerInfo:  OWNER,
     });
 
@@ -352,7 +379,7 @@ async function handleMessage(sock, msg) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  CONNECTED NOTIFICATION — Bot connect ہونے پر deployer کو message
+//  CONNECTED NOTIFICATION
 // ═══════════════════════════════════════════════════════════════════
 
 async function sendConnectedNotification(sock) {
@@ -383,7 +410,7 @@ async function sendConnectedNotification(sock) {
       });
     }
   } catch (e) {
-    console.error('[NOTIFY] Failed to send connected notification:', e.message);
+    console.error('[NOTIFY] Failed:', e.message);
   }
 }
 
@@ -408,9 +435,9 @@ async function connectToWhatsApp() {
       creds: state.creds,
       keys: makeCacheableSignalKeyStore(state.keys, logger),
     },
-    browser: Browsers.macOS('Desktop'),
+    browser:                    Browsers.macOS('Desktop'),
     generateHighQualityLinkPreview: true,
-    syncFullHistory: false,
+    syncFullHistory:            false,
   });
 
   sock.ev.on('creds.update', saveCreds);
@@ -418,9 +445,7 @@ async function connectToWhatsApp() {
   sock.ev.on('connection.update', async (update) => {
     const { connection, lastDisconnect, qr } = update;
 
-    if (qr) {
-      console.log(chalk.yellow('[CONNECTION] Scan QR code to connect'));
-    }
+    if (qr) console.log(chalk.yellow('[CONNECTION] Scan QR code to connect'));
 
     if (connection === 'close') {
       const shouldReconnect =
@@ -447,7 +472,6 @@ async function connectToWhatsApp() {
       await initDatabase();
       registerEvents(sock);
       setInterval(() => cleanExpiredCooldowns(), 5 * 60 * 1000);
-
       setTimeout(() => sendConnectedNotification(sock), 3000);
     }
   });
