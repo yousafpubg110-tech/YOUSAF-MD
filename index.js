@@ -41,7 +41,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const require   = createRequire(import.meta.url);
 
 // ═══════════════════════════════════════════════════════════════════
-//  SESSION LOADER — ENV یا session/SESSION_ID فائل سے
+//  SESSION LOADER
 // ═══════════════════════════════════════════════════════════════════
 
 const SESSION_ID = process.env.SESSION_ID || (() => {
@@ -192,15 +192,13 @@ async function loadPlugins() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  MSG WRAPPERS
-//  تمام plugins کے لیے msg.react() اور msg.reply() کام کریں گے
+//  MSG WRAPPERS — تمام plugins کے لیے msg.react() اور msg.reply()
 // ═══════════════════════════════════════════════════════════════════
 
 function attachMsgHelpers(sock, msg) {
   const from   = msg.key.remoteJid;
   const quoted = msg;
 
-  // msg.react('emoji')
   msg.react = async (emoji) => {
     try {
       await sock.sendMessage(from, {
@@ -209,7 +207,6 @@ function attachMsgHelpers(sock, msg) {
     } catch (_) {}
   };
 
-  // msg.reply('text')
   msg.reply = async (text) => {
     try {
       await sock.sendMessage(from, { text }, { quoted });
@@ -225,12 +222,14 @@ async function handleMessage(sock, msg) {
   try {
     if (!msg.message) return;
 
-    // ── Attach helpers so all plugins can use msg.react / msg.reply ─
     attachMsgHelpers(sock, msg);
 
-    const from    = msg.key.remoteJid;
-    const sender  = msg.key.participant || msg.key.remoteJid;
-    const isGroup = from.endsWith('@g.us');
+    const from      = msg.key.remoteJid;
+    const isGroup   = from.endsWith('@g.us');
+
+    // ── FIX: WhatsApp multi-device JID — remove :deviceId before matching
+    const rawSender = msg.key.participant || msg.key.remoteJid;
+    const sender    = rawSender?.replace(/:.*@/, '@') || rawSender;
 
     const ownerCheck    = isOwner(sender);
     const deployerCheck = isDeployer(sender);
@@ -353,7 +352,7 @@ async function handleMessage(sock, msg) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  WELCOME MESSAGE — Bot connect ہونے پر deployer کو notify کرے
+//  CONNECTED NOTIFICATION — Bot connect ہونے پر deployer کو message
 // ═══════════════════════════════════════════════════════════════════
 
 async function sendConnectedNotification(sock) {
@@ -449,7 +448,6 @@ async function connectToWhatsApp() {
       registerEvents(sock);
       setInterval(() => cleanExpiredCooldowns(), 5 * 60 * 1000);
 
-      // Deployer کو connected notification بھیجو
       setTimeout(() => sendConnectedNotification(sock), 3000);
     }
   });
