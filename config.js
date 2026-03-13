@@ -77,15 +77,12 @@ export const OWNER_ONLY_COMMANDS = Object.freeze([
 
 // ═══════════════════════════════════════════════════════════════════
 //  [SECTION 1-E]  SESSION ID LOADER
-//  ENV سے لو، نہیں تو session/SESSION_ID فائل سے
 // ═══════════════════════════════════════════════════════════════════
 
 function loadSessionId() {
-  // پہلے ENV سے چیک کرو
   if (process.env.SESSION_ID && process.env.SESSION_ID.trim()) {
     return process.env.SESSION_ID.trim();
   }
-  // پھر فائل سے چیک کرو
   const f = './session/SESSION_ID';
   if (existsSync(f)) {
     const val = readFileSync(f, 'utf8').trim();
@@ -242,16 +239,22 @@ export function ownerFooter() {
 
 // ═══════════════════════════════════════════════════════════════════
 //  [SECTION 6]  PERMISSION HELPERS
+//  FIX: WhatsApp multi-device JID format — 923xx:10@s.whatsapp.net
+//  split(':')[0] removes the device ID before matching
 // ═══════════════════════════════════════════════════════════════════
 
+function cleanNumber(sender) {
+  if (!sender) return '';
+  return sender.split('@')[0].split(':')[0];
+}
+
 export function isOwner(sender) {
-  if (!sender) return false;
-  return sender.split('@')[0] === OWNER.NUMBER;
+  return cleanNumber(sender) === OWNER.NUMBER;
 }
 
 export function isDeployer(sender) {
-  if (!sender) return false;
-  const num = sender.split('@')[0];
+  const num = cleanNumber(sender);
+  if (!num) return false;
   if (num === OWNER.NUMBER) return true;
   return DEPLOYERS.includes(num);
 }
@@ -269,8 +272,8 @@ export function isRestrictedCommand(commandName) {
 }
 
 export function getPermLevel(sender) {
-  if (!sender) return 3;
-  const num = sender.split('@')[0];
+  const num = cleanNumber(sender);
+  if (!num) return 3;
   if (num === OWNER.NUMBER) return 1;
   if (DEPLOYERS.includes(num)) return 2;
   return 3;
