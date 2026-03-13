@@ -7,212 +7,336 @@
 ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
 */
 import axios from 'axios';
-import { SYSTEM } from '../config.js';
+import { OWNER, SYSTEM } from '../config.js';
 
-// ─── TikTok Downloader ────────────────────────────────────────────────────────
-async function tiktokHandler({sock, msg, from, args}) {
+const CHANNEL = OWNER.CHANNEL;
+
+async function getBuffer(url) {
+  const res = await axios.get(url, { responseType: 'arraybuffer', timeout: 60000 });
+  return Buffer.from(res.data);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  TIKTOK
+// ═══════════════════════════════════════════════════════════════════
+
+async function downloadTikTok(url) {
+  // Method 1 — tikwm
   try {
-    if (!args?.length) return msg.reply(`❌ *Please provide a TikTok URL!*\n\n.tiktok https://vm.tiktok.com/xxxxx\n.tt https://www.tiktok.com/@user/video/xxxxx\n${SYSTEM.SHORT_WATERMARK}`);
+    const res = await axios.get(
+      `https://tikwm.com/api/?url=${encodeURIComponent(url)}`,
+      { timeout: 30000 }
+    );
+    const d = res.data?.data;
+    if (d?.play) return { url: d.play, title: d.title || 'TikTok Video' };
+  } catch (_) {}
+
+  // Method 2 — tikdown
+  try {
+    const res = await axios.get(
+      `https://api.tikdown.org/api/download?url=${encodeURIComponent(url)}`,
+      { timeout: 30000 }
+    );
+    if (res.data?.success && res.data?.video) {
+      return { url: res.data.video, title: res.data.title || 'TikTok Video' };
+    }
+  } catch (_) {}
+
+  // Method 3 — cobalt
+  try {
+    const res = await axios.post('https://api.cobalt.tools/', {
+      url,
+      downloadMode: 'auto',
+    }, {
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      timeout: 30000,
+    });
+    const dlUrl = res.data?.url || res.data?.tunnel;
+    if (dlUrl) return { url: dlUrl, title: 'TikTok Video' };
+  } catch (_) {}
+
+  throw new Error('All TikTok download methods failed');
+}
+
+async function tiktokHandler({ sock, msg, from, args }) {
+  try {
+    if (!args?.length) {
+      return msg.reply(
+        `❌ *Please provide a TikTok URL!*\n\n` +
+        `*.tiktok https://vm.tiktok.com/xxxxx*\n` +
+        `${SYSTEM.SHORT_WATERMARK}`
+      );
+    }
     await msg.react('🎵');
-    const url = args[0];
-
     await msg.reply(`⏳ *Downloading TikTok video...*\n${SYSTEM.SHORT_WATERMARK}`);
-    await msg.react('⬇️');
 
-    // Method 1: TikTok API
-    let videoData = null;
-    try {
-      const apiRes = await axios.get(`https://api.tikdown.org/api/download?url=${encodeURIComponent(url)}`, { timeout: 30000 });
-      if (apiRes.data?.success && apiRes.data?.video) {
-        videoData = { url: apiRes.data.video, title: apiRes.data.title || 'TikTok Video' };
-      }
-    } catch (_) {}
+    const data = await downloadTikTok(args[0]);
+    const buf  = await getBuffer(data.url);
 
-    // Method 2: Alternative API
-    if (!videoData) {
-      try {
-        const altRes = await axios.get(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`, { timeout: 30000 });
-        if (altRes.data?.data?.play) {
-          videoData = { url: altRes.data.data.play, title: altRes.data.data.title || 'TikTok Video' };
-        }
-      } catch (_) {}
-    }
-
-    if (!videoData) {
-      await msg.react('❌');
-      return msg.reply(`❌ *Failed to download TikTok video!*\n\n💡 Make sure the URL is valid and public.\n${SYSTEM.SHORT_WATERMARK}`);
-    }
-
-    const videoBuffer = await axios.get(videoData.url, { responseType: 'arraybuffer', timeout: 60000 });
     await sock.sendMessage(from, {
-      video: Buffer.from(videoBuffer.data),
-      caption: `🎵 *${videoData.title}*\n\n📢 *Channel:* View Channel\n${SYSTEM.SHORT_WATERMARK}`,
+      video:   buf,
+      caption: `🎵 *${data.title}*\n\n📢 *Channel:* ${CHANNEL}\n${SYSTEM.SHORT_WATERMARK}`,
     }, { quoted: msg });
     await msg.react('✅');
-  } catch (error) {
-    console.error('[TIKTOK ERROR]:', error.message);
+  } catch (err) {
+    console.error('[TIKTOK ERROR]:', err.message);
     await msg.react('❌');
-    await msg.reply(`❌ *Download failed!*\n_${error.message}_\n${SYSTEM.SHORT_WATERMARK}`);
+    await msg.reply(`❌ *Download failed!*\n_${err.message}_\n${SYSTEM.SHORT_WATERMARK}`);
   }
 }
 
-// ─── Facebook Downloader ──────────────────────────────────────────────────────
-async function fbHandler({sock, msg, from, args}) {
+// ═══════════════════════════════════════════════════════════════════
+//  FACEBOOK
+// ═══════════════════════════════════════════════════════════════════
+
+async function downloadFacebook(url) {
+  // Method 1 — getmyfb
   try {
-    if (!args?.length) return msg.reply(`❌ *Please provide a Facebook video URL!*\n\n.fb https://fb.watch/xxxxx\n.facebook https://www.facebook.com/watch?v=xxxxx\n${SYSTEM.SHORT_WATERMARK}`);
+    const res = await axios.post(
+      'https://getmyfb.com/api/info',
+      `url=${encodeURIComponent(url)}`,
+      {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        timeout: 30000,
+      }
+    );
+    const hd = res.data?.links?.Download_HD || res.data?.links?.Download_SD;
+    if (hd) return hd;
+  } catch (_) {}
+
+  // Method 2 — nexoracle
+  try {
+    const res = await axios.get(
+      `https://api.nexoracle.com/downloader/facebook?apikey=free_key@maher_apis&url=${encodeURIComponent(url)}`,
+      { timeout: 30000 }
+    );
+    const v = res.data?.result?.video || res.data?.result?.hd;
+    if (v) return v;
+  } catch (_) {}
+
+  // Method 3 — cobalt
+  try {
+    const res = await axios.post('https://api.cobalt.tools/', {
+      url,
+      downloadMode: 'auto',
+    }, {
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      timeout: 30000,
+    });
+    const dlUrl = res.data?.url || res.data?.tunnel;
+    if (dlUrl) return dlUrl;
+  } catch (_) {}
+
+  throw new Error('All Facebook download methods failed');
+}
+
+async function fbHandler({ sock, msg, from, args }) {
+  try {
+    if (!args?.length) {
+      return msg.reply(
+        `❌ *Please provide a Facebook video URL!*\n\n` +
+        `*.fb https://fb.watch/xxxxx*\n` +
+        `${SYSTEM.SHORT_WATERMARK}`
+      );
+    }
     await msg.react('📘');
-    const url = args[0];
-
     await msg.reply(`⏳ *Downloading Facebook video...*\n${SYSTEM.SHORT_WATERMARK}`);
-    await msg.react('⬇️');
 
-    let videoUrl = null;
-    try {
-      const apiRes = await axios.get(`https://api.nexoracle.com/downloader/facebook?apikey=free_key@maher_apis&url=${encodeURIComponent(url)}`, { timeout: 30000 });
-      if (apiRes.data?.result?.video) {
-        videoUrl = apiRes.data.result.video;
-      }
-    } catch (_) {}
+    const videoUrl = await downloadFacebook(args[0]);
+    const buf      = await getBuffer(videoUrl);
 
-    if (!videoUrl) {
-      await msg.react('❌');
-      return msg.reply(`❌ *Failed to download Facebook video!*\n\n💡 Try a different URL or check if the video is public.\n${SYSTEM.SHORT_WATERMARK}`);
-    }
-
-    const videoBuffer = await axios.get(videoUrl, { responseType: 'arraybuffer', timeout: 60000 });
     await sock.sendMessage(from, {
-      video: Buffer.from(videoBuffer.data),
-      caption: `📘 *Facebook Video*\n\n📢 *Channel:* View Channel\n${SYSTEM.SHORT_WATERMARK}`,
+      video:   buf,
+      caption: `📘 *Facebook Video*\n\n📢 *Channel:* ${CHANNEL}\n${SYSTEM.SHORT_WATERMARK}`,
     }, { quoted: msg });
     await msg.react('✅');
-  } catch (error) {
-    console.error('[FB ERROR]:', error.message);
+  } catch (err) {
+    console.error('[FB ERROR]:', err.message);
     await msg.react('❌');
-    await msg.reply(`❌ *Download failed!*\n_${error.message}_\n${SYSTEM.SHORT_WATERMARK}`);
+    await msg.reply(`❌ *Download failed!*\n_${err.message}_\n${SYSTEM.SHORT_WATERMARK}`);
   }
 }
 
-// ─── Instagram Downloader ─────────────────────────────────────────────────────
-async function instaHandler({sock, msg, from, args}) {
+// ═══════════════════════════════════════════════════════════════════
+//  INSTAGRAM
+// ═══════════════════════════════════════════════════════════════════
+
+async function downloadInstagram(url) {
+  // Method 1 — cobalt
   try {
-    if (!args?.length) return msg.reply(`❌ *Please provide an Instagram URL!*\n\n.insta https://www.instagram.com/p/xxxxx\n.ig https://www.instagram.com/reel/xxxxx\n${SYSTEM.SHORT_WATERMARK}`);
-    await msg.react('📸');
-    const url = args[0];
+    const res = await axios.post('https://api.cobalt.tools/', {
+      url,
+      downloadMode: 'auto',
+    }, {
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      timeout: 30000,
+    });
+    const dlUrl = res.data?.url || res.data?.tunnel;
+    if (dlUrl) return [{ url: dlUrl, type: 'video' }];
+  } catch (_) {}
 
-    await msg.reply(`⏳ *Downloading Instagram media...*\n${SYSTEM.SHORT_WATERMARK}`);
-    await msg.react('⬇️');
+  // Method 2 — nexoracle
+  try {
+    const res = await axios.get(
+      `https://api.nexoracle.com/downloader/instagram?apikey=free_key@maher_apis&url=${encodeURIComponent(url)}`,
+      { timeout: 30000 }
+    );
+    if (res.data?.result?.length > 0) return res.data.result;
+  } catch (_) {}
 
-    let mediaData = null;
-    try {
-      const apiRes = await axios.get(`https://api.nexoracle.com/downloader/instagram?apikey=free_key@maher_apis&url=${encodeURIComponent(url)}`, { timeout: 30000 });
-      if (apiRes.data?.result?.length > 0) {
-        mediaData = apiRes.data.result[0];
-      }
-    } catch (_) {}
-
-    if (!mediaData) {
-      await msg.react('❌');
-      return msg.reply(`❌ *Failed to download Instagram media!*\n\n💡 Make sure the URL is valid and public.\n${SYSTEM.SHORT_WATERMARK}`);
+  // Method 3 — insta-dl api
+  try {
+    const res = await axios.get(
+      `https://api.siputzx.my.id/api/d/instagram?url=${encodeURIComponent(url)}`,
+      { timeout: 30000 }
+    );
+    if (res.data?.data) {
+      return [{ url: res.data.data, type: 'video' }];
     }
+  } catch (_) {}
 
-    const mediaBuffer = await axios.get(mediaData.url, { responseType: 'arraybuffer', timeout: 60000 });
-    const isVideo = mediaData.type === 'video';
+  throw new Error('All Instagram download methods failed');
+}
+
+async function instaHandler({ sock, msg, from, args }) {
+  try {
+    if (!args?.length) {
+      return msg.reply(
+        `❌ *Please provide an Instagram URL!*\n\n` +
+        `*.insta https://www.instagram.com/p/xxxxx*\n` +
+        `*.ig https://www.instagram.com/reel/xxxxx*\n` +
+        `${SYSTEM.SHORT_WATERMARK}`
+      );
+    }
+    await msg.react('📸');
+    await msg.reply(`⏳ *Downloading Instagram media...*\n${SYSTEM.SHORT_WATERMARK}`);
+
+    const results = await downloadInstagram(args[0]);
+    const media   = results[0];
+    const buf     = await getBuffer(media.url);
+    const isVideo = media.type === 'video' || media.url?.includes('.mp4');
 
     if (isVideo) {
       await sock.sendMessage(from, {
-        video: Buffer.from(mediaBuffer.data),
-        caption: `📸 *Instagram Video*\n\n📢 *Channel:* View Channel\n${SYSTEM.SHORT_WATERMARK}`,
+        video:   buf,
+        caption: `📸 *Instagram Video*\n\n📢 *Channel:* ${CHANNEL}\n${SYSTEM.SHORT_WATERMARK}`,
       }, { quoted: msg });
     } else {
       await sock.sendMessage(from, {
-        image: Buffer.from(mediaBuffer.data),
-        caption: `📸 *Instagram Image*\n\n📢 *Channel:* View Channel\n${SYSTEM.SHORT_WATERMARK}`,
+        image:   buf,
+        caption: `📸 *Instagram Image*\n\n📢 *Channel:* ${CHANNEL}\n${SYSTEM.SHORT_WATERMARK}`,
       }, { quoted: msg });
     }
     await msg.react('✅');
-  } catch (error) {
-    console.error('[INSTA ERROR]:', error.message);
+  } catch (err) {
+    console.error('[INSTA ERROR]:', err.message);
     await msg.react('❌');
-    await msg.reply(`❌ *Download failed!*\n_${error.message}_\n${SYSTEM.SHORT_WATERMARK}`);
+    await msg.reply(`❌ *Download failed!*\n_${err.message}_\n${SYSTEM.SHORT_WATERMARK}`);
   }
 }
 
-// ─── CapCut Template Downloader ───────────────────────────────────────────────
-async function capcutHandler({sock, msg, from, args}) {
+// ═══════════════════════════════════════════════════════════════════
+//  CAPCUT
+// ═══════════════════════════════════════════════════════════════════
+
+async function downloadCapcut(url) {
+  // Method 1 — cobalt
   try {
-    if (!args?.length) return msg.reply(`❌ *Please provide a CapCut template URL!*\n\n.capcut https://www.capcut.com/t/xxxxx\n${SYSTEM.SHORT_WATERMARK}`);
+    const res = await axios.post('https://api.cobalt.tools/', {
+      url,
+      downloadMode: 'auto',
+    }, {
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      timeout: 30000,
+    });
+    const dlUrl = res.data?.url || res.data?.tunnel;
+    if (dlUrl) return dlUrl;
+  } catch (_) {}
+
+  // Method 2 — nexoracle
+  try {
+    const res = await axios.get(
+      `https://api.nexoracle.com/downloader/capcut?apikey=free_key@maher_apis&url=${encodeURIComponent(url)}`,
+      { timeout: 30000 }
+    );
+    const v = res.data?.result?.video;
+    if (v) return v;
+  } catch (_) {}
+
+  throw new Error('All CapCut download methods failed');
+}
+
+async function capcutHandler({ sock, msg, from, args }) {
+  try {
+    if (!args?.length) {
+      return msg.reply(
+        `❌ *Please provide a CapCut template URL!*\n\n` +
+        `*.capcut https://www.capcut.com/t/xxxxx*\n` +
+        `${SYSTEM.SHORT_WATERMARK}`
+      );
+    }
     await msg.react('✂️');
-    const url = args[0];
-
     await msg.reply(`⏳ *Downloading CapCut template...*\n${SYSTEM.SHORT_WATERMARK}`);
-    await msg.react('⬇️');
 
-    let videoUrl = null;
-    try {
-      const apiRes = await axios.get(`https://api.nexoracle.com/downloader/capcut?apikey=free_key@maher_apis&url=${encodeURIComponent(url)}`, { timeout: 30000 });
-      if (apiRes.data?.result?.video) {
-        videoUrl = apiRes.data.result.video;
-      }
-    } catch (_) {}
+    const videoUrl = await downloadCapcut(args[0]);
+    const buf      = await getBuffer(videoUrl);
 
-    if (!videoUrl) {
-      await msg.react('❌');
-      return msg.reply(`❌ *Failed to download CapCut template!*\n\n💡 Make sure the URL is valid.\n${SYSTEM.SHORT_WATERMARK}`);
-    }
-
-    const videoBuffer = await axios.get(videoUrl, { responseType: 'arraybuffer', timeout: 60000 });
     await sock.sendMessage(from, {
-      video: Buffer.from(videoBuffer.data),
-      caption: `✂️ *CapCut Template*\n\n📢 *Channel:* View Channel\n${SYSTEM.SHORT_WATERMARK}`,
+      video:   buf,
+      caption: `✂️ *CapCut Template*\n\n📢 *Channel:* ${CHANNEL}\n${SYSTEM.SHORT_WATERMARK}`,
     }, { quoted: msg });
     await msg.react('✅');
-  } catch (error) {
-    console.error('[CAPCUT ERROR]:', error.message);
+  } catch (err) {
+    console.error('[CAPCUT ERROR]:', err.message);
     await msg.react('❌');
-    await msg.reply(`❌ *Download failed!*\n_${error.message}_\n${SYSTEM.SHORT_WATERMARK}`);
+    await msg.reply(`❌ *Download failed!*\n_${err.message}_\n${SYSTEM.SHORT_WATERMARK}`);
   }
 }
 
-// ─── Inshot Video Downloader ──────────────────────────────────────────────────
-async function inshotHandler({sock, msg, from, args}) {
-  try {
-    if (!args?.length) return msg.reply(`❌ *Please provide an Inshot share URL!*\n\n.inshot https://inshot.com/share/xxxxx\n${SYSTEM.SHORT_WATERMARK}`);
-    await msg.react('🎬');
-    const url = args[0];
+// ═══════════════════════════════════════════════════════════════════
+//  INSHOT
+// ═══════════════════════════════════════════════════════════════════
 
+async function inshotHandler({ sock, msg, from, args }) {
+  try {
+    if (!args?.length) {
+      return msg.reply(
+        `❌ *Please provide an Inshot share URL!*\n\n` +
+        `*.inshot https://inshot.com/share/xxxxx*\n` +
+        `${SYSTEM.SHORT_WATERMARK}`
+      );
+    }
+    await msg.react('🎬');
     await msg.reply(`⏳ *Downloading Inshot video...*\n${SYSTEM.SHORT_WATERMARK}`);
-    await msg.react('⬇️');
 
     let videoUrl = null;
     try {
-      const apiRes = await axios.get(`https://api.nexoracle.com/downloader/inshot?apikey=free_key@maher_apis&url=${encodeURIComponent(url)}`, { timeout: 30000 });
-      if (apiRes.data?.result?.video) {
-        videoUrl = apiRes.data.result.video;
-      }
+      const res = await axios.get(
+        `https://api.nexoracle.com/downloader/inshot?apikey=free_key@maher_apis&url=${encodeURIComponent(args[0])}`,
+        { timeout: 30000 }
+      );
+      videoUrl = res.data?.result?.video;
     } catch (_) {}
 
-    if (!videoUrl) {
-      await msg.react('❌');
-      return msg.reply(`❌ *Failed to download Inshot video!*\n\n💡 Make sure the URL is valid.\n${SYSTEM.SHORT_WATERMARK}`);
-    }
+    if (!videoUrl) throw new Error('Could not fetch Inshot video');
 
-    const videoBuffer = await axios.get(videoUrl, { responseType: 'arraybuffer', timeout: 60000 });
+    const buf = await getBuffer(videoUrl);
     await sock.sendMessage(from, {
-      video: Buffer.from(videoBuffer.data),
-      caption: `🎬 *Inshot Video*\n\n📢 *Channel:* View Channel\n${SYSTEM.SHORT_WATERMARK}`,
+      video:   buf,
+      caption: `🎬 *Inshot Video*\n\n📢 *Channel:* ${CHANNEL}\n${SYSTEM.SHORT_WATERMARK}`,
     }, { quoted: msg });
     await msg.react('✅');
-  } catch (error) {
-    console.error('[INSHOT ERROR]:', error.message);
+  } catch (err) {
+    console.error('[INSHOT ERROR]:', err.message);
     await msg.react('❌');
-    await msg.reply(`❌ *Download failed!*\n_${error.message}_\n${SYSTEM.SHORT_WATERMARK}`);
+    await msg.reply(`❌ *Download failed!*\n_${err.message}_\n${SYSTEM.SHORT_WATERMARK}`);
   }
 }
 
 export default [
-  {command:['tiktok','tt'],   name:'tiktok', category:'Downloader',description:'Download TikTok videos',usage:'.tiktok <url>',cooldown:15,handler:tiktokHandler},
-  {command:['fb','facebook'], name:'fb',     category:'Downloader',description:'Download Facebook videos',usage:'.fb <url>',cooldown:15,handler:fbHandler},
-  {command:['insta','ig'],    name:'insta',  category:'Downloader',description:'Download Instagram media',usage:'.insta <url>',cooldown:15,handler:instaHandler},
-  {command:['capcut'],        name:'capcut', category:'Downloader',description:'Download CapCut templates',usage:'.capcut <url>',cooldown:15,handler:capcutHandler},
-  {command:['inshot'],        name:'inshot', category:'Downloader',description:'Download Inshot videos',usage:'.inshot <url>',cooldown:15,handler:inshotHandler},
+  { command: ['tiktok', 'tt'],    name: 'tiktok',  category: 'Downloader', description: 'Download TikTok videos',     usage: '.tiktok <url>',   cooldown: 15, handler: tiktokHandler },
+  { command: ['fb', 'facebook'],  name: 'fb',      category: 'Downloader', description: 'Download Facebook videos',   usage: '.fb <url>',       cooldown: 15, handler: fbHandler     },
+  { command: ['insta', 'ig'],     name: 'insta',   category: 'Downloader', description: 'Download Instagram media',   usage: '.insta <url>',    cooldown: 15, handler: instaHandler  },
+  { command: ['capcut'],          name: 'capcut',  category: 'Downloader', description: 'Download CapCut templates',  usage: '.capcut <url>',   cooldown: 15, handler: capcutHandler },
+  { command: ['inshot'],          name: 'inshot',  category: 'Downloader', description: 'Download Inshot videos',     usage: '.inshot <url>',   cooldown: 15, handler: inshotHandler },
 ];
