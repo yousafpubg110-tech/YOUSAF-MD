@@ -10,67 +10,125 @@
     { "url": "https://github.com/mcollina/heroku-buildpack-imagemagick" }
   ],
   "env": {
+    "SESSION_ID": {
+      "description": "🔑 Aapka SESSION_ID — Pairing bot se hasil karein: https://github.com/yousafpubg110-tech/YOUSAF-MD-PAIRING",
+      "required": true
+    },
+    "DEPLOYER_NUMBER": {
+      "description": "📱 Aapka WhatsApp number (country code ke sath, bina + ke) — Example: 923001234567",
+      "required": true
+    },
     "BOT_NAME": {
-      "description": "Bot ka naam",
+      "description": "🤖 Bot ka naam",
       "value": "YOUSAF-MD",
       "required": false
     },
     "OWNER_NAME": {
-      "description": "Aapka naam",
+      "description": "👑 Aapka naam",
       "value": "Bot Owner",
       "required": false
     },
-    "OWNER_NUMBER": {
-      "description": "Aapka WhatsApp number (country code ke sath, bina + ke) — Example: 923001234567",
-      "required": true
-    },
     "PREFIX": {
-      "description": "Bot command prefix",
+      "description": "⌨️ Bot command prefix",
       "value": ".",
       "required": false
     },
-    "ANTI_DELETE": {
-      "description": "Deleted messages wapas bheje — true ya false",
-      "value": "true",
+    "MODE": {
+      "description": "🌐 Bot mode — public ya private",
+      "value": "public",
       "required": false
     },
-    "AUTO_STATUS_VIEW": {
-      "description": "Status auto view kare — true ya false",
+    "AUTO_STATUS": {
+      "description": "👁️ Status auto view kare — true ya false",
       "value": "true",
       "required": false
     },
     "AUTO_LIKE_STATUS": {
-      "description": "Status pe auto like kare — true ya false",
+      "description": "❤️ Status pe auto like kare — true ya false",
       "value": "true",
       "required": false
     },
-    "ANTI_CALL": {
-      "description": "Calls auto reject kare — true ya false",
-      "value": "false",
-      "required": false
-    },
-    "ANTI_LINK": {
-      "description": "Group mein links delete kare — true ya false",
-      "value": "false",
-      "required": false
-    },
-    "WELCOME_MSG": {
-      "description": "Naye member ko welcome message — true ya false",
-      "value": "false",
-      "required": false
-    },
-    "GOODBYE_MSG": {
-      "description": "Jane wale ko goodbye message — true ya false",
+    "AUTO_READ": {
+      "description": "✅ Messages auto read kare — true ya false",
       "value": "false",
       "required": false
     },
     "AUTO_REACT": {
-      "description": "Messages pe auto react kare — true ya false",
+      "description": "😊 Messages pe auto react kare — true ya false",
       "value": "false",
       "required": false
     },
+    "AUTO_TYPING": {
+      "description": "⌨️ Typing indicator dikhaye — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "AUTO_RECORDING": {
+      "description": "🎙️ Recording indicator dikhaye — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "AUTO_BIO": {
+      "description": "📝 Auto bio update kare — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "AUTO_REPLY": {
+      "description": "💬 Messages ka auto reply kare — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "ANTI_DELETE": {
+      "description": "🗑️ Deleted messages wapas bheje — true ya false",
+      "value": "true",
+      "required": false
+    },
+    "ANTI_LINK": {
+      "description": "🔗 Group mein links delete kare — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "ANTI_SPAM": {
+      "description": "🚫 Spam messages block kare — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "ANTI_BAD": {
+      "description": "🤬 Bad words block kare — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "ANTI_CALL": {
+      "description": "📵 Calls auto reject kare — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "ANTI_VIEW_ONCE": {
+      "description": "👁️ View once messages save kare — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "WELCOME": {
+      "description": "👋 Naye member ko welcome message — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "GOODBYE": {
+      "description": "👋 Jane wale ko goodbye message — true ya false",
+      "value": "false",
+      "required": false
+    },
+    "MAX_WARN": {
+      "description": "⚠️ Warn limit before kick — number",
+      "value": "3",
+      "required": false
+    },
+    "MONGODB_URI": {
+      "description": "🗄️ MongoDB URI (optional — JSON database use hogi agar khaali hai)",
+      "required": false
+    },
     "ANTHROPIC_API_KEY": {
-      "description": "Claude AI API key for auto-reply (optional)",
+      "description": "🤖 Claude AI API key for auto-reply (optional)",
       "required": false
     }
   }
