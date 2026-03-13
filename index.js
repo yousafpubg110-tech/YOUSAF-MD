@@ -18,7 +18,7 @@ import pino from 'pino';
 import chalk from 'chalk';
 import figlet from 'figlet';
 import gradient from 'gradient-string';
-import { existsSync, mkdirSync, readdirSync } from 'fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
@@ -36,11 +36,39 @@ import {
   isOwnerOnlyCommand,
 } from './config.js';
 
-import { registerEvents }      from './lib/EventHandler.js';
+import { registerEvents }                       from './lib/EventHandler.js';
 import { checkCooldown, cleanExpiredCooldowns } from './lib/CooldownManager.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require   = createRequire(import.meta.url);
+
+// ═══════════════════════════════════════════════════════════════════
+//  SESSION LOADER — ENV یا session/SESSION_ID فائل سے
+// ═══════════════════════════════════════════════════════════════════
+
+const SESSION_ID = process.env.SESSION_ID || (() => {
+  const f = './session/SESSION_ID';
+  if (existsSync(f)) {
+    const val = readFileSync(f, 'utf8').trim();
+    if (val && val !== 'YOUR_SESSION_ID_HERE') return val;
+  }
+  return null;
+})();
+
+if (SESSION_ID) {
+  try {
+    const encoded = SESSION_ID.replace('YOUSAF-MD_', '');
+    const decoded = Buffer.from(encoded, 'base64').toString('utf8');
+    const sessDir = SYSTEM.SESSION_DIR || './session';
+    if (!existsSync(sessDir)) mkdirSync(sessDir, { recursive: true });
+    writeFileSync(`${sessDir}/creds.json`, decoded);
+    console.log(chalk.green('[SESSION] ✅ Session loaded successfully!'));
+  } catch (e) {
+    console.error(chalk.red('[SESSION] ❌ Failed to load session:'), e.message);
+  }
+} else {
+  console.log(chalk.yellow('[SESSION] No SESSION_ID found — QR code will be shown'));
+}
 
 // ═══════════════════════════════════════════════════════════════════
 //  EXPRESS — KEEP ALIVE
@@ -66,7 +94,6 @@ const plugins = new Map();
 
 // ═══════════════════════════════════════════════════════════════════
 //  DEPLOYER-ONLY COMMANDS
-//  Only the person who deployed the bot can use these
 // ═══════════════════════════════════════════════════════════════════
 
 const DEPLOYER_ONLY_COMMANDS = new Set([
@@ -117,7 +144,6 @@ async function loadPlugins() {
 
       if (!handler) { failed++; continue; }
 
-      // Support ARRAY export: export default [ {...}, {...} ]
       if (Array.isArray(handler)) {
         let regCount = 0;
         for (const item of handler) {
@@ -135,7 +161,6 @@ async function loadPlugins() {
         continue;
       }
 
-      // Support SINGLE export: export default { command, handler }
       let commandNames = [];
       if (handler.command instanceof RegExp) {
         commandNames = handler.command.source
@@ -180,11 +205,9 @@ async function handleMessage(sock, msg) {
     const sender  = msg.key.participant || msg.key.remoteJid;
     const isGroup = from.endsWith('@g.us');
 
-    // ── Permission levels ──────────────────────────────────────────
-    const ownerCheck    = isOwner(sender);    // Level 1 — Yousaf only
-    const deployerCheck = isDeployer(sender); // Level 2 — whoever deployed
+    const ownerCheck    = isOwner(sender);
+    const deployerCheck = isDeployer(sender);
 
-    // ── Group admin status ─────────────────────────────────────────
     let isAdmin    = false;
     let isBotAdmin = false;
 
@@ -200,7 +223,6 @@ async function handleMessage(sock, msg) {
       } catch { /* defaults stay false */ }
     }
 
-    // ── Get message text ───────────────────────────────────────────
     const msgType = Object.keys(msg.message)[0];
     let text = '';
 
@@ -222,14 +244,10 @@ async function handleMessage(sock, msg) {
     const plugin = plugins.get(command);
     if (!plugin) return;
 
-    // ── Private MODE — only deployer/owner can use bot ─────────────
     if (CONFIG.MODE === 'private' && !ownerCheck && !deployerCheck) return;
 
-    // ═══════════════════════════════════════════════════════════════
-    //  PERMISSION GATE
-    // ═══════════════════════════════════════════════════════════════
+    // ── Permission Gate ────────────────────────────────────────────
 
-    // [1] ownerOnly — only Yousaf
     if (plugin.ownerOnly && !ownerCheck) {
       return sock.sendMessage(from, {
         text:
@@ -239,7 +257,6 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
-    // [2] deployerOnly — deployer or owner
     const isDeployerCmd = DEPLOYER_ONLY_COMMANDS.has(command) || plugin.deployerOnly;
     if (isDeployerCmd && !deployerCheck && !ownerCheck) {
       return sock.sendMessage(from, {
@@ -250,7 +267,6 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
-    // [3] groupOnly
     if (plugin.groupOnly && !isGroup) {
       return sock.sendMessage(from, {
         text:
@@ -260,7 +276,6 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
-    // [4] adminOnly
     if (plugin.adminOnly && !isAdmin && !deployerCheck && !ownerCheck) {
       return sock.sendMessage(from, {
         text:
@@ -270,7 +285,6 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
-    // [5] botAdmin required
     if (plugin.botAdmin && !isBotAdmin) {
       return sock.sendMessage(from, {
         text:
@@ -280,7 +294,6 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
-    // ── Cooldown check (skip for owner/deployer) ───────────────────
     if (!ownerCheck && !deployerCheck) {
       const { onCooldown, remaining } = checkCooldown(sender, command);
       if (onCooldown) {
@@ -293,7 +306,6 @@ async function handleMessage(sock, msg) {
       }
     }
 
-    // ── Execute plugin ─────────────────────────────────────────────
     await plugin.handler({
       sock,
       msg,
@@ -305,7 +317,7 @@ async function handleMessage(sock, msg) {
       isDeployer: deployerCheck,
       isAdmin,
       isBotAdmin,
-      ownerInfo:  OWNER,  // read-only owner info for plugins
+      ownerInfo:  OWNER,
     });
 
   } catch (error) {
@@ -318,8 +330,8 @@ async function handleMessage(sock, msg) {
 // ═══════════════════════════════════════════════════════════════════
 
 async function connectToWhatsApp() {
-  const { state, saveCreds } = await useMultiFileAuthState(SYSTEM.SESSION_DIR);
-  const { version, isLatest } = await fetchLatestBaileysVersion();
+  const { state, saveCreds }   = await useMultiFileAuthState(SYSTEM.SESSION_DIR);
+  const { version, isLatest }  = await fetchLatestBaileysVersion();
 
   console.log(chalk.cyan(figlet.textSync('YOUSAF-BALOCH-MD', { font: 'Standard' })));
   console.log(gradient.pastel(
@@ -369,21 +381,13 @@ async function connectToWhatsApp() {
         `[INFO] Bot: ${OWNER.BOT_NAME} | Owner: ${OWNER.FULL_NAME} | Prefix: ${CONFIG.PREFIX} | Mode: ${CONFIG.MODE}`
       ));
 
-      // Load plugins
       await loadPlugins();
-
-      // Init database
       await initDatabase();
-
-      // Register all group/call/anti-link/anti-bad events
       registerEvents(sock);
-
-      // Auto-clean expired cooldowns every 5 minutes
       setInterval(() => cleanExpiredCooldowns(), 5 * 60 * 1000);
     }
   });
 
-  // Command handler
   sock.ev.on('messages.upsert', async (m) => {
     if (m.type === 'notify') {
       for (const msg of m.messages) {
