@@ -2,6 +2,7 @@
  * ╔══════════════════════════════════════════════════════════════════╗
  * ║         YOUSAF-BALOCH-MD — MAIN BOT ENGINE                      ║
  * ║         Created by: Muhammad Yousaf Baloch                      ║
+ * ║         Platforms: Heroku, Railway, Render, Koyeb, VPS          ║
  * ╚══════════════════════════════════════════════════════════════════╝
  */
 
@@ -28,6 +29,8 @@ import {
   OWNER,
   CONFIG,
   SYSTEM,
+  ADMIN_COMMANDS,
+  DEPLOYER_ONLY_COMMANDS,
   validateConfig,
   initDatabase,
   isOwner,
@@ -44,7 +47,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const require   = createRequire(import.meta.url);
 
 // ═══════════════════════════════════════════════════════════════════
-//  SESSION LOADER
+//  SESSION LOADER — ENV یا session/SESSION_ID فائل سے
 // ═══════════════════════════════════════════════════════════════════
 
 const SESSION_ID = process.env.SESSION_ID || (() => {
@@ -72,14 +75,23 @@ if (SESSION_ID) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  EXPRESS — KEEP ALIVE
+//  EXPRESS — KEEP ALIVE (Heroku, Render, Railway, Koyeb)
 // ═══════════════════════════════════════════════════════════════════
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  res.send(`${OWNER.BOT_NAME} is running! ✅\nVersion: ${OWNER.VERSION}`);
+  res.send(
+    `<h2>🤖 ${OWNER.BOT_NAME} is running! ✅</h2>` +
+    `<p>Version: ${OWNER.VERSION}</p>` +
+    `<p>Owner: ${OWNER.FULL_NAME}</p>` +
+    `<p>Status: Online 🟢</p>`
+  );
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', bot: OWNER.BOT_NAME, version: OWNER.VERSION });
 });
 
 app.listen(PORT, () => {
@@ -179,7 +191,7 @@ async function loadPlugins() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  MSG WRAPPERS — تمام plugins کے لیے msg.react() اور msg.reply()
+//  MSG WRAPPERS — msg.react() اور msg.reply() تمام plugins میں
 // ═══════════════════════════════════════════════════════════════════
 
 function attachMsgHelpers(sock, msg) {
@@ -233,8 +245,8 @@ async function handleMessage(sock, msg) {
           .filter(p => p.admin === 'admin' || p.admin === 'superadmin')
           .map(p => p.id);
         const botJid = sock.user.id.replace(/:.*@/, '@');
-        isAdmin    = groupAdmins.includes(sender);
-        isBotAdmin = groupAdmins.includes(botJid);
+        isAdmin    = groupAdmins.some(a => a.replace(/:.*@/, '@') === sender);
+        isBotAdmin = groupAdmins.some(a => a.replace(/:.*@/, '@') === botJid);
       } catch { /* defaults stay false */ }
     }
 
@@ -264,14 +276,14 @@ async function handleMessage(sock, msg) {
     if (CONFIG.MODE === 'private' && !ownerCheck && !deployerCheck) return;
 
     // ═══════════════════════════════════════════════════════════════
-    //  PERMISSION GATE — canUseCommand() سے check
-    //  Owner    ✅ سب کچھ
-    //  Deployer ✅ سب کچھ
-    //  Admin    ✅ group settings + management
-    //  User     ✅ عام commands — ❌ settings on/off نہیں
+    //  PERMISSION GATE
+    //  Level 1 — Owner    : سب کچھ
+    //  Level 2 — Deployer : سب کچھ (settings سمیت)
+    //  Level 3 — Admin    : group settings + management
+    //  Level 4 — User     : صرف عام commands
     // ═══════════════════════════════════════════════════════════════
 
-    // plugin میں ownerOnly flag ہے تو صرف Owner
+    // ownerOnly plugin flag
     if (plugin.ownerOnly && !ownerCheck) {
       return sock.sendMessage(from, {
         text:
@@ -281,10 +293,18 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
-    // canUseCommand check — config.js میں defined permission levels
+    // deployerOnly plugin flag
+    if (plugin.deployerOnly && !deployerCheck && !ownerCheck) {
+      return sock.sendMessage(from, {
+        text:
+          `❌ *Permission Denied!*\n\n` +
+          `This command can only be used by the person who deployed this bot.\n` +
+          `${SYSTEM.SHORT_WATERMARK}`,
+      }, { quoted: msg });
+    }
+
+    // canUseCommand — config میں defined permission levels
     if (!canUseCommand(command, sender, groupAdmins)) {
-      // Deployer only commands
-      const { DEPLOYER_ONLY_COMMANDS, ADMIN_COMMANDS } = await import('./config.js');
       if (DEPLOYER_ONLY_COMMANDS.includes(command)) {
         return sock.sendMessage(from, {
           text:
@@ -304,16 +324,6 @@ async function handleMessage(sock, msg) {
       return;
     }
 
-    // plugin میں deployerOnly flag ہے
-    if (plugin.deployerOnly && !deployerCheck && !ownerCheck) {
-      return sock.sendMessage(from, {
-        text:
-          `❌ *Permission Denied!*\n\n` +
-          `This command can only be used by the person who deployed this bot.\n` +
-          `${SYSTEM.SHORT_WATERMARK}`,
-      }, { quoted: msg });
-    }
-
     // groupOnly
     if (plugin.groupOnly && !isGroup) {
       return sock.sendMessage(from, {
@@ -324,7 +334,7 @@ async function handleMessage(sock, msg) {
       }, { quoted: msg });
     }
 
-    // adminOnly flag
+    // adminOnly plugin flag
     if (plugin.adminOnly && !isAdmin && !deployerCheck && !ownerCheck) {
       return sock.sendMessage(from, {
         text:
@@ -379,7 +389,7 @@ async function handleMessage(sock, msg) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  CONNECTED NOTIFICATION
+//  CONNECTED NOTIFICATION — Bot connect ہونے پر deployer کو message
 // ═══════════════════════════════════════════════════════════════════
 
 async function sendConnectedNotification(sock) {
@@ -433,11 +443,12 @@ async function connectToWhatsApp() {
     printQRInTerminal: true,
     auth: {
       creds: state.creds,
-      keys: makeCacheableSignalKeyStore(state.keys, logger),
+      keys:  makeCacheableSignalKeyStore(state.keys, logger),
     },
-    browser:                    Browsers.macOS('Desktop'),
+    browser:                        Browsers.macOS('Desktop'),
     generateHighQualityLinkPreview: true,
-    syncFullHistory:            false,
+    syncFullHistory:                false,
+    markOnlineOnConnect:            true,
   });
 
   sock.ev.on('creds.update', saveCreds);
@@ -448,18 +459,17 @@ async function connectToWhatsApp() {
     if (qr) console.log(chalk.yellow('[CONNECTION] Scan QR code to connect'));
 
     if (connection === 'close') {
-      const shouldReconnect =
-        (lastDisconnect?.error instanceof Boom)
-          ? lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut
-          : true;
+      const statusCode = lastDisconnect?.error?.output?.statusCode;
+      const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
 
-      console.log(chalk.red('[CONNECTION] Closed:'), lastDisconnect?.error?.message);
+      console.log(chalk.red('[CONNECTION] Closed — Code:'), statusCode);
 
       if (shouldReconnect) {
         console.log(chalk.yellow('[CONNECTION] Reconnecting...'));
-        connectToWhatsApp();
+        setTimeout(() => connectToWhatsApp(), 5000);
       } else {
         console.log(chalk.red('[CONNECTION] Logged out. Delete session folder and restart.'));
+        process.exit(1);
       }
 
     } else if (connection === 'open') {
