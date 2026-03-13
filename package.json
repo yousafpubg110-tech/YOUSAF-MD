@@ -26,7 +26,6 @@
     "@hapi/boom": "^10.0.1",
     "@whiskeysockets/baileys": "^6.7.9",
     "axios": "^1.7.9",
-    "canvas": "^2.11.2",
     "chalk": "^5.4.1",
     "cheerio": "^1.0.0",
     "dotenv": "^16.4.7",
@@ -52,7 +51,7 @@
     "nodemon": "^3.1.9"
   },
   "engines": {
-    "node": "24.x"
+    "node": "20.x"
   },
   "repository": {
     "type": "git",
