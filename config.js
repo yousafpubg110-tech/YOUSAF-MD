@@ -7,14 +7,13 @@
  */
 
 import { config } from 'dotenv';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
 
 config();
 
 // ═══════════════════════════════════════════════════════════════════
 //  [SECTION 1]  OWNER IDENTITY — LOCKED — READ ONLY
-//  DO NOT MODIFY — HARD-CODED — IMMUTABLE
 // ═══════════════════════════════════════════════════════════════════
 
 export const OWNER = Object.freeze({
@@ -27,23 +26,18 @@ export const OWNER = Object.freeze({
   YEAR:      '2026',
   COUNTRY:   'Pakistan',
 
-  // Social media links — DO NOT REMOVE
   YOUTUBE:        'https://www.youtube.com/@Yousaf_Baloch_Tech',
   TIKTOK:         'https://tiktok.com/@loser_boy.110',
   CHANNEL:        'https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j',
   GITHUB:         'https://github.com/yousafpubg110-tech',
   WHATSAPP:       'https://wa.me/923710636110',
 
-  // This bot repo
   REPO:           'https://github.com/yousafpubg110-tech/YOUSAF-MD',
-
-  // Second bot repo
   REPO_BALOCH_MD: 'https://github.com/yousafpubg110-tech/YOUSAF-BALOCH-MD',
 });
 
 // ═══════════════════════════════════════════════════════════════════
 //  [SECTION 1-B]  DEPLOYER — LEVEL 2 BOT ADMIN
-//  The person who deploys the bot on their number
 // ═══════════════════════════════════════════════════════════════════
 
 function loadDeployers() {
@@ -59,7 +53,6 @@ export const DEPLOYERS = Object.freeze(loadDeployers());
 
 // ═══════════════════════════════════════════════════════════════════
 //  [SECTION 1-C]  DEPLOYER-ONLY COMMANDS
-//  Only deployer or owner can use these
 // ═══════════════════════════════════════════════════════════════════
 
 export const DEPLOYER_ONLY_COMMANDS = Object.freeze([
@@ -76,7 +69,6 @@ export const DEPLOYER_ONLY_COMMANDS = Object.freeze([
 
 // ═══════════════════════════════════════════════════════════════════
 //  [SECTION 1-D]  OWNER-ONLY COMMANDS
-//  Only Muhammad Yousaf Baloch (original owner) can use these
 // ═══════════════════════════════════════════════════════════════════
 
 export const OWNER_ONLY_COMMANDS = Object.freeze([
@@ -84,11 +76,32 @@ export const OWNER_ONLY_COMMANDS = Object.freeze([
 ]);
 
 // ═══════════════════════════════════════════════════════════════════
+//  [SECTION 1-E]  SESSION ID LOADER
+//  ENV سے لو، نہیں تو session/SESSION_ID فائل سے
+// ═══════════════════════════════════════════════════════════════════
+
+function loadSessionId() {
+  // پہلے ENV سے چیک کرو
+  if (process.env.SESSION_ID && process.env.SESSION_ID.trim()) {
+    return process.env.SESSION_ID.trim();
+  }
+  // پھر فائل سے چیک کرو
+  const f = './session/SESSION_ID';
+  if (existsSync(f)) {
+    const val = readFileSync(f, 'utf8').trim();
+    if (val && val !== 'YOUR_SESSION_ID_HERE') return val;
+  }
+  return '';
+}
+
+export const SESSION_ID = loadSessionId();
+
+// ═══════════════════════════════════════════════════════════════════
 //  [SECTION 2]  BOT SETTINGS
 // ═══════════════════════════════════════════════════════════════════
 
 export const CONFIG = {
-  SESSION_ID: process.env.SESSION_ID || '',
+  SESSION_ID: SESSION_ID,
   PREFIX:     process.env.PREFIX     || '.',
   MODE:       (process.env.MODE      || 'public').toLowerCase(),
   APP_NAME:   process.env.APP_NAME   || OWNER.BOT_NAME,
@@ -96,6 +109,7 @@ export const CONFIG = {
   LANGUAGE:   process.env.LANGUAGE   || 'en',
 
   AUTO_READ:        process.env.AUTO_READ        === 'true',
+  AUTO_STATUS:      process.env.AUTO_STATUS      === 'true',
   AUTO_READ_STATUS: process.env.AUTO_READ_STATUS === 'true',
   AUTO_LIKE_STATUS: process.env.AUTO_LIKE_STATUS === 'true',
   AUTO_REACT:       process.env.AUTO_REACT       === 'true',
@@ -280,6 +294,8 @@ export function validateConfig() {
 
   if (!CONFIG.SESSION_ID) {
     warnings.push('SESSION_ID not set. Get one from YOUSAF-PAIRING-V1.');
+  } else {
+    console.log('[CONFIG] ✅ SESSION_ID loaded successfully!');
   }
 
   if (DEPLOYERS.length === 0) {
@@ -299,6 +315,7 @@ export default {
   OWNER_ONLY_COMMANDS,
   CONFIG,
   SYSTEM,
+  SESSION_ID,
   initDatabase,
   ownerFooter,
   isOwner,
