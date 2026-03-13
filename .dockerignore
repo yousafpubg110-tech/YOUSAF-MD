@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment & Secrets
+.env
+.env.local
+.env.production
+
+# Session files — sensitive
+session/creds.json
+session/*.json
+
+# Temp & generated files
+temp/
+logs/
+database/database.json
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker itself
+Dockerfile
+.dockerignore
+
+# Docs
+README.md
+*.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
