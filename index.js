@@ -14,7 +14,6 @@ import {
   Browsers,
   makeCacheableSignalKeyStore,
 } from '@whiskeysockets/baileys';
-import { Boom }         from '@hapi/boom';
 import pino             from 'pino';
 import chalk            from 'chalk';
 import figlet           from 'figlet';
@@ -39,7 +38,6 @@ import {
   isOwner,
   isDeployer,
   canUseCommand,
-  cleanNumber,
 } from './config.js';
 
 import { registerEvents }                       from './lib/EventHandler.js';
@@ -182,7 +180,7 @@ async function loadPlugins() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  MSG HELPERS — msg.react() + msg.reply() تمام plugins کے لیے
+//  MSG HELPERS
 // ═══════════════════════════════════════════════════════════════════
 
 function attachMsgHelpers(sock, msg) {
@@ -214,7 +212,6 @@ async function handleMessage(sock, msg) {
     const from    = msg.key.remoteJid;
     const isGroup = from.endsWith('@g.us');
 
-    // multi-device JID fix
     const rawSender = msg.key.participant || msg.key.remoteJid;
     const sender    = rawSender?.replace(/:.*@/, '@') || rawSender;
 
@@ -338,7 +335,10 @@ async function sendConnectedNotification(sock) {
   try {
     const raw = process.env.DEPLOYER_NUMBER || '';
     if (!raw.trim()) return;
-    const numbers = raw.split(',').map(n => n.trim().replace(/[^0-9]/g, '')).filter(n => n.length >= 7);
+    const numbers = raw
+      .split(',')
+      .map(n => n.trim().replace(/[^0-9]/g, ''))
+      .filter(n => n.length >= 7);
     for (const num of numbers) {
       await sock.sendMessage(`${num}@s.whatsapp.net`, {
         text:
