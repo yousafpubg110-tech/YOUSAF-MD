@@ -44,12 +44,47 @@ function ownerFooter(){
   );
 }
 
+// ── FIX: menu.jpg use کرو menu-thumb.png نہیں ──────────────────────
 function getThumb(){
-  try{
-    const p=path.resolve('./assets/menu-thumb.png');
-    if(fs.existsSync(p)) return fs.readFileSync(p);
-  }catch(_){}
+  const names = ['menu.jpg','menu.png','menu-thumb.jpg','menu-thumb.png','banner.jpg'];
+  for(const name of names){
+    try{
+      const p=path.resolve(`./assets/${name}`);
+      if(fs.existsSync(p)) return fs.readFileSync(p);
+    }catch(_){}
+  }
   return null;
+}
+
+// ── owner.jpg لینے کا function ─────────────────────────────────────
+function getOwnerImg(){
+  const names = ['owner.jpg','owner.png','banner.jpg'];
+  for(const name of names){
+    try{
+      const p=path.resolve(`./assets/${name}`);
+      if(fs.existsSync(p)) return fs.readFileSync(p);
+    }catch(_){}
+  }
+  return null;
+}
+
+// ── menu-voice.m4a بھیجنے کا function ─────────────────────────────
+async function sendMenuVoice(sock, from, msg){
+  try{
+    const names = ['menu-voice.m4a','menu-voice.mp3','menu-voice.ogg'];
+    for(const name of names){
+      const p=path.resolve(`./assets/${name}`);
+      if(fs.existsSync(p)){
+        const voiceBuf=fs.readFileSync(p);
+        await sock.sendMessage(from,{
+          audio:    voiceBuf,
+          mimetype: name.endsWith('.mp3') ? 'audio/mpeg' : 'audio/mp4',
+          ptt:      true,
+        },{quoted:msg});
+        return;
+      }
+    }
+  }catch(_){}
 }
 
 function buildMenu(senderName){
@@ -474,29 +509,49 @@ async function infoHandler({sock,msg,from,sender}){
   }
 }
 
+// ── MENU HANDLER — image + text + voice ──────────────────────────
 async function menuHandler({sock,msg,from,sender}){
   try{
     const senderNum=sender?.split('@')[0]||'User';
     const menuText=buildMenu(senderNum);
     const thumbBuf=getThumb();
+
     if(thumbBuf){
-      await sock.sendMessage(from,{image:thumbBuf,caption:menuText},{quoted:msg});
+      // Image کے ساتھ menu caption
+      await sock.sendMessage(from,{
+        image:   thumbBuf,
+        caption: menuText,
+      },{quoted:msg});
     } else {
+      // Image نہیں ملی — text only
       await sock.sendMessage(from,{text:menuText},{quoted:msg});
     }
+
+    // 2 seconds بعد voice message
+    setTimeout(()=>sendMenuVoice(sock,from,msg),2000);
+
   }catch(e){
     await sock.sendMessage(from,{text:`❌ _${e.message}_`},{quoted:msg}).catch(()=>{});
   }
 }
 
+// ── OWNER HANDLER — owner.jpg کے ساتھ ───────────────────────────
 async function ownerHandler({sock,msg,from}){
   try{
-    await sock.sendMessage(from,{
-      text:
-        `╭━━━『 👑 *OWNER INFO* 』━━━╮\n\n`+
-        `${ownerFooter()}\n\n`+
-        `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM.SHORT_WATERMARK}`,
-    },{quoted:msg});
+    const ownerBuf=getOwnerImg();
+    const ownerText=
+      `╭━━━『 👑 *OWNER INFO* 』━━━╮\n\n`+
+      `${ownerFooter()}\n\n`+
+      `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM.SHORT_WATERMARK}`;
+
+    if(ownerBuf){
+      await sock.sendMessage(from,{
+        image:   ownerBuf,
+        caption: ownerText,
+      },{quoted:msg});
+    } else {
+      await sock.sendMessage(from,{text:ownerText},{quoted:msg});
+    }
   }catch(e){
     await sock.sendMessage(from,{text:`❌ _${e.message}_`},{quoted:msg}).catch(()=>{});
   }
@@ -534,9 +589,7 @@ async function scriptHandler({sock,msg,from}){
 async function publicHandler({sock,msg,from,isDeployer,isOwner}){
   try{
     if(!isDeployer&&!isOwner){
-      return sock.sendMessage(from,{
-        text:`❌ *Permission Denied!*\n\n${SYSTEM.SHORT_WATERMARK}`,
-      },{quoted:msg});
+      return sock.sendMessage(from,{text:`❌ *Permission Denied!*\n\n${SYSTEM.SHORT_WATERMARK}`},{quoted:msg});
     }
     CONFIG.MODE='public';
     await sock.sendMessage(from,{
@@ -550,9 +603,7 @@ async function publicHandler({sock,msg,from,isDeployer,isOwner}){
 async function privateHandler({sock,msg,from,isDeployer,isOwner}){
   try{
     if(!isDeployer&&!isOwner){
-      return sock.sendMessage(from,{
-        text:`❌ *Permission Denied!*\n\n${SYSTEM.SHORT_WATERMARK}`,
-      },{quoted:msg});
+      return sock.sendMessage(from,{text:`❌ *Permission Denied!*\n\n${SYSTEM.SHORT_WATERMARK}`},{quoted:msg});
     }
     CONFIG.MODE='private';
     await sock.sendMessage(from,{
@@ -562,10 +613,6 @@ async function privateHandler({sock,msg,from,isDeployer,isOwner}){
     await sock.sendMessage(from,{text:`❌ _${e.message}_`},{quoted:msg}).catch(()=>{});
   }
 }
-
-// ═══════════════════════════════════════════════════════════════════
-//  EXPORTS
-// ═══════════════════════════════════════════════════════════════════
 
 export default [
   { command: 'alive',   handler: aliveHandler   },
