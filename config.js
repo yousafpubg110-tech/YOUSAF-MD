@@ -53,12 +53,10 @@ export const DEPLOYERS = Object.freeze(loadDeployers());
 //  [SECTION 1-C]  PERMISSION COMMAND LISTS
 // ═══════════════════════════════════════════════════════════════════
 
-// صرف Original Owner
 export const OWNER_ONLY_COMMANDS = Object.freeze([
   'eval', 'exec', 'shell',
 ]);
 
-// Owner + Deployer + Admin — عام user نہیں
 export const ADMIN_COMMANDS = Object.freeze([
   'setting', 'settings',
   'antilink', 'antiviewonce', 'antispam', 'antibad', 'anticall', 'antidelete', 'antivv',
@@ -69,7 +67,6 @@ export const ADMIN_COMMANDS = Object.freeze([
   'linkgroup', 'revoke', 'invite', 'antiabuse',
 ]);
 
-// صرف Owner + Deployer
 export const DEPLOYER_ONLY_COMMANDS = Object.freeze([
   'config', 'configure', 'set',
   'restart', 'shutdown',
@@ -96,7 +93,20 @@ function loadSessionId() {
 export const SESSION_ID = loadSessionId();
 
 // ═══════════════════════════════════════════════════════════════════
+//  HELPER — env boolean — default value support
+//  اگر ENV میں set نہیں تو default value use کرو
+// ═══════════════════════════════════════════════════════════════════
+
+function envBool(key, defaultVal = false) {
+  const val = process.env[key];
+  if (val === undefined || val === '') return defaultVal;
+  return val === 'true';
+}
+
+// ═══════════════════════════════════════════════════════════════════
 //  [SECTION 2]  BOT SETTINGS
+//  DEFAULT ON: AUTO_STATUS, AUTO_LIKE_STATUS, ANTI_DELETE, ANTI_VIEW_ONCE
+//  یہ ہمیشہ ON رہیں گے جب تک deployer OFF نہ کرے
 // ═══════════════════════════════════════════════════════════════════
 
 export const CONFIG = {
@@ -107,36 +117,50 @@ export const CONFIG = {
   TIMEZONE:         process.env.TIMEZONE   || 'Asia/Karachi',
   LANGUAGE:         process.env.LANGUAGE   || 'en',
 
-  AUTO_READ:        process.env.AUTO_READ        === 'true',
-  AUTO_STATUS:      process.env.AUTO_STATUS      === 'true',
-  AUTO_READ_STATUS: process.env.AUTO_READ_STATUS === 'true',
-  AUTO_LIKE_STATUS: process.env.AUTO_LIKE_STATUS === 'true',
-  AUTO_REACT:       process.env.AUTO_REACT       === 'true',
-  AUTO_TYPING:      process.env.AUTO_TYPING      === 'true',
-  AUTO_RECORDING:   process.env.AUTO_RECORDING   === 'true',
-  AUTO_BIO:         process.env.AUTO_BIO         === 'true',
-  AUTO_REPLY:       process.env.AUTO_REPLY        === 'true',
-  AUTO_DOWNLOAD:    process.env.AUTO_DOWNLOAD     === 'true',
+  // ── AUTO FEATURES ─────────────────────────────────────────────
+  // AUTO_STATUS   — default: true  (ہمیشہ ON)
+  // AUTO_LIKE_STATUS — default: true  (ہمیشہ ON)
+  // باقی — default: false
 
-  ANTI_DELETE:      process.env.ANTI_DELETE    === 'true',
-  ANTI_LINK:        process.env.ANTI_LINK      === 'true',
-  ANTI_BAD:         process.env.ANTI_BAD       === 'true',
-  ANTI_SPAM:        process.env.ANTI_SPAM      === 'true',
-  ANTI_CALL:        process.env.ANTI_CALL      === 'true',
-  ANTI_VIEW_ONCE:   process.env.ANTI_VIEW_ONCE === 'true',
+  AUTO_READ:        envBool('AUTO_READ',        false),
+  AUTO_STATUS:      envBool('AUTO_STATUS',       true),  // DEFAULT ON ✅
+  AUTO_READ_STATUS: envBool('AUTO_READ_STATUS',  true),  // DEFAULT ON ✅
+  AUTO_LIKE_STATUS: envBool('AUTO_LIKE_STATUS',  true),  // DEFAULT ON ✅
+  AUTO_REACT:       envBool('AUTO_REACT',        false),
+  AUTO_TYPING:      envBool('AUTO_TYPING',       false),
+  AUTO_RECORDING:   envBool('AUTO_RECORDING',    false),
+  AUTO_BIO:         envBool('AUTO_BIO',          false),
+  AUTO_REPLY:       envBool('AUTO_REPLY',        false),
+  AUTO_DOWNLOAD:    envBool('AUTO_DOWNLOAD',     false),
 
-  WELCOME:          process.env.WELCOME     === 'true',
-  GOODBYE:          process.env.GOODBYE     === 'true',
+  // ── ANTI FEATURES ─────────────────────────────────────────────
+  // ANTI_DELETE   — default: true  (ہمیشہ ON)
+  // ANTI_VIEW_ONCE — default: true  (ہمیشہ ON)
+  // باقی — default: false
+
+  ANTI_DELETE:      envBool('ANTI_DELETE',       true),  // DEFAULT ON ✅
+  ANTI_LINK:        envBool('ANTI_LINK',         false),
+  ANTI_BAD:         envBool('ANTI_BAD',          false),
+  ANTI_SPAM:        envBool('ANTI_SPAM',         false),
+  ANTI_CALL:        envBool('ANTI_CALL',         false),
+  ANTI_VIEW_ONCE:   envBool('ANTI_VIEW_ONCE',    true),  // DEFAULT ON ✅
+
+  // ── GROUP FEATURES ────────────────────────────────────────────
+  WELCOME:          envBool('WELCOME',           false),
+  GOODBYE:          envBool('GOODBYE',           false),
   MAX_WARN:         parseInt(process.env.MAX_WARN)        || 3,
   ANTI_SPAM_LIMIT:  parseInt(process.env.ANTI_SPAM_LIMIT) || 5,
 
+  // ── DATABASE ──────────────────────────────────────────────────
   MONGODB_URI:      process.env.MONGODB_URI || '',
   DB_TYPE:          process.env.MONGODB_URI ? 'mongodb' : 'json',
   DB_PATH:          process.env.DB_PATH     || './database',
 
+  // ── LINKS ─────────────────────────────────────────────────────
   SUPPORT_GROUP:    process.env.SUPPORT_GROUP || OWNER.CHANNEL,
   SCRIPT_LINK:      process.env.SCRIPT_LINK   || OWNER.REPO,
 
+  // ── PLATFORM ──────────────────────────────────────────────────
   HEROKU_APP_NAME:  process.env.HEROKU_APP_NAME || '',
   KEEP_ALIVE_URL:   process.env.KEEP_ALIVE_URL  || '',
   RENDER_APP_URL:   process.env.RENDER_APP_URL  || '',
@@ -232,8 +256,6 @@ export function ownerFooter() {
 
 // ═══════════════════════════════════════════════════════════════════
 //  [SECTION 6]  PERMISSION HELPERS
-//  WhatsApp multi-device JID fix: 923xx:10@s.whatsapp.net
-//  cleanNumber() removes :10 device ID before matching
 // ═══════════════════════════════════════════════════════════════════
 
 export function cleanNumber(sender) {
@@ -275,7 +297,7 @@ export function isRestrictedCommand(cmd)   { return isDeployerOnlyCommand(cmd) |
 export function getPermLevel(sender) {
   const num = cleanNumber(sender);
   if (!num) return 4;
-  if (num === OWNER.NUMBER)     return 1;
+  if (num === OWNER.NUMBER)    return 1;
   if (DEPLOYERS.includes(num)) return 2;
   return 4;
 }
@@ -304,6 +326,11 @@ export function validateConfig() {
   } else {
     console.log(`[CONFIG] ✅ Deployers loaded: ${DEPLOYERS.join(', ')}`);
   }
+
+  console.log('[CONFIG] ✅ AUTO_STATUS:', CONFIG.AUTO_STATUS);
+  console.log('[CONFIG] ✅ AUTO_LIKE_STATUS:', CONFIG.AUTO_LIKE_STATUS);
+  console.log('[CONFIG] ✅ ANTI_DELETE:', CONFIG.ANTI_DELETE);
+  console.log('[CONFIG] ✅ ANTI_VIEW_ONCE:', CONFIG.ANTI_VIEW_ONCE);
 
   warnings.forEach(w => console.warn(`[CONFIG WARN] ⚠️  ${w}`));
   return errors;
