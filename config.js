@@ -12,10 +12,6 @@ import { join } from 'path';
 
 config();
 
-// ═══════════════════════════════════════════════════════════════════
-//  [SECTION 1]  OWNER IDENTITY — LOCKED — READ ONLY
-// ═══════════════════════════════════════════════════════════════════
-
 export const OWNER = Object.freeze({
   NAME:           'Yousaf Baloch',
   FULL_NAME:      'Muhammad Yousaf Baloch',
@@ -34,10 +30,6 @@ export const OWNER = Object.freeze({
   REPO_BALOCH_MD: 'https://github.com/yousafpubg110-tech/YOUSAF-BALOCH-MD',
 });
 
-// ═══════════════════════════════════════════════════════════════════
-//  [SECTION 1-B]  DEPLOYER
-// ═══════════════════════════════════════════════════════════════════
-
 function loadDeployers() {
   const raw = process.env.DEPLOYER_NUMBER || '';
   if (!raw.trim()) return [];
@@ -48,10 +40,6 @@ function loadDeployers() {
 }
 
 export const DEPLOYERS = Object.freeze(loadDeployers());
-
-// ═══════════════════════════════════════════════════════════════════
-//  [SECTION 1-C]  PERMISSION COMMAND LISTS
-// ═══════════════════════════════════════════════════════════════════
 
 export const OWNER_ONLY_COMMANDS = Object.freeze([
   'eval', 'exec', 'shell',
@@ -76,10 +64,6 @@ export const DEPLOYER_ONLY_COMMANDS = Object.freeze([
   'join', 'leave',
 ]);
 
-// ═══════════════════════════════════════════════════════════════════
-//  [SECTION 1-D]  SESSION ID LOADER
-// ═══════════════════════════════════════════════════════════════════
-
 function loadSessionId() {
   if (process.env.SESSION_ID?.trim()) return process.env.SESSION_ID.trim();
   const f = './session/SESSION_ID';
@@ -92,22 +76,11 @@ function loadSessionId() {
 
 export const SESSION_ID = loadSessionId();
 
-// ═══════════════════════════════════════════════════════════════════
-//  HELPER — env boolean — default value support
-//  اگر ENV میں set نہیں تو default value use کرو
-// ═══════════════════════════════════════════════════════════════════
-
 function envBool(key, defaultVal = false) {
   const val = process.env[key];
   if (val === undefined || val === '') return defaultVal;
   return val === 'true';
 }
-
-// ═══════════════════════════════════════════════════════════════════
-//  [SECTION 2]  BOT SETTINGS
-//  DEFAULT ON: AUTO_STATUS, AUTO_LIKE_STATUS, ANTI_DELETE, ANTI_VIEW_ONCE
-//  یہ ہمیشہ ON رہیں گے جب تک deployer OFF نہ کرے
-// ═══════════════════════════════════════════════════════════════════
 
 export const CONFIG = {
   SESSION_ID:       SESSION_ID,
@@ -117,15 +90,10 @@ export const CONFIG = {
   TIMEZONE:         process.env.TIMEZONE   || 'Asia/Karachi',
   LANGUAGE:         process.env.LANGUAGE   || 'en',
 
-  // ── AUTO FEATURES ─────────────────────────────────────────────
-  // AUTO_STATUS   — default: true  (ہمیشہ ON)
-  // AUTO_LIKE_STATUS — default: true  (ہمیشہ ON)
-  // باقی — default: false
-
   AUTO_READ:        envBool('AUTO_READ',        false),
-  AUTO_STATUS:      envBool('AUTO_STATUS',       true),  // DEFAULT ON ✅
-  AUTO_READ_STATUS: envBool('AUTO_READ_STATUS',  true),  // DEFAULT ON ✅
-  AUTO_LIKE_STATUS: envBool('AUTO_LIKE_STATUS',  true),  // DEFAULT ON ✅
+  AUTO_STATUS:      envBool('AUTO_STATUS',       true),
+  AUTO_READ_STATUS: envBool('AUTO_READ_STATUS',  true),
+  AUTO_LIKE_STATUS: envBool('AUTO_LIKE_STATUS',  true),
   AUTO_REACT:       envBool('AUTO_REACT',        false),
   AUTO_TYPING:      envBool('AUTO_TYPING',       false),
   AUTO_RECORDING:   envBool('AUTO_RECORDING',    false),
@@ -133,42 +101,29 @@ export const CONFIG = {
   AUTO_REPLY:       envBool('AUTO_REPLY',        false),
   AUTO_DOWNLOAD:    envBool('AUTO_DOWNLOAD',     false),
 
-  // ── ANTI FEATURES ─────────────────────────────────────────────
-  // ANTI_DELETE   — default: true  (ہمیشہ ON)
-  // ANTI_VIEW_ONCE — default: true  (ہمیشہ ON)
-  // باقی — default: false
-
-  ANTI_DELETE:      envBool('ANTI_DELETE',       true),  // DEFAULT ON ✅
+  ANTI_DELETE:      envBool('ANTI_DELETE',       true),
   ANTI_LINK:        envBool('ANTI_LINK',         false),
   ANTI_BAD:         envBool('ANTI_BAD',          false),
   ANTI_SPAM:        envBool('ANTI_SPAM',         false),
   ANTI_CALL:        envBool('ANTI_CALL',         false),
-  ANTI_VIEW_ONCE:   envBool('ANTI_VIEW_ONCE',    true),  // DEFAULT ON ✅
+  ANTI_VIEW_ONCE:   envBool('ANTI_VIEW_ONCE',    true),
 
-  // ── GROUP FEATURES ────────────────────────────────────────────
   WELCOME:          envBool('WELCOME',           false),
   GOODBYE:          envBool('GOODBYE',           false),
   MAX_WARN:         parseInt(process.env.MAX_WARN)        || 3,
   ANTI_SPAM_LIMIT:  parseInt(process.env.ANTI_SPAM_LIMIT) || 5,
 
-  // ── DATABASE ──────────────────────────────────────────────────
   MONGODB_URI:      process.env.MONGODB_URI || '',
   DB_TYPE:          process.env.MONGODB_URI ? 'mongodb' : 'json',
   DB_PATH:          process.env.DB_PATH     || './database',
 
-  // ── LINKS ─────────────────────────────────────────────────────
   SUPPORT_GROUP:    process.env.SUPPORT_GROUP || OWNER.CHANNEL,
   SCRIPT_LINK:      process.env.SCRIPT_LINK   || OWNER.REPO,
 
-  // ── PLATFORM ──────────────────────────────────────────────────
   HEROKU_APP_NAME:  process.env.HEROKU_APP_NAME || '',
   KEEP_ALIVE_URL:   process.env.KEEP_ALIVE_URL  || '',
   RENDER_APP_URL:   process.env.RENDER_APP_URL  || '',
 };
-
-// ═══════════════════════════════════════════════════════════════════
-//  [SECTION 3]  SYSTEM CONSTANTS
-// ═══════════════════════════════════════════════════════════════════
 
 export const SYSTEM = Object.freeze({
   BAILEYS_VERSION:  process.env.BAILEYS_VERSION || '6.7.9',
@@ -196,10 +151,6 @@ export const SYSTEM = Object.freeze({
     `▶️ ${OWNER.YOUTUBE}\n` +
     `🎵 ${OWNER.TIKTOK}`,
 });
-
-// ═══════════════════════════════════════════════════════════════════
-//  [SECTION 4]  DATABASE
-// ═══════════════════════════════════════════════════════════════════
 
 export async function initDatabase() {
   if (CONFIG.DB_TYPE === 'mongodb' && CONFIG.MONGODB_URI) {
@@ -237,10 +188,6 @@ function initJsonDatabase() {
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════
-//  [SECTION 5]  OWNER FOOTER
-// ═══════════════════════════════════════════════════════════════════
-
 export function ownerFooter() {
   return (
     `╭━━━━━━━━━━━━━━━━━━━━━━╮\n` +
@@ -253,10 +200,6 @@ export function ownerFooter() {
     `_⚡ YOUSAF-MD v${OWNER.VERSION}_`
   );
 }
-
-// ═══════════════════════════════════════════════════════════════════
-//  [SECTION 6]  PERMISSION HELPERS
-// ═══════════════════════════════════════════════════════════════════
 
 export function cleanNumber(sender) {
   if (!sender) return '';
@@ -280,12 +223,31 @@ export function isAdminLevel(sender, groupAdmins = []) {
   return groupAdmins.some(a => cleanNumber(a) === num);
 }
 
+// ═══════════════════════════════════════════════════════════════════
+//  PERMISSION CHECK
+//  Owner   — everything ✅
+//  Deployer — everything ✅ (same as owner)
+//  Admin   — group management only ✅
+//  User    — general commands only ✅
+// ═══════════════════════════════════════════════════════════════════
+
 export function canUseCommand(commandName, sender, groupAdmins = []) {
   const cmd = commandName?.toLowerCase();
   if (!cmd) return false;
-  if (OWNER_ONLY_COMMANDS.includes(cmd))    return isOwner(sender);
+
+  // Deployer has FULL authority — same as Owner
+  if (isDeployer(sender)) return true;
+
+  // Owner only — eval, exec, shell
+  if (OWNER_ONLY_COMMANDS.includes(cmd)) return isOwner(sender);
+
+  // Deployer only commands — already handled above
   if (DEPLOYER_ONLY_COMMANDS.includes(cmd)) return isDeployer(sender);
-  if (ADMIN_COMMANDS.includes(cmd))         return isAdminLevel(sender, groupAdmins);
+
+  // Admin commands — group admins can use
+  if (ADMIN_COMMANDS.includes(cmd)) return isAdminLevel(sender, groupAdmins);
+
+  // Everyone else
   return true;
 }
 
@@ -301,10 +263,6 @@ export function getPermLevel(sender) {
   if (DEPLOYERS.includes(num)) return 2;
   return 4;
 }
-
-// ═══════════════════════════════════════════════════════════════════
-//  [SECTION 7]  STARTUP VALIDATOR
-// ═══════════════════════════════════════════════════════════════════
 
 export function validateConfig() {
   const errors   = [];
