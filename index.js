@@ -18,6 +18,7 @@ import pino             from 'pino';
 import chalk            from 'chalk';
 import figlet           from 'figlet';
 import gradient         from 'gradient-string';
+import readline         from 'readline';
 import {
   existsSync, mkdirSync, readdirSync,
   readFileSync, writeFileSync,
@@ -46,6 +47,9 @@ import { checkCooldown, cleanExpiredCooldowns } from './lib/CooldownManager.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require   = createRequire(import.meta.url);
 
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+const question = (text) => new Promise((resolve) => rl.question(text, resolve));
+
 // ═══════════════════════════════════════════════════════════════════
 //  SESSION LOADER
 // ═══════════════════════════════════════════════════════════════════
@@ -71,7 +75,7 @@ if (SESSION_ID) {
     console.error(chalk.red('[SESSION] ❌ Failed:'), e.message);
   }
 } else {
-  console.log(chalk.yellow('[SESSION] No SESSION_ID — QR code will be shown'));
+  console.log(chalk.yellow('[SESSION] No SESSION_ID found. Starting pairing/QR mode...'));
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -360,7 +364,7 @@ async function sendConnectedNotification(sock) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  WHATSAPP CONNECTION
+//  WHATSAPP CONNECTION (PAIRING CODE & QR DUAL SUPPORT)
 // ═══════════════════════════════════════════════════════════════════
 
 async function connectToWhatsApp() {
@@ -384,12 +388,44 @@ async function connectToWhatsApp() {
     markOnlineOnConnect:            true,
   });
 
+  if (!sock.authState.creds.registered) {
+    console.log(chalk.yellow('\n========================================'));
+    console.log(chalk.cyan('   📱 CHOOSE CONNECTION METHOD:'));
+    console.log(chalk.green('   1. Pairing Code (Recommended & Default)'));
+    console.log(chalk.yellow('   2. QR Code (Check logs below if needed)'));
+    console.log(chalk.yellow('========================================\n'));
+
+    let phoneNumber = process.env.PHONE_NUMBER;
+    if (!phoneNumber) {
+      phoneNumber = await question(chalk.green('👉 Enter your WhatsApp number with country code for Pairing Code (e.g., 923075134110): '));
+    }
+    
+    if (phoneNumber && phoneNumber.trim().length > 5) {
+      phoneNumber = phoneNumber.replace(/[^0-9]/g, '');
+      setTimeout(async () => {
+        try {
+          console.log(chalk.blue('[PAIRING] Requesting pairing code for:'), phoneNumber);
+          let code = await sock.requestPairingCode(phoneNumber);
+          code = code?.match(/.{1,4}/g)?.join('-') || code;
+          console.log(chalk.bgCyan.black(`\n 🔑 YOUR PAIRING CODE IS: ${code} \n`));
+          console.log(chalk.yellow('Go to WhatsApp > Linked Devices > Link with phone number instead, and enter this code.\n'));
+        } catch (err) {
+          console.error(chalk.red('[PAIRING ERROR]:'), err.message);
+        }
+      }, 4000);
+    } else {
+      console.log(chalk.yellow('[INFO] No phone number entered. Falling back / Listening for QR Code scan...'));
+    }
+  }
+
   sock.ev.on('creds.update', saveCreds);
 
   sock.ev.on('connection.update', async (update) => {
     const { connection, lastDisconnect, qr } = update;
 
-    if (qr) console.log(chalk.yellow('[CONNECTION] Scan QR code'));
+    if (qr) {
+      console.log(chalk.yellow('[CONNECTION] QR Code generated. Scan it from WhatsApp if not using Pairing Code.'));
+    }
 
     if (connection === 'close') {
       const code = lastDisconnect?.error?.output?.statusCode;
@@ -404,7 +440,7 @@ async function connectToWhatsApp() {
       }
 
     } else if (connection === 'open') {
-      console.log(chalk.green('[CONNECTION] ✅ Connected!'));
+      console.log(chalk.green('[CONNECTION] ✅ Connected successfully! Session active.'));
       console.log(chalk.cyan(
         `[INFO] ${OWNER.BOT_NAME} | Prefix: ${CONFIG.PREFIX} | Mode: ${CONFIG.MODE}`
       ));
@@ -454,3 +490,4 @@ connectToWhatsApp().catch(err => {
 });
 
 export default connectToWhatsApp;
+

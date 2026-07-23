@@ -84,7 +84,7 @@ function envBool(key, defaultVal = false) {
 
 export const CONFIG = {
   SESSION_ID:          SESSION_ID,
-  PREFIX:              process.env.PREFIX     || '.',
+  PREFIX:              (process.env.PREFIX && process.env.PREFIX.trim().length <= 3) ? process.env.PREFIX.trim() : '.',
   MODE:                (process.env.MODE      || 'public').toLowerCase(),
   COMMAND_ACCESS_MODE: (process.env.COMMAND_ACCESS_MODE || 'all').toLowerCase(),
   APP_NAME:            process.env.APP_NAME   || OWNER.BOT_NAME,
