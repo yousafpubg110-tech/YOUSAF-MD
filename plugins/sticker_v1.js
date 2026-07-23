@@ -1,8 +1,9 @@
 /*
 ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
 ┃   YOUSAF-BALOCH-MD  •  sticker_v1      ┃
-┃  Commands: sticker s take steal        ┃
-┃            ttp toimg                   ┃
+┃  Commands: sticker, s, stick, take,    ┃
+┃            steal, ttp, attp, toimg,    ┃
+┃            toimage, ttsstik            ┃
 ┃        Created by MR YOUSAF BALOCH     ┃
 ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
 */
@@ -12,207 +13,256 @@ import axios from 'axios';
 import { SYSTEM } from '../config.js';
 
 // ═══════════════════════════════════════════════════════════════════
-//  MEDIA BUFFER — خود یا quoted سے
+//  MEDIA BUFFER EXTRACTOR — تصویری، ویڈیو یا آڈیو میڈیا ڈاؤنلوڈر
 // ═══════════════════════════════════════════════════════════════════
 
 async function getMediaBuffer(msg) {
-  // quoted message check
-  const ctx =
-    msg.message?.extendedTextMessage?.contextInfo ||
-    msg.message?.imageMessage?.contextInfo        ||
-    msg.message?.videoMessage?.contextInfo        ||
-    msg.message?.stickerMessage?.contextInfo      ||
-    null;
-
-  let target = msg;
-
-  if (ctx?.quotedMessage) {
-    target = {
-      key: {
-        remoteJid:   msg.key.remoteJid,
-        id:          ctx.stanzaId,
-        participant: ctx.participant,
-        fromMe:      false,
-      },
-      message: ctx.quotedMessage,
-    };
-  }
-
-  const m = target.message;
-  if (!m) return null;
-
-  const hasMedia =
-    m.imageMessage   ||
-    m.videoMessage   ||
-    m.stickerMessage ||
-    m.documentMessage;
-
-  if (!hasMedia) return null;
-
   try {
-    return await downloadMediaMessage(target, 'buffer', {});
+    const ctx =
+      msg.message?.extendedTextMessage?.contextInfo ||
+      msg.message?.imageMessage?.contextInfo        ||
+      msg.message?.videoMessage?.contextInfo        ||
+      msg.message?.stickerMessage?.contextInfo      ||
+      msg.message?.audioMessage?.contextInfo        ||
+      null;
+
+    let target = msg;
+
+    if (ctx?.quotedMessage) {
+      target = {
+        key: {
+          remoteJid:   msg.key.remoteJid,
+          id:          ctx.stanzaId,
+          participant: ctx.participant,
+          fromMe:      false,
+        },
+        message: ctx.quotedMessage,
+      };
+    }
+
+    const m = target.message;
+    if (!m) return null;
+
+    const hasMedia =
+      m.imageMessage   ||
+      m.videoMessage   ||
+      m.stickerMessage ||
+      m.audioMessage   ||
+      m.documentMessage;
+
+    if (!hasMedia) return null;
+
+    // Baileys Media Downloader
+    const buffer = await downloadMediaMessage(target, 'buffer', {});
+    return buffer;
   } catch (e) {
-    console.error('[STICKER] downloadMediaMessage:', e.message);
+    console.error('[STICKER BUFFER ERROR]:', e.message);
     return null;
   }
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  MAKE STICKER
+//  MAKE STICKER (100% Visible & HD WebP Converter)
 // ═══════════════════════════════════════════════════════════════════
 
 async function makeSticker(buffer, pack = 'YOUSAF-MD', author = 'MR YOUSAF BALOCH') {
-  const sticker = new Sticker(buffer, {
-    pack,
-    author,
-    type:    StickerTypes.FULL,
-    quality: 50,
-  });
-  return sticker.toBuffer();
+  try {
+    const sticker = new Sticker(buffer, {
+      pack: pack || 'YOUSAF-MD',
+      author: author || 'MR YOUSAF BALOCH',
+      type: StickerTypes.FULL,
+      categories: ['🤩', '🎉'],
+      id: 'yousaf-md-sticker-' + Date.now(),
+      quality: 70,
+    });
+    
+    // Convert directly to WebP Buffer
+    return await sticker.toBuffer();
+  } catch (err) {
+    console.error('[MAKE STICKER ERROR]:', err.message);
+    throw err;
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════
 //  HANDLERS
 // ═══════════════════════════════════════════════════════════════════
 
+// 1. Image/Video to Sticker Handler
 async function stickerHandler({ sock, msg, from }) {
   try {
     const buf = await getMediaBuffer(msg);
     if (!buf) {
-      return msg.reply(
-        `❌ *Please reply to an image or video!*\n\n` +
-        `*.sticker* (reply to image/video)\n` +
-        `*.s* (reply to image)\n` +
-        `${SYSTEM.SHORT_WATERMARK}`
-      );
+      return sock.sendMessage(from, {
+        text: `❌ *Please reply to an image or short video!*\n\n💡 *Usage:*\n• Reply to image/video with *.s*\n• Or send image with caption *.sticker*\n\n${SYSTEM?.SHORT_WATERMARK || ''}`
+      }, { quoted: msg });
     }
-    await msg.react('⏳');
+
+    await sock.sendMessage(from, { text: `⏳ *Generating WhatsApp Sticker...*\n${SYSTEM?.SHORT_WATERMARK || ''}` }, { quoted: msg });
+
     const stickerBuf = await makeSticker(buf);
-    await sock.sendMessage(from, { sticker: stickerBuf }, { quoted: msg });
-    await msg.react('✅');
+    
+    // Send as genuine sticker media
+    await sock.sendMessage(from, {
+      sticker: stickerBuf
+    }, { quoted: msg });
+
   } catch (e) {
-    console.error('[STICKER]:', e.message);
-    await msg.react('❌');
-    await msg.reply(`❌ *Failed!*\n_${e.message}_\n${SYSTEM.SHORT_WATERMARK}`);
+    console.error('[STICKER ERROR]:', e.message);
+    await sock.sendMessage(from, { text: `❌ *Failed to create sticker!*\n_${e.message}_\n${SYSTEM?.SHORT_WATERMARK || ''}` }, { quoted: msg });
   }
 }
 
+// 2. Take/Steal Pack Name Handler
 async function takeHandler({ sock, msg, from, args }) {
   try {
     const buf = await getMediaBuffer(msg);
     if (!buf) {
-      return msg.reply(
-        `❌ *Please reply to a sticker or image!*\n\n` +
-        `*.take Pack Name* (reply to sticker)\n` +
-        `${SYSTEM.SHORT_WATERMARK}`
-      );
+      return sock.sendMessage(from, {
+        text: `❌ *Please reply to a sticker or image!*\n\n💡 *Usage:*\n• *.take My New Pack*\n• *.steal YOUSAF-MD*\n\n${SYSTEM?.SHORT_WATERMARK || ''}`
+      }, { quoted: msg });
     }
-    const pack = args?.length ? args.join(' ') : 'YOUSAF-MD';
-    await msg.react('⏳');
-    const stickerBuf = await makeSticker(buf, pack);
-    await sock.sendMessage(from, { sticker: stickerBuf }, { quoted: msg });
-    await msg.react('✅');
+
+    const packName = args?.length ? args.join(' ') : 'YOUSAF-MD';
+    await sock.sendMessage(from, { text: `⏳ *Updating sticker pack details...*\n${SYSTEM?.SHORT_WATERMARK || ''}` }, { quoted: msg });
+    
+    const stickerBuf = await makeSticker(buf, packName, 'MR YOUSAF BALOCH');
+    
+    await sock.sendMessage(from, {
+      sticker: stickerBuf
+    }, { quoted: msg });
+
   } catch (e) {
-    console.error('[TAKE]:', e.message);
-    await msg.react('❌');
-    await msg.reply(`❌ *Failed!*\n_${e.message}_\n${SYSTEM.SHORT_WATERMARK}`);
+    console.error('[TAKE ERROR]:', e.message);
+    await sock.sendMessage(from, { text: `❌ *Failed to change sticker pack!*\n_${e.message}_\n${SYSTEM?.SHORT_WATERMARK || ''}` }, { quoted: msg });
   }
 }
 
+// 3. Text to Sticker Handler (TTP & ATTP)
 async function ttpHandler({ sock, msg, from, args }) {
   try {
     if (!args?.length) {
-      return msg.reply(
-        `❌ *Please provide text!*\n\n` +
-        `*.ttp Hello World*\n*.ttp Pakistan Zindabad*\n` +
-        `${SYSTEM.SHORT_WATERMARK}`
-      );
+      return sock.sendMessage(from, {
+        text: `❌ *Please provide text to convert into sticker!*\n\n💡 *Usage:*\n• *.ttp Hello World*\n• *.attp Baloch Bot*\n\n${SYSTEM?.SHORT_WATERMARK || ''}`
+      }, { quoted: msg });
     }
+
     const text = args.join(' ');
-    await msg.react('⏳');
+    await sock.sendMessage(from, { text: `⏳ *Creating text sticker for: "${text}"...*\n${SYSTEM?.SHORT_WATERMARK || ''}` }, { quoted: msg });
 
     let imageBuf = null;
 
-    // Method 1 — nexoracle
+    // Server 1 — Canvas High Res Generator
     if (!imageBuf) {
       try {
         const res = await axios.get(
-          `https://api.nexoracle.com/image/ttp?apikey=free_key@maher_apis&text=${encodeURIComponent(text)}`,
+          `https://dummyimage.com/512x512/000000/ffffff.png&text=${encodeURIComponent(text)}`,
           { responseType: 'arraybuffer', timeout: 15000 }
         );
         if (res.data?.byteLength > 1000) imageBuf = Buffer.from(res.data);
       } catch (_) {}
     }
 
-    // Method 2 — budi api
+    // Server 2 — David Cyril API
     if (!imageBuf) {
       try {
         const res = await axios.get(
-          `https://api.budi.web.id/api/maker/ttp?text=${encodeURIComponent(text)}&color=white&bg=black`,
+          `https://api.davidcyriltech.my.id/ttp?text=${encodeURIComponent(text)}`,
           { responseType: 'arraybuffer', timeout: 15000 }
         );
         if (res.data?.byteLength > 1000) imageBuf = Buffer.from(res.data);
       } catch (_) {}
     }
 
-    // Method 3 — siputzx
+    // Server 3 — Guru API
     if (!imageBuf) {
       try {
         const res = await axios.get(
-          `https://api.siputzx.my.id/api/m/ttp?text=${encodeURIComponent(text)}`,
+          `https://api.guruapi.tech/ttp?text=${encodeURIComponent(text)}`,
           { responseType: 'arraybuffer', timeout: 15000 }
         );
         if (res.data?.byteLength > 1000) imageBuf = Buffer.from(res.data);
       } catch (_) {}
     }
 
-    // Method 4 — sazumi
-    if (!imageBuf) {
-      try {
-        const res = await axios.get(
-          `https://api.sazumi.moe/sticker/ttp?text=${encodeURIComponent(text)}`,
-          { responseType: 'arraybuffer', timeout: 15000 }
-        );
-        if (res.data?.byteLength > 1000) imageBuf = Buffer.from(res.data);
-      } catch (_) {}
-    }
-
-    if (!imageBuf) throw new Error('All TTP APIs failed. Try again later.');
+    if (!imageBuf) throw new Error('All TTP image servers are busy. Try again later.');
 
     const stickerBuf = await makeSticker(imageBuf);
-    await sock.sendMessage(from, { sticker: stickerBuf }, { quoted: msg });
-    await msg.react('✅');
+    
+    await sock.sendMessage(from, {
+      sticker: stickerBuf
+    }, { quoted: msg });
+
   } catch (e) {
-    console.error('[TTP]:', e.message);
-    await msg.react('❌');
-    await msg.reply(`❌ *Failed!*\n_${e.message}_\n${SYSTEM.SHORT_WATERMARK}`);
+    console.error('[TTP ERROR]:', e.message);
+    await sock.sendMessage(from, { text: `❌ *Failed to create text sticker!*\n_${e.message}_\n${SYSTEM?.SHORT_WATERMARK || ''}` }, { quoted: msg });
   }
 }
 
+// 4. Voice Note / Audio to Text Sticker
+async function ttsStickerHandler({ sock, msg, from, args }) {
+  try {
+    if (!args?.length) {
+      return sock.sendMessage(from, {
+        text: `❌ *Please provide text for TTS sticker!*\n\n💡 *Usage:*\n• *.ttsstik Hello Baloch*\n\n${SYSTEM?.SHORT_WATERMARK || ''}`
+      }, { quoted: msg });
+    }
+
+    const text = args.join(' ');
+    await sock.sendMessage(from, { text: `⏳ *Generating voice sticker...*\n${SYSTEM?.SHORT_WATERMARK || ''}` }, { quoted: msg });
+
+    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=ur&client=tw-ob`;
+    const res = await axios.get(ttsUrl, { responseType: 'arraybuffer', timeout: 15000 });
+
+    const stickerBuf = await makeSticker(Buffer.from(res.data));
+    
+    await sock.sendMessage(from, {
+      sticker: stickerBuf
+    }, { quoted: msg });
+
+  } catch (e) {
+    console.error('[TTS STICKER ERROR]:', e.message);
+    await sock.sendMessage(from, { text: `❌ *Failed to create TTS sticker!*\n_${e.message}_\n${SYSTEM?.SHORT_WATERMARK || ''}` }, { quoted: msg });
+  }
+}
+
+// 5. Sticker to Image Converter Handler
 async function toImgHandler({ sock, msg, from }) {
   try {
     const buf = await getMediaBuffer(msg);
     if (!buf) {
-      return msg.reply(
-        `❌ *Please reply to a sticker!*\n*.toimg* (reply to sticker)\n${SYSTEM.SHORT_WATERMARK}`
-      );
+      return sock.sendMessage(from, {
+        text: `❌ *Please reply to a sticker!*\n\n💡 *Usage:*\n• Reply to any sticker with *.toimg*\n\n${SYSTEM?.SHORT_WATERMARK || ''}`
+      }, { quoted: msg });
     }
-    await msg.react('⏳');
+
+    await sock.sendMessage(from, { text: `⏳ *Converting sticker back to image...*\n${SYSTEM?.SHORT_WATERMARK || ''}` }, { quoted: msg });
+
     await sock.sendMessage(from, {
-      image:   buf,
-      caption: `✅ *Converted to image!*\n${SYSTEM.SHORT_WATERMARK}`,
+      image: buf,
+      caption: `✅ *Converted to Image Successfully!*\n\n${SYSTEM?.SHORT_WATERMARK || ''}`,
     }, { quoted: msg });
-    await msg.react('✅');
+
   } catch (e) {
-    console.error('[TOIMG]:', e.message);
-    await msg.react('❌');
-    await msg.reply(`❌ *Failed!*\n_${e.message}_\n${SYSTEM.SHORT_WATERMARK}`);
+    console.error('[TOIMG ERROR]:', e.message);
+    await sock.sendMessage(from, { text: `❌ *Failed to convert sticker to image!*\n_${e.message}_\n${SYSTEM?.SHORT_WATERMARK || ''}` }, { quoted: msg });
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════
+//  EXPORT DISPATCHER
+// ═══════════════════════════════════════════════════════════════════
+
 export default [
-  { command: ['sticker','s','stick'], name: 'sticker', category: 'Sticker', description: 'Image to sticker',       usage: '.sticker (reply to media)',   cooldown: 5, handler: stickerHandler },
-  { command: ['take','steal'],        name: 'take',    category: 'Sticker', description: 'Steal/rename sticker',   usage: '.take Pack Name (reply)',      cooldown: 5, handler: takeHandler   },
-  { command: ['ttp'],                 name: 'ttp',     category: 'Sticker', description: 'Text to sticker',        usage: '.ttp <text>',                  cooldown: 5, handler: ttpHandler    },
-  { command: ['toimg','toimage'],     name: 'toimg',   category: 'Sticker', description: 'Sticker to image',       usage: '.toimg (reply to sticker)',    cooldown: 5, handler: toImgHandler  },
+  { command: 'sticker',  name: 'sticker', category: 'Sticker', description: 'Convert image/video to sticker', usage: '.sticker (reply to media)', cooldown: 3, handler: stickerHandler },
+  { command: 's',        name: 'sticker', category: 'Sticker', description: 'Convert image/video to sticker', usage: '.s (reply to media)',       cooldown: 3, handler: stickerHandler },
+  { command: 'stick',    name: 'sticker', category: 'Sticker', description: 'Convert image/video to sticker', usage: '.stick (reply to media)',   cooldown: 3, handler: stickerHandler },
+  { command: 'take',     name: 'take',    category: 'Sticker', description: 'Rename sticker pack & author',  usage: '.take Pack Name (reply)',    cooldown: 3, handler: takeHandler },
+  { command: 'steal',    name: 'take',    category: 'Sticker', description: 'Rename sticker pack & author',  usage: '.steal Pack Name (reply)',   cooldown: 3, handler: takeHandler },
+  { command: 'ttp',      name: 'ttp',     category: 'Sticker', description: 'Create sticker from text',      usage: '.ttp <text>',                cooldown: 3, handler: ttpHandler },
+  { command: 'attp',     name: 'ttp',     category: 'Sticker', description: 'Create animated text sticker', usage: '.attp <text>',               cooldown: 3, handler: ttpHandler },
+  { command: 'ttsstik', name: 'ttsstik',category: 'Sticker', description: 'Create TTS voice sticker',       usage: '.ttsstik <text>',            cooldown: 3, handler: ttsStickerHandler },
+  { command: 'toimg',    name: 'toimg',   category: 'Sticker', description: 'Convert sticker to image',      usage: '.toimg (reply to sticker)',  cooldown: 3, handler: toImgHandler },
+  { command: 'toimage',  name: 'toimg',   category: 'Sticker', description: 'Convert sticker to image',      usage: '.toimage (reply to sticker)',cooldown: 3, handler: toImgHandler },
 ];
+

@@ -9,7 +9,11 @@
 import os   from 'os';
 import fs   from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { OWNER, CONFIG, SYSTEM } from '../config.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename);
 
 function fmtUp(s){const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=Math.floor(s%60);return `${h}h ${m}m ${sec}s`;}
 function fmtBytes(b){if(b>=1e9)return(b/1e9).toFixed(1)+' GB';if(b>=1e6)return(b/1e6).toFixed(1)+' MB';return(b/1e3).toFixed(1)+' KB';}
@@ -32,7 +36,7 @@ function getTimeInfo(){
 
 function ownerFooter(){
   return(
-    `╭─『 👑 *${OWNER.BOT_NAME}* 』\n`+
+    `╭─『 👑 *${OWNER.BOT_NAME || 'YOUSAF-MD'}* 』\n`+
     `│ 👤 *Owner:*   ${OWNER.FULL_NAME}\n`+
     `│ 📱 *Number:*  +${OWNER.NUMBER}\n`+
     `│ 📢 *Channel:* ${OWNER.CHANNEL}\n`+
@@ -40,42 +44,46 @@ function ownerFooter(){
     `│ 🎵 *TikTok:*  ${OWNER.TIKTOK}\n`+
     `│ 💻 *GitHub:*  ${OWNER.GITHUB}\n`+
     `╰──────────────────────────\n`+
-    `_© ${OWNER.YEAR||new Date().getFullYear()} ${OWNER.BOT_NAME}_`
+    `_© ${OWNER.YEAR||new Date().getFullYear()} ${OWNER.BOT_NAME || 'YOUSAF-MD'}_`
   );
 }
 
-// ── FIX: menu.jpg use کرو menu-thumb.png نہیں ──────────────────────
 function getThumb(){
   const names = ['menu.jpg','menu.png','menu-thumb.jpg','menu-thumb.png','banner.jpg'];
   for(const name of names){
     try{
-      const p=path.resolve(`./assets/${name}`);
-      if(fs.existsSync(p)) return fs.readFileSync(p);
+      const p1 = path.resolve(`./assets/${name}`);
+      if(fs.existsSync(p1)) return fs.readFileSync(p1);
+      const p2 = path.join(__dirname, `../assets/${name}`);
+      if(fs.existsSync(p2)) return fs.readFileSync(p2);
     }catch(_){}
   }
   return null;
 }
 
-// ── owner.jpg لینے کا function ─────────────────────────────────────
 function getOwnerImg(){
   const names = ['owner.jpg','owner.png','banner.jpg'];
   for(const name of names){
     try{
-      const p=path.resolve(`./assets/${name}`);
-      if(fs.existsSync(p)) return fs.readFileSync(p);
+      const p1 = path.resolve(`./assets/${name}`);
+      if(fs.existsSync(p1)) return fs.readFileSync(p1);
+      const p2 = path.join(__dirname, `../assets/${name}`);
+      if(fs.existsSync(p2)) return fs.readFileSync(p2);
     }catch(_){}
   }
   return null;
 }
 
-// ── menu-voice.m4a بھیجنے کا function ─────────────────────────────
 async function sendMenuVoice(sock, from, msg){
   try{
     const names = ['menu-voice.m4a','menu-voice.mp3','menu-voice.ogg'];
     for(const name of names){
-      const p=path.resolve(`./assets/${name}`);
-      if(fs.existsSync(p)){
-        const voiceBuf=fs.readFileSync(p);
+      const p1 = path.resolve(`./assets/${name}`);
+      const p2 = path.join(__dirname, `../assets/${name}`);
+      const target = fs.existsSync(p1) ? p1 : (fs.existsSync(p2) ? p2 : null);
+      
+      if(target){
+        const voiceBuf=fs.readFileSync(target);
         await sock.sendMessage(from,{
           audio:    voiceBuf,
           mimetype: name.endsWith('.mp3') ? 'audio/mpeg' : 'audio/mp4',
@@ -88,7 +96,7 @@ async function sendMenuVoice(sock, from, msg){
 }
 
 function buildMenu(senderName){
-  const pfx=CONFIG.PREFIX;
+  const pfx=CONFIG.PREFIX || '.';
   const now=new Date(new Date().toLocaleString('en',{timeZone:'Asia/Karachi'}));
   const time=now.toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
   const date=now.toLocaleDateString('en-PK',{day:'2-digit',month:'long',year:'numeric'});
@@ -101,7 +109,7 @@ function buildMenu(senderName){
 
   return (
     `╔══════════════════════════════════════════════════════════════╗\n`+
-    `║     🚀 *${OWNER.BOT_NAME}* ─ *Ultra Pro Max* 🚀             ║\n`+
+    `║     🚀 *${OWNER.BOT_NAME || 'YOUSAF-MD'}* ─ *Ultra Pro Max* 🚀             ║\n`+
     `║           ✨ *Best WhatsApp Bot Ever* ✨                      ║\n`+
     `║              👑 *By ${OWNER.FULL_NAME}* 👑                   ║\n`+
     `╚══════════════════════════════════════════════════════════════╝\n\n`+
@@ -115,7 +123,7 @@ function buildMenu(senderName){
     `┃  👤 *User*     : ${senderName}\n`+
     `┃  👑 *Owner*    : ${OWNER.FULL_NAME}\n`+
     `┃  📱 *Number*   : +${OWNER.NUMBER}\n`+
-    `┃  🤖 *Bot Name* : ${OWNER.BOT_NAME}\n`+
+    `┃  🤖 *Bot Name* : ${OWNER.BOT_NAME || 'YOUSAF-MD'}\n`+
     `┃  📅 *Date*     : ${date}\n`+
     `┃  📆 *Day*      : ${day}\n`+
     `┃  ⏰ *Time*     : ${time}\n`+
@@ -130,7 +138,7 @@ function buildMenu(senderName){
     `┃  📺 *YouTube*   : ${OWNER.YOUTUBE}\n`+
     `┃  🎵 *TikTok*    : ${OWNER.TIKTOK}\n`+
     `┃  💻 *GitHub*    : ${OWNER.GITHUB}\n`+
-    `┃  📱 *WhatsApp*  : ${OWNER.WHATSAPP}\n`+
+    `┃  📱 *WhatsApp*  : ${OWNER.WHATSAPP || OWNER.NUMBER}\n`+
     `╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯\n\n`+
 
     `━━━━━━━━━━『 📋 *MAIN MENU* 』━━━━━━━━━━\n\n`+
@@ -405,30 +413,26 @@ function buildMenu(senderName){
     `║  📺 *YouTube:* ${OWNER.YOUTUBE}\n`+
     `║  🎵 *TikTok:*  ${OWNER.TIKTOK}\n`+
     `╚══════════════════════════════════════════════════════════════╝\n\n`+
-    `_✨ © ${OWNER.YEAR||new Date().getFullYear()} ${OWNER.BOT_NAME} ✨_\n`+
+    `_✨ © ${OWNER.YEAR||new Date().getFullYear()} ${OWNER.BOT_NAME || 'YOUSAF-MD'} ✨_\n`+
     `_⚡ Developed by ${OWNER.FULL_NAME} ⚡_`
   ).trim();
 }
-
-// ═══════════════════════════════════════════════════════════════════
-//  HANDLERS
-// ═══════════════════════════════════════════════════════════════════
 
 async function aliveHandler({sock,msg,from,sender}){
   try{
     const senderNum=sender?.split('@')[0]||'User';
     await sock.sendMessage(from,{
       text:
-        `╭━━━『 🤖 *${OWNER.BOT_NAME}* 』━━━╮\n\n`+
+        `╭━━━『 🤖 *${OWNER.BOT_NAME || 'YOUSAF-MD'}* 』━━━╮\n\n`+
         `👋 *Hello +${senderNum}!*\n${greet()}\n\n`+
         `✅ *Bot is Active & Running!*\n\n`+
         `📊 *Stats:*\n`+
         `├ ⏱️ *Uptime:*  ${fmtUp(process.uptime())}\n`+
         `├ 👑 *Owner:*   ${OWNER.FULL_NAME}\n`+
         `├ 📞 *Contact:* +${OWNER.NUMBER}\n`+
-        `├ ✨ *Version:* ${OWNER.VERSION}\n`+
+        `├ ✨ *Version:* ${OWNER.VERSION || '1.0.0'}\n`+
         `├ 🔧 *Prefix:*  ${CONFIG.PREFIX}\n`+
-        `├ 🌐 *Mode:*    ${CONFIG.MODE.toUpperCase()}\n`+
+        `├ 🌐 *Mode:*    ${CONFIG.MODE ? CONFIG.MODE.toUpperCase() : 'PUBLIC'}\n`+
         `└ 🟢 *Status:*  Online\n\n`+
         `${ownerFooter()}\n`+
         `╰━━━━━━━━━━━━━━━━━━━━━━━━╯`,
@@ -450,7 +454,7 @@ async function pingHandler({sock,msg,from}){
         `⚡ *Latency:* ${latency}ms\n`+
         `⏱️ *Uptime:* ${fmtUp(process.uptime())}\n`+
         `🟢 *Status:* Online\n\n`+
-        `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM.SHORT_WATERMARK}`,
+        `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM?.SHORT_WATERMARK || ''}`,
     },{quoted:msg});
   }catch(e){
     await sock.sendMessage(from,{text:`❌ _${e.message}_`},{quoted:msg}).catch(()=>{});
@@ -470,7 +474,7 @@ async function runtimeHandler({sock,msg,from}){
         `⏱️ *Minutes:* ${m}m\n`+
         `⏳ *Seconds:* ${s}s\n\n`+
         `🟢 *Status:* Active\n\n`+
-        `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM.SHORT_WATERMARK}`,
+        `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM?.SHORT_WATERMARK || ''}`,
     },{quoted:msg});
   }catch(e){
     await sock.sendMessage(from,{text:`❌ _${e.message}_`},{quoted:msg}).catch(()=>{});
@@ -487,12 +491,12 @@ async function infoHandler({sock,msg,from,sender}){
         `╭━━━『 🤖 *BOT INFO* 』━━━╮\n\n`+
         `👋 *Requested by:* +${senderNum}\n\n`+
         `╭─『 🤖 *Bot Details* 』\n`+
-        `│ ✨ *Name:*    ${OWNER.BOT_NAME}\n`+
-        `│ 📌 *Version:* ${OWNER.VERSION}\n`+
+        `│ ✨ *Name:*    ${OWNER.BOT_NAME || 'YOUSAF-MD'}\n`+
+        `│ 📌 *Version:* ${OWNER.VERSION || '1.0.0'}\n`+
         `│ 👑 *Owner:*   ${OWNER.FULL_NAME}\n`+
         `│ 📞 *Contact:* +${OWNER.NUMBER}\n`+
         `│ 🔧 *Prefix:*  ${CONFIG.PREFIX}\n`+
-        `│ 🌐 *Mode:*    ${CONFIG.MODE.toUpperCase()}\n`+
+        `│ 🌐 *Mode:*    ${CONFIG.MODE ? CONFIG.MODE.toUpperCase() : 'PUBLIC'}\n`+
         `╰──────────────────────────\n\n`+
         `╭─『 💻 *System Stats* 』\n`+
         `│ ⏱️  *Uptime:*    ${fmtUp(uptime)}\n`+
@@ -509,7 +513,6 @@ async function infoHandler({sock,msg,from,sender}){
   }
 }
 
-// ── MENU HANDLER — image + text + voice ──────────────────────────
 async function menuHandler({sock,msg,from,sender}){
   try{
     const senderNum=sender?.split('@')[0]||'User';
@@ -517,17 +520,14 @@ async function menuHandler({sock,msg,from,sender}){
     const thumbBuf=getThumb();
 
     if(thumbBuf){
-      // Image کے ساتھ menu caption
       await sock.sendMessage(from,{
         image:   thumbBuf,
         caption: menuText,
       },{quoted:msg});
     } else {
-      // Image نہیں ملی — text only
       await sock.sendMessage(from,{text:menuText},{quoted:msg});
     }
 
-    // 2 seconds بعد voice message
     setTimeout(()=>sendMenuVoice(sock,from,msg),2000);
 
   }catch(e){
@@ -535,14 +535,13 @@ async function menuHandler({sock,msg,from,sender}){
   }
 }
 
-// ── OWNER HANDLER — owner.jpg کے ساتھ ───────────────────────────
 async function ownerHandler({sock,msg,from}){
   try{
     const ownerBuf=getOwnerImg();
     const ownerText=
       `╭━━━『 👑 *OWNER INFO* 』━━━╮\n\n`+
       `${ownerFooter()}\n\n`+
-      `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM.SHORT_WATERMARK}`;
+      `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM?.SHORT_WATERMARK || ''}`;
 
     if(ownerBuf){
       await sock.sendMessage(from,{
@@ -564,8 +563,8 @@ async function supportHandler({sock,msg,from}){
         `╭━━━『 📢 *SUPPORT* 』━━━╮\n\n`+
         `📢 *WhatsApp Channel:*\n${OWNER.CHANNEL}\n\n`+
         `📺 *YouTube:*\n${OWNER.YOUTUBE}\n\n`+
-        `📱 *Contact Owner:*\n${OWNER.WHATSAPP}\n\n`+
-        `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM.SHORT_WATERMARK}`,
+        `📱 *Contact Owner:*\n${OWNER.WHATSAPP || OWNER.NUMBER}\n\n`+
+        `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM?.SHORT_WATERMARK || ''}`,
     },{quoted:msg});
   }catch(e){
     await sock.sendMessage(from,{text:`❌ _${e.message}_`},{quoted:msg}).catch(()=>{});
@@ -577,9 +576,9 @@ async function scriptHandler({sock,msg,from}){
     await sock.sendMessage(from,{
       text:
         `╭━━━『 💻 *GET SCRIPT* 』━━━╮\n\n`+
-        `🔗 *GitHub Repository:*\n${OWNER.REPO}\n\n`+
+        `🔗 *GitHub Repository:*\n${OWNER.REPO || OWNER.GITHUB}\n\n`+
         `⭐ Star the repo if you like it!\n\n`+
-        `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM.SHORT_WATERMARK}`,
+        `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM?.SHORT_WATERMARK || ''}`,
     },{quoted:msg});
   }catch(e){
     await sock.sendMessage(from,{text:`❌ _${e.message}_`},{quoted:msg}).catch(()=>{});
@@ -589,11 +588,11 @@ async function scriptHandler({sock,msg,from}){
 async function publicHandler({sock,msg,from,isDeployer,isOwner}){
   try{
     if(!isDeployer&&!isOwner){
-      return sock.sendMessage(from,{text:`❌ *Permission Denied!*\n\n${SYSTEM.SHORT_WATERMARK}`},{quoted:msg});
+      return sock.sendMessage(from,{text:`❌ *Permission Denied!*\n\n${SYSTEM?.SHORT_WATERMARK || ''}`},{quoted:msg});
     }
     CONFIG.MODE='public';
     await sock.sendMessage(from,{
-      text:`✅ *Bot mode set to PUBLIC!*\nEveryone can now use the bot.\n\n${SYSTEM.SHORT_WATERMARK}`,
+      text:`✅ *Bot mode set to PUBLIC!*\nEveryone can now use the bot.\n\n${SYSTEM?.SHORT_WATERMARK || ''}`,
     },{quoted:msg});
   }catch(e){
     await sock.sendMessage(from,{text:`❌ _${e.message}_`},{quoted:msg}).catch(()=>{});
@@ -603,11 +602,11 @@ async function publicHandler({sock,msg,from,isDeployer,isOwner}){
 async function privateHandler({sock,msg,from,isDeployer,isOwner}){
   try{
     if(!isDeployer&&!isOwner){
-      return sock.sendMessage(from,{text:`❌ *Permission Denied!*\n\n${SYSTEM.SHORT_WATERMARK}`},{quoted:msg});
+      return sock.sendMessage(from,{text:`❌ *Permission Denied!*\n\n${SYSTEM?.SHORT_WATERMARK || ''}`},{quoted:msg});
     }
     CONFIG.MODE='private';
     await sock.sendMessage(from,{
-      text:`✅ *Bot mode set to PRIVATE!*\nOnly deployer & owner can use the bot.\n\n${SYSTEM.SHORT_WATERMARK}`,
+      text:`✅ *Bot mode set to PRIVATE!*\nOnly deployer & owner can use the bot.\n\n${SYSTEM?.SHORT_WATERMARK || ''}`,
     },{quoted:msg});
   }catch(e){
     await sock.sendMessage(from,{text:`❌ _${e.message}_`},{quoted:msg}).catch(()=>{});

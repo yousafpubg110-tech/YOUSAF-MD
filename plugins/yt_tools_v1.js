@@ -1,321 +1,305 @@
 /*
-╭━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
-┃   YOUSAF-BALOCH-MD  •  yt_tools_v1     ┃
-┃  Commands: video audio play            ┃
-┃            bayan song ytmp3 ytmp4      ┃
-┃        Created by MR YOUSAF BALOCH     ┃
-╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
+╭━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
+┃   YOUSAF-BALOCH-MD  •  yt_tools_v1                             ┃
+┃   Commands: video, audio, play, song, ytmp3, ytmp4, bayan    ┃
+┃             music, drama, movie, ytv, yta                       ┃
+┃   Features: Multi-Server Fallback, No IP Block, Owner Only    ┃
+┃   Created by MR YOUSAF BALOCH                                  ┃
+╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
 */
 import axios from 'axios';
-import yts   from 'yt-search';
+import yts from 'yt-search';
 import { SYSTEM, OWNER } from '../config.js';
+
+// ═══════════════════════════════════════════════════════════════════
+//  UTILITIES & HELPERS
+// ═══════════════════════════════════════════════════════════════════
 
 function fmtNum(n) {
   if (!n || isNaN(n)) return '0';
-  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
-  if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
   return String(n);
 }
 
 function isYTUrl(url) {
   try {
     const h = new URL(url).hostname;
-    return ['www.youtube.com','youtube.com','youtu.be','m.youtube.com'].includes(h);
-  } catch { return false; }
+    return ['www.youtube.com', 'youtube.com', 'youtu.be', 'm.youtube.com'].includes(h);
+  } catch {
+    return false;
+  }
 }
 
 async function getBuffer(url) {
-  const res = await axios.get(url, { responseType: 'arraybuffer', timeout: 60000,
-    headers: { 'User-Agent': 'Mozilla/5.0' } });
+  const res = await axios.get(url, {
+    responseType: 'arraybuffer',
+    timeout: 90000,
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Accept': '*/*',
+    },
+  });
   return Buffer.from(res.data);
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  SEARCH
+//  SEARCH ENGINE
 // ═══════════════════════════════════════════════════════════════════
 
 async function searchYT(query) {
   if (isYTUrl(query)) {
     try {
-      const u  = new URL(query);
+      const u = new URL(query);
       const id = u.searchParams.get('v') || u.pathname.slice(1);
-      const r  = await yts({ videoId: id });
+      const r = await yts({ videoId: id });
       return { info: r, url: query };
-    } catch {}
+    } catch (_) {}
   }
   const r = await yts(query);
-  if (!r.videos.length) throw new Error('No results found!');
+  if (!r.videos || !r.videos.length) throw new Error('No YouTube results found for your query!');
   return { info: r.videos[0], url: r.videos[0].url };
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  DOWNLOAD — 5 fallback methods
+//  ULTRA HEAVY MULTI-SERVER DOWNLOAD ENGINES (7 FALLBACKS)
 // ═══════════════════════════════════════════════════════════════════
 
-// Method 1 — cobalt.tools (best, no IP block)
-async function cobalt(url, isAudio) {
+async function engineDavid(url, isAudio) {
+  const type = isAudio ? 'ytmp3' : 'ytmp4';
+  const res = await axios.get(`https://api.davidcyriltech.my.id/download/${type}?url=${encodeURIComponent(url)}`, { timeout: 35000 });
+  const dl = res.data?.result?.download_url || res.data?.result?.url || res.data?.url;
+  if (!dl) throw new Error('David Engine: No link returned');
+  return await getBuffer(dl);
+}
+
+async function engineGuru(url, isAudio) {
+  const type = isAudio ? 'ytmp3' : 'ytmp4';
+  const res = await axios.get(`https://api.guruapi.tech/${type}?url=${encodeURIComponent(url)}`, { timeout: 35000 });
+  const dl = res.data?.result?.download_url || res.data?.result?.url || res.data?.url;
+  if (!dl) throw new Error('Guru Engine: No link returned');
+  return await getBuffer(dl);
+}
+
+async function engineWidipe(url, isAudio) {
+  const type = isAudio ? 'yump3' : 'yump4';
+  const res = await axios.get(`https://widipe.sharevips.com/download/${type}?url=${encodeURIComponent(url)}`, { timeout: 35000 });
+  const dl = res.data?.result?.mp3 || res.data?.result?.mp4 || res.data?.result?.url;
+  if (!dl) throw new Error('Widipe Engine: No link returned');
+  return await getBuffer(dl);
+}
+
+async function engineCobalt(url, isAudio) {
   const res = await axios.post('https://api.cobalt.tools/', {
     url,
     downloadMode: isAudio ? 'audio' : 'auto',
-    audioFormat:  'mp3',
-    quality:      '720',
+    audioFormat: 'mp3',
+    videoQuality: '720',
   }, {
     headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
     timeout: 30000,
   });
-  const dlUrl = res.data?.url || res.data?.tunnel;
-  if (!dlUrl) throw new Error('cobalt: no url');
-  return await getBuffer(dlUrl);
+  const dl = res.data?.url || res.data?.tunnel;
+  if (!dl) throw new Error('Cobalt Engine: No link returned');
+  return await getBuffer(dl);
 }
 
-// Method 2 — y2mate
-async function y2mate(url, isAudio) {
+async function engineOkatsu(url, isAudio) {
+  const type = isAudio ? 'ytmp3' : 'ytmp4';
+  const res = await axios.get(`https://api.okatsu.my.id/download/${type}?url=${encodeURIComponent(url)}`, { timeout: 35000 });
+  const dl = res.data?.result?.dl_url || res.data?.result?.url;
+  if (!dl) throw new Error('Okatsu Engine: No link returned');
+  return await getBuffer(dl);
+}
+
+async function engineY2Mate(url, isAudio) {
   const r1 = await axios.post('https://www.y2mate.com/mates/analyzeV2/ajax', {
     k_query: url, k_page: 'home', hl: 'en', q_auto: 0,
   }, { timeout: 20000 });
   const vid = r1.data?.vid;
-  if (!vid) throw new Error('y2mate: no vid');
-  const key = r1.data?.links?.[isAudio ? 'mp3' : 'mp4']?.['128']?.k
-    || r1.data?.links?.[isAudio ? 'mp3' : 'mp4']?.['720']?.k
-    || '';
+  if (!vid) throw new Error('Y2Mate: No VID');
+  const key = r1.data?.links?.[isAudio ? 'mp3' : 'mp4']?.['128']?.k || r1.data?.links?.[isAudio ? 'mp3' : 'mp4']?.['720']?.k || '';
   const r2 = await axios.post('https://www.y2mate.com/mates/convertV2/index', {
-    vid, ftype: isAudio ? 'mp3' : 'mp4',
-    fquality: isAudio ? '128' : '720',
-    token: '', timeExpire: '', k: key,
+    vid, ftype: isAudio ? 'mp3' : 'mp4', fquality: isAudio ? '128' : '720', token: '', timeExpire: '', k: key,
   }, { timeout: 20000 });
-  const dlUrl = r2.data?.dlink;
-  if (!dlUrl) throw new Error('y2mate: no dlink');
-  return await getBuffer(dlUrl);
+  const dl = r2.data?.dlink;
+  if (!dl) throw new Error('Y2Mate: No Download Link');
+  return await getBuffer(dl);
 }
 
-// Method 3 — yt5s
-async function yt5s(url, isAudio) {
-  const r1 = await axios.post('https://yt5s.io/api/ajaxSearch', {
-    q: url, vt: isAudio ? 'mp3' : 'mp4',
-  }, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    timeout: 20000,
+async function engineSaveFrom(url, isAudio) {
+  const res = await axios.get(`https://worker.sf-tools.com/savefrom.php?sf_url=${encodeURIComponent(url)}`, {
+    timeout: 25000,
+    headers: { 'User-Agent': 'Mozilla/5.0' }
   });
-  const links = r1.data?.links?.[isAudio ? 'mp3' : 'mp4'];
-  if (!links) throw new Error('yt5s: no links');
-  const entry = Object.values(links)[0];
-  if (!entry?.url) throw new Error('yt5s: no entry url');
-  return await getBuffer(entry.url);
-}
-
-// Method 4 — SaveFrom
-async function savefrom(url, isAudio) {
-  const res = await axios.get(
-    `https://worker.sf-tools.com/savefrom.php?sf_url=${encodeURIComponent(url)}`,
-    { timeout: 20000, headers: { 'User-Agent': 'Mozilla/5.0' } }
-  );
-  const data  = res.data;
-  const items = data?.url || [];
-  const item  = items.find(i => isAudio
-    ? i.type?.includes('audio') || i.ext === 'mp3'
-    : i.type?.includes('video') || i.ext === 'mp4'
-  );
-  if (!item?.url) throw new Error('savefrom: no url');
+  const items = res.data?.url || [];
+  const item = items.find(i => isAudio ? (i.type?.includes('audio') || i.ext === 'mp3') : (i.type?.includes('video') || i.ext === 'mp4'));
+  if (!item?.url) throw new Error('SaveFrom: No direct link');
   return await getBuffer(item.url);
 }
 
-// Method 5 — SnapAny
-async function snapany(url, isAudio) {
-  const res = await axios.post('https://snapany.com/api/convert', {
-    url, format: isAudio ? 'mp3' : 'mp4',
-  }, {
-    headers: { 'Content-Type': 'application/json' },
-    timeout: 20000,
-  });
-  const dlUrl = res.data?.data?.url || res.data?.url;
-  if (!dlUrl) throw new Error('snapany: no url');
-  return await getBuffer(dlUrl);
-}
-
-async function downloadMedia(url, isAudio = false) {
-  const methods = [
-    { name: 'cobalt.tools', fn: () => cobalt(url, isAudio)    },
-    { name: 'y2mate',       fn: () => y2mate(url, isAudio)    },
-    { name: 'yt5s',         fn: () => yt5s(url, isAudio)      },
-    { name: 'savefrom',     fn: () => savefrom(url, isAudio)  },
-    { name: 'snapany',      fn: () => snapany(url, isAudio)   },
+async function downloadMediaMaster(url, isAudio = false) {
+  const engines = [
+    { name: 'David-Cyril Primary Engine', fn: () => engineDavid(url, isAudio) },
+    { name: 'Guru-API Secondary Engine', fn: () => engineGuru(url, isAudio) },
+    { name: 'Widipe Mirror Engine',      fn: () => engineWidipe(url, isAudio) },
+    { name: 'Cobalt-Tools Direct Engine',fn: () => engineCobalt(url, isAudio) },
+    { name: 'Okatsu High-Speed Engine',  fn: () => engineOkatsu(url, isAudio) },
+    { name: 'Y2Mate Fallback Engine',     fn: () => engineY2Mate(url, isAudio) },
+    { name: 'SaveFrom Worker Engine',    fn: () => engineSaveFrom(url, isAudio) },
   ];
 
-  for (const m of methods) {
+  let lastError = '';
+  for (const eng of engines) {
     try {
-      console.log(`[YT] Trying: ${m.name}`);
-      const buf = await m.fn();
+      console.log(`[YT-DOWNLOAD] Attempting with ${eng.name}...`);
+      const buf = await eng.fn();
       if (buf && buf.length > 10000) {
-        console.log(`[YT] ✅ ${m.name} — ${(buf.length/1024/1024).toFixed(1)}MB`);
+        console.log(`[YT-DOWNLOAD] ✅ Success via ${eng.name} — Size: ${(buf.length / 1024 / 1024).toFixed(2)} MB`);
         return buf;
       }
-    } catch (e) {
-      console.warn(`[YT] ❌ ${m.name}: ${e.message}`);
+    } catch (err) {
+      console.warn(`[YT-DOWNLOAD] ❌ ${eng.name} failed: ${err.message}`);
+      lastError = err.message;
     }
   }
-  throw new Error('All download methods failed. Try a shorter video.');
+  throw new Error(`All 7 Download Servers were unable to fetch this video. Details: ${lastError}`);
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  HANDLERS
+//  HANDLERS & COMMAND LOGIC
 // ═══════════════════════════════════════════════════════════════════
 
 async function videoHandler({ sock, msg, from, args }) {
   try {
-    if (!args?.length) return msg.reply(
-      `❌ *Usage:* .video <YouTube URL or search query>\n\n` +
-      `*.video Despacito*\n*.video https://youtu.be/xxxxx*\n${SYSTEM.SHORT_WATERMARK}`
-    );
-    await msg.react('🎬');
-    const { info, url } = await searchYT(args.join(' '));
-    await msg.reply(
-      `╭━━━『 *YOUTUBE VIDEO* 』━━━╮\n` +
-      `🎬 *Title:*    ${info.title}\n` +
-      `👤 *Channel:*  ${info.author?.name || 'Unknown'}\n` +
-      `⏱️ *Duration:* ${info.timestamp || info.duration?.timestamp || 'N/A'}\n` +
-      `👁️ *Views:*    ${fmtNum(info.views)}\n` +
-      `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n` +
-      `⏳ *Downloading...*\n${SYSTEM.SHORT_WATERMARK}`
-    );
-    const buf = await downloadMedia(url, false);
-    if (buf.length > 100 * 1024 * 1024) {
-      return msg.reply(`⚠️ *File too large!* (${(buf.length/1024/1024).toFixed(0)}MB)\n💡 Try: *.audio ${url}*\n${SYSTEM.SHORT_WATERMARK}`);
+    if (!args || !args.length) {
+      return sock.sendMessage(from, {
+        text: `╭━━━『 ❌ *INVALID USAGE* 』━━━╮\n\n` +
+              `Please provide a YouTube video link or search term.\n\n` +
+              `📌 *Examples:*\n` +
+              `• .video Ertugrul Ghazi Episode 1\n` +
+              `• .ytv https://youtu.be/xxxxxx\n\n` +
+              `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM?.SHORT_WATERMARK || ''}`
+      }, { quoted: msg });
     }
+
+    const query = args.join(' ');
+    const { info, url } = await searchYT(query);
+
     await sock.sendMessage(from, {
-      video:    buf,
-      mimetype: 'video/mp4',
-      caption:  `🎬 *${info.title}*\n👤 ${info.author?.name || ''}\n${SYSTEM.SHORT_WATERMARK}`,
+      text: `╭━━━『 🎬 *YOUTUBE VIDEO DOWNLOADER* 』━━━╮\n\n` +
+            `🎬 *Title:*    ${info.title}\n` +
+            `👤 *Channel:*  ${info.author?.name || 'Unknown'}\n` +
+            `⏱️ *Duration:* ${info.timestamp || info.duration?.timestamp || 'N/A'}\n` +
+            `👁️ *Views:*    ${fmtNum(info.views)}\n` +
+            `📅 *Uploaded:* ${info.ago || 'N/A'}\n\n` +
+            `⏳ *Downloading Video via Ultra Servers... Please wait!*\n\n` +
+            `╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM?.SHORT_WATERMARK || ''}`
     }, { quoted: msg });
-    await msg.react('✅');
+
+    const buf = await downloadMediaMaster(url, false);
+
+    await sock.sendMessage(from, {
+      video: buf,
+      mimetype: 'video/mp4',
+      caption: `╭━━━『 🎬 *YOUTUBE VIDEO* 』━━━╮\n\n` +
+               `🎬 *Title:* ${info.title}\n` +
+               `👤 *Channel:* ${info.author?.name || 'Unknown'}\n\n` +
+               `👑 *Owner:* ${OWNER?.FULL_NAME || 'MR YOUSAF BALOCH'}\n` +
+               `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM?.SHORT_WATERMARK || ''}`,
+    }, { quoted: msg });
+
   } catch (e) {
-    console.error('[VIDEO]:', e.message);
-    await msg.react('❌');
-    await msg.reply(`❌ *Download failed!*\n_${e.message}_\n${SYSTEM.SHORT_WATERMARK}`);
+    console.error('[VIDEO COMMAND ERROR]:', e.message);
+    await sock.sendMessage(from, {
+      text: `❌ *Download Failed!*\n\n_Reason: ${e.message}_\n\n${SYSTEM?.SHORT_WATERMARK || ''}`
+    }, { quoted: msg });
   }
 }
 
 async function audioHandler({ sock, msg, from, args }) {
   try {
-    if (!args?.length) return msg.reply(
-      `❌ *Usage:* .audio <YouTube URL or song name>\n\n` +
-      `*.audio Despacito*\n${SYSTEM.SHORT_WATERMARK}`
-    );
-    await msg.react('🎵');
-    const { info, url } = await searchYT(args.join(' '));
-    await msg.reply(
-      `╭━━━『 *YOUTUBE MP3* 』━━━╮\n` +
-      `🎵 *Title:*    ${info.title}\n` +
-      `👤 *Artist:*   ${info.author?.name || 'Unknown'}\n` +
-      `⏱️ *Duration:* ${info.timestamp || info.duration?.timestamp || 'N/A'}\n` +
-      `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n` +
-      `⏳ *Downloading...*\n${SYSTEM.SHORT_WATERMARK}`
-    );
-    const buf = await downloadMedia(url, true);
+    if (!args || !args.length) {
+      return sock.sendMessage(from, {
+        text: `╭━━━『 ❌ *INVALID USAGE* 』━━━╮\n\n` +
+              `Please provide a song name or YouTube link.\n\n` +
+              `📌 *Examples:*\n` +
+              `• .audio Atif Aslam New Song\n` +
+              `• .ytmp3 https://youtu.be/xxxxxx\n\n` +
+              `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM?.SHORT_WATERMARK || ''}`
+      }, { quoted: msg });
+    }
+
+    const query = args.join(' ');
+    const { info, url } = await searchYT(query);
+
     await sock.sendMessage(from, {
-      audio:    buf,
-      mimetype: 'audio/mpeg',
-      ptt:      false,
+      text: `╭━━━『 🎵 *YOUTUBE AUDIO MP3* 』━━━╮\n\n` +
+            `🎵 *Title:*    ${info.title}\n` +
+            `👤 *Artist:*   ${info.author?.name || 'Unknown'}\n` +
+            `⏱️ *Duration:* ${info.timestamp || info.duration?.timestamp || 'N/A'}\n` +
+            `👁️ *Views:*    ${fmtNum(info.views)}\n\n` +
+            `⏳ *Converting & Downloading Audio... Please wait!*\n\n` +
+            `╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯\n${SYSTEM?.SHORT_WATERMARK || ''}`
     }, { quoted: msg });
-    await msg.react('✅');
+
+    const buf = await downloadMediaMaster(url, true);
+
+    await sock.sendMessage(from, {
+      audio: buf,
+      mimetype: 'audio/mpeg',
+      ptt: false,
+    }, { quoted: msg });
+
   } catch (e) {
-    console.error('[AUDIO]:', e.message);
-    await msg.react('❌');
-    await msg.reply(`❌ *Download failed!*\n_${e.message}_\n${SYSTEM.SHORT_WATERMARK}`);
+    console.error('[AUDIO COMMAND ERROR]:', e.message);
+    await sock.sendMessage(from, {
+      text: `❌ *Audio Download Failed!*\n\n_Reason: ${e.message}_\n\n${SYSTEM?.SHORT_WATERMARK || ''}`
+    }, { quoted: msg });
   }
 }
 
 async function playHandler({ sock, msg, from, args }) {
-  try {
-    if (!args?.length) return msg.reply(
-      `❌ *Usage:* .play <song name>\n*.play Atif Aslam*\n${SYSTEM.SHORT_WATERMARK}`
-    );
-    await msg.react('🎵');
-    const { info, url } = await searchYT(args.join(' '));
-    await msg.reply(
-      `╭━━━『 *PLAY MUSIC* 』━━━╮\n` +
-      `🎵 *Title:*    ${info.title}\n` +
-      `👤 *Artist:*   ${info.author?.name || 'Unknown'}\n` +
-      `⏱️ *Duration:* ${info.timestamp || info.duration?.timestamp || 'N/A'}\n` +
-      `👁️ *Views:*    ${fmtNum(info.views)}\n` +
-      `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n` +
-      `⏳ *Downloading...*\n${SYSTEM.SHORT_WATERMARK}`
-    );
-    const buf = await downloadMedia(url, true);
-    await sock.sendMessage(from, {
-      audio:    buf,
-      mimetype: 'audio/mpeg',
-      ptt:      false,
-    }, { quoted: msg });
-    await msg.react('✅');
-  } catch (e) {
-    console.error('[PLAY]:', e.message);
-    await msg.react('❌');
-    await msg.reply(`❌ *Download failed!*\n_${e.message}_\n${SYSTEM.SHORT_WATERMARK}`);
-  }
+  return audioHandler({ sock, msg, from, args });
 }
 
 async function songHandler({ sock, msg, from, args }) {
-  try {
-    if (!args?.length) return msg.reply(
-      `❌ *Usage:* .song <song name>\n*.song Atif Aslam*\n${SYSTEM.SHORT_WATERMARK}`
-    );
-    await msg.react('🎶');
-    const { info, url } = await searchYT(args.join(' ') + ' song');
-    await msg.reply(
-      `╭━━━『 *SONG DOWNLOAD* 』━━━╮\n` +
-      `🎶 *Title:*    ${info.title}\n` +
-      `👤 *Artist:*   ${info.author?.name || 'Unknown'}\n` +
-      `⏱️ *Duration:* ${info.timestamp || info.duration?.timestamp || 'N/A'}\n` +
-      `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n` +
-      `⏳ *Downloading...*\n${SYSTEM.SHORT_WATERMARK}`
-    );
-    const buf = await downloadMedia(url, true);
-    await sock.sendMessage(from, {
-      audio:    buf,
-      mimetype: 'audio/mpeg',
-      ptt:      false,
-    }, { quoted: msg });
-    await msg.react('✅');
-  } catch (e) {
-    console.error('[SONG]:', e.message);
-    await msg.react('❌');
-    await msg.reply(`❌ *Download failed!*\n_${e.message}_\n${SYSTEM.SHORT_WATERMARK}`);
-  }
+  if (args && args.length) args.push('song');
+  return audioHandler({ sock, msg, from, args });
 }
 
 async function bayanHandler({ sock, msg, from, args }) {
-  try {
-    if (!args?.length) return msg.reply(
-      `❌ *Usage:* .bayan <scholar/topic>\n*.bayan Maulana Tariq Jameel*\n${SYSTEM.SHORT_WATERMARK}`
-    );
-    await msg.react('🕌');
-    const { info, url } = await searchYT(args.join(' ') + ' bayan');
-    await msg.reply(
-      `╭━━━『 *ISLAMIC BAYAN* 』━━━╮\n` +
-      `🕌 *Title:*    ${info.title}\n` +
-      `👤 *Speaker:*  ${info.author?.name || 'Unknown'}\n` +
-      `⏱️ *Duration:* ${info.timestamp || info.duration?.timestamp || 'N/A'}\n` +
-      `╰━━━━━━━━━━━━━━━━━━━━━━━━╯\n` +
-      `⏳ *Downloading...*\n${SYSTEM.SHORT_WATERMARK}`
-    );
-    const buf = await downloadMedia(url, true);
-    await sock.sendMessage(from, {
-      audio:    buf,
-      mimetype: 'audio/mpeg',
-      ptt:      false,
-    }, { quoted: msg });
-    await msg.react('✅');
-  } catch (e) {
-    console.error('[BAYAN]:', e.message);
-    await msg.react('❌');
-    await msg.reply(`❌ *Download failed!*\n_${e.message}_\n${SYSTEM.SHORT_WATERMARK}`);
-  }
+  if (args && args.length) args.push('bayan');
+  return audioHandler({ sock, msg, from, args });
 }
 
+async function dramaHandler({ sock, msg, from, args }) {
+  if (args && args.length) args.push('drama episode');
+  return videoHandler({ sock, msg, from, args });
+}
+
+async function movieHandler({ sock, msg, from, args }) {
+  if (args && args.length) args.push('full movie');
+  return videoHandler({ sock, msg, from, args });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  EXPORT DISPATCHER
+// ═══════════════════════════════════════════════════════════════════
+
 export default [
-  { command: ['video','ytv','ytmp4'], name: 'video', category: 'Downloader', description: 'Download YouTube video', usage: '.video <url/query>', cooldown: 15, handler: videoHandler },
-  { command: ['audio','yta','ytmp3'], name: 'audio', category: 'Downloader', description: 'Download YouTube audio', usage: '.audio <url/query>', cooldown: 15, handler: audioHandler },
-  { command: ['play','music'],        name: 'play',  category: 'Downloader', description: 'Play music',            usage: '.play <song>',      cooldown: 15, handler: playHandler  },
-  { command: ['song'],                name: 'song',  category: 'Downloader', description: 'Download song',         usage: '.song <name>',      cooldown: 15, handler: songHandler  },
-  { command: ['bayan'],               name: 'bayan', category: 'Downloader', description: 'Islamic bayan',         usage: '.bayan <topic>',    cooldown: 15, handler: bayanHandler },
+  { command: 'video', handler: videoHandler },
+  { command: 'ytv',   handler: videoHandler },
+  { command: 'ytmp4', handler: videoHandler },
+  { command: 'drama', handler: dramaHandler },
+  { command: 'movie', handler: movieHandler },
+  { command: 'audio', handler: audioHandler },
+  { command: 'yta',   handler: audioHandler },
+  { command: 'ytmp3', handler: audioHandler },
+  { command: 'play',  handler: playHandler  },
+  { command: 'music', handler: playHandler  },
+  { command: 'song',  handler: songHandler  },
+  { command: 'bayan', handler: bayanHandler }
 ];
+

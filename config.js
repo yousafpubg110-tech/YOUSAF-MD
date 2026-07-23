@@ -61,7 +61,7 @@ export const DEPLOYER_ONLY_COMMANDS = Object.freeze([
   'block', 'unblock', 'ban', 'unban',
   'broadcast', 'bc', 'update',
   'setprefix', 'setmode', 'setname',
-  'join', 'leave',
+  'join', 'leave', 'cmdmode',
 ]);
 
 function loadSessionId() {
@@ -83,12 +83,13 @@ function envBool(key, defaultVal = false) {
 }
 
 export const CONFIG = {
-  SESSION_ID:       SESSION_ID,
-  PREFIX:           process.env.PREFIX     || '.',
-  MODE:             (process.env.MODE      || 'public').toLowerCase(),
-  APP_NAME:         process.env.APP_NAME   || OWNER.BOT_NAME,
-  TIMEZONE:         process.env.TIMEZONE   || 'Asia/Karachi',
-  LANGUAGE:         process.env.LANGUAGE   || 'en',
+  SESSION_ID:          SESSION_ID,
+  PREFIX:              process.env.PREFIX     || '.',
+  MODE:                (process.env.MODE      || 'public').toLowerCase(),
+  COMMAND_ACCESS_MODE: (process.env.COMMAND_ACCESS_MODE || 'all').toLowerCase(),
+  APP_NAME:            process.env.APP_NAME   || OWNER.BOT_NAME,
+  TIMEZONE:            process.env.TIMEZONE   || 'Asia/Karachi',
+  LANGUAGE:            process.env.LANGUAGE   || 'en',
 
   AUTO_READ:        envBool('AUTO_READ',        false),
   AUTO_STATUS:      envBool('AUTO_STATUS',       true),
@@ -223,31 +224,18 @@ export function isAdminLevel(sender, groupAdmins = []) {
   return groupAdmins.some(a => cleanNumber(a) === num);
 }
 
-// ═══════════════════════════════════════════════════════════════════
-//  PERMISSION CHECK
-//  Owner   — everything ✅
-//  Deployer — everything ✅ (same as owner)
-//  Admin   — group management only ✅
-//  User    — general commands only ✅
-// ═══════════════════════════════════════════════════════════════════
-
 export function canUseCommand(commandName, sender, groupAdmins = []) {
   const cmd = commandName?.toLowerCase();
   if (!cmd) return false;
 
-  // Deployer has FULL authority — same as Owner
   if (isDeployer(sender)) return true;
 
-  // Owner only — eval, exec, shell
   if (OWNER_ONLY_COMMANDS.includes(cmd)) return isOwner(sender);
 
-  // Deployer only commands — already handled above
   if (DEPLOYER_ONLY_COMMANDS.includes(cmd)) return isDeployer(sender);
 
-  // Admin commands — group admins can use
   if (ADMIN_COMMANDS.includes(cmd)) return isAdminLevel(sender, groupAdmins);
 
-  // Everyone else
   return true;
 }
 
@@ -303,3 +291,4 @@ export default {
   isOwnerOnlyCommand, isDeployerOnlyCommand, isAdminCommand,
   isRestrictedCommand, getPermLevel, validateConfig,
 };
+

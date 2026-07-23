@@ -6,7 +6,7 @@
 ┃        Created by MR YOUSAF BALOCH     ┃
 ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
 */
-import { OWNER, SYSTEM } from '../config.js';
+import { OWNER, SYSTEM, isOwner as checkOwner, isDeployer as checkDeployer } from '../config.js';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import fs from 'fs';
@@ -14,20 +14,36 @@ import path from 'path';
 
 const execAsync = promisify(exec);
 
+// Helper function to check owner or deployer permission
+function verifyOwnerPermission(sender, isOwnerFlag) {
+  if (isOwnerFlag) return true;
+  if (sender && (checkOwner(sender) || checkDeployer(sender))) return true;
+  return false;
+}
+
 // ─── BROADCAST Handler ────────────────────────────────────────────────────────
 async function broadcastHandler({sock, msg, from, args, sender, isOwner}) {
   try {
-    if (!isOwner) return msg.reply(`❌ *Only Owner can use this command!*\n${SYSTEM.SHORT_WATERMARK}`);
+    if (!verifyOwnerPermission(sender, isOwner)) {
+      return msg.reply(`❌ *Only Owner or Deployer can use this command!*\n${SYSTEM.SHORT_WATERMARK}`);
+    }
     
-    if (!args?.length) return msg.reply(`❌ *Please provide a message!*\n\n.broadcast Hello everyone!\n.bc Important announcement\n${SYSTEM.SHORT_WATERMARK}`);
+    if (!args?.length) {
+      return msg.reply(`❌ *Please provide a message!*\n\n.broadcast Hello everyone!\n.bc Important announcement\n${SYSTEM.SHORT_WATERMARK}`);
+    }
     
     await msg.react('📢');
     const message = args.join(' ');
     
     // Get all chats
     const chats = await sock.groupFetchAllParticipating();
-    const groupIds = Object.keys(chats);
+    const groupIds = Object.keys(chats || {});
     
+    if (!groupIds.length) {
+      await msg.react('⚠️');
+      return msg.reply(`⚠️ *No active groups found to broadcast.*\n${SYSTEM.SHORT_WATERMARK}`);
+    }
+
     await msg.reply(`⏳ *Broadcasting to ${groupIds.length} groups...*\n${SYSTEM.SHORT_WATERMARK}`);
     
     let sent = 0;
@@ -51,9 +67,11 @@ async function broadcastHandler({sock, msg, from, args, sender, isOwner}) {
 }
 
 // ─── BLOCK Handler ────────────────────────────────────────────────────────────
-async function blockHandler({sock, msg, from, args, isOwner}) {
+async function blockHandler({sock, msg, from, args, sender, isOwner}) {
   try {
-    if (!isOwner) return msg.reply(`❌ *Only Owner can use this command!*\n${SYSTEM.SHORT_WATERMARK}`);
+    if (!verifyOwnerPermission(sender, isOwner)) {
+      return msg.reply(`❌ *Only Owner or Deployer can use this command!*\n${SYSTEM.SHORT_WATERMARK}`);
+    }
     
     const target = msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || 
                    msg.message?.extendedTextMessage?.contextInfo?.participant;
@@ -82,9 +100,11 @@ async function blockHandler({sock, msg, from, args, isOwner}) {
 }
 
 // ─── UNBLOCK Handler ──────────────────────────────────────────────────────────
-async function unblockHandler({sock, msg, from, args, isOwner}) {
+async function unblockHandler({sock, msg, from, args, sender, isOwner}) {
   try {
-    if (!isOwner) return msg.reply(`❌ *Only Owner can use this command!*\n${SYSTEM.SHORT_WATERMARK}`);
+    if (!verifyOwnerPermission(sender, isOwner)) {
+      return msg.reply(`❌ *Only Owner or Deployer can use this command!*\n${SYSTEM.SHORT_WATERMARK}`);
+    }
     
     const target = msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || 
                    msg.message?.extendedTextMessage?.contextInfo?.participant;
@@ -113,15 +133,16 @@ async function unblockHandler({sock, msg, from, args, isOwner}) {
 }
 
 // ─── RESTART Handler ──────────────────────────────────────────────────────────
-async function restartHandler({msg, isOwner}) {
+async function restartHandler({msg, sender, isOwner}) {
   try {
-    if (!isOwner) return msg.reply(`❌ *Only Owner can use this command!*\n${SYSTEM.SHORT_WATERMARK}`);
+    if (!verifyOwnerPermission(sender, isOwner)) {
+      return msg.reply(`❌ *Only Owner or Deployer can use this command!*\n${SYSTEM.SHORT_WATERMARK}`);
+    }
     
     await msg.react('🔄');
     await msg.reply(`🔄 *Restarting bot...*\n\n⏳ Please wait a moment.\n👑 *By:* ${OWNER.FULL_NAME}\n${SYSTEM.SHORT_WATERMARK}`);
     
-    // Exit process to trigger restart (PM2 or other process manager will restart)
-    setTimeout(() => process.exit(0), 2000);
+    setTimeout(() => process.exit(0), 1500);
   } catch (error) {
     console.error('[RESTART ERROR]:', error.message);
     await msg.react('❌');
@@ -130,21 +151,27 @@ async function restartHandler({msg, isOwner}) {
 }
 
 // ─── EVAL Handler ─────────────────────────────────────────────────────────────
-async function evalHandler({sock, msg, from, args, isOwner}) {
+async function evalHandler({sock, msg, from, args, sender, isOwner}) {
   try {
-    if (!isOwner) return msg.reply(`❌ *Only Owner can use this command!*\n${SYSTEM.SHORT_WATERMARK}`);
+    if (!verifyOwnerPermission(sender, isOwner)) {
+      return msg.reply(`❌ *Only Owner or Deployer can use this command!*\n${SYSTEM.SHORT_WATERMARK}`);
+    }
     
-    if (!args?.length) return msg.reply(`❌ *Please provide JavaScript code!*\n\n.eval console.log('Hello')\n.eval 5 + 5\n${SYSTEM.SHORT_WATERMARK}`);
+    if (!args?.length) {
+      return msg.reply(`❌ *Please provide JavaScript code!*\n\n.eval console.log('Hello')\n.eval 5 + 5\n${SYSTEM.SHORT_WATERMARK}`);
+    }
     
     await msg.react('💻');
     const code = args.join(' ');
     
     let result;
     try {
-      // Create a safe context with common variables
-      const context = { sock, msg, from, console };
-      const fn = new Function(...Object.keys(context), 'return eval(' + JSON.stringify(code) + ')');
-      result = await fn(...Object.values(context));
+      const evalFunc = new Function('sock', 'msg', 'from', 'OWNER', 'SYSTEM', `
+        return (async () => {
+          ${code}
+        })();
+      `);
+      result = await evalFunc(sock, msg, from, OWNER, SYSTEM);
     } catch (err) {
       result = `Error: ${err.message}`;
     }
@@ -167,3 +194,4 @@ export default [
   {command:['restart'],        name:'restart',   category:'Owner',description:'Restart the bot',usage:'.restart',ownerOnly:true,cooldown:10,handler:restartHandler},
   {command:['eval'],           name:'eval',      category:'Owner',description:'Evaluate JavaScript code',usage:'.eval <code>',ownerOnly:true,cooldown:5,handler:evalHandler},
 ];
+
