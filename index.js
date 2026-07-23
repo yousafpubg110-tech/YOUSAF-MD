@@ -1,9 +1,9 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║         YOUSAF-BALOCH-MD — MAIN BOT ENGINE                      ║
- * ║         Created by: Muhammad Yousaf Baloch                      ║
- * ║         Platforms: Heroku, Railway, Render, Koyeb, VPS          ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║         YOUSAF-BALOCH-MD — MAIN BOT ENGINE                               ║
+ * ║         Created by: Muhammad Yousaf Baloch                               ║
+ * ║         Platforms: Heroku, Railway, Render, Koyeb, VPS                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
  */
 
 import {
@@ -50,37 +50,114 @@ const require   = createRequire(import.meta.url);
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 const question = (text) => new Promise((resolve) => rl.question(text, resolve));
 
-// ═══════════════════════════════════════════════════════════════════
-//  SESSION LOADER
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
+//  SESSION LOADER — ROBUST VALIDATION & ERROR HANDLING
+// ════════════════════════════════════════════════════════════════════════════
 
-const SESSION_ID = process.env.SESSION_ID || (() => {
-  const f = './session/SESSION_ID';
-  if (existsSync(f)) {
-    const val = readFileSync(f, 'utf8').trim();
-    if (val && val !== 'YOUR_SESSION_ID_HERE') return val;
+/**
+ * Validates if a string is a valid base64-encoded JSON session
+ * @param {string} encoded - The base64 string to validate
+ * @returns {boolean} - True if valid base64 and valid JSON, false otherwise
+ */
+function isValidBase64Json(encoded) {
+  try {
+    if (!encoded || typeof encoded !== 'string') return false;
+    // Check if it looks like base64 (rough check)
+    if (!/^[A-Za-z0-9+/=]+$/.test(encoded)) return false;
+    // Try to decode and parse as JSON
+    const decoded = Buffer.from(encoded, 'base64').toString('utf8');
+    JSON.parse(decoded);
+    return true;
+  } catch {
+    return false;
   }
-  return null;
-})();
+}
+
+/**
+ * Checks if a session ID is a placeholder (case-insensitive)
+ * @param {string} sessionId - The session ID to check
+ * @returns {boolean} - True if it's a placeholder like 'YOUR_SESSION_ID_HERE'
+ */
+function isPlaceholder(sessionId) {
+  if (!sessionId || typeof sessionId !== 'string') return true;
+  const lower = sessionId.toLowerCase().trim();
+  return (
+    lower === 'your_session_id_here' ||
+    lower.includes('your_session_id') ||
+    lower.includes('placeholder') ||
+    lower.includes('example') ||
+    lower === '' ||
+    lower === 'undefined' ||
+    lower === 'null'
+  );
+}
+
+/**
+ * Safely loads and validates SESSION_ID from environment or file
+ * @returns {string|null} - Valid SESSION_ID or null if not found/invalid
+ */
+function loadAndValidateSessionId() {
+  try {
+    // Try environment variable first
+    let sessionId = process.env.SESSION_ID || '';
+    
+    if (sessionId && !isPlaceholder(sessionId)) {
+      // Validate it's actually usable base64/JSON
+      if (isValidBase64Json(sessionId.replace('YOUSAF-MD_', ''))) {
+        console.log(chalk.green('[SESSION] ✅ Valid SESSION_ID loaded from environment'));
+        return sessionId;
+      }
+    }
+
+    // Try loading from file
+    const sessionFilePath = './session/SESSION_ID';
+    if (existsSync(sessionFilePath)) {
+      const fileContent = readFileSync(sessionFilePath, 'utf8').trim();
+      
+      if (fileContent && !isPlaceholder(fileContent)) {
+        // Validate the file content
+        if (isValidBase64Json(fileContent.replace('YOUSAF-MD_', ''))) {
+          console.log(chalk.green('[SESSION] ✅ Valid SESSION_ID loaded from file'));
+          return fileContent;
+        } else {
+          console.warn(chalk.yellow('[SESSION] ⚠️ SESSION_ID file exists but contains invalid base64/JSON. Falling back to QR/Pairing mode.'));
+        }
+      }
+    }
+
+    return null;
+  } catch (err) {
+    console.error(chalk.red('[SESSION] ❌ Error validating SESSION_ID:'), err.message);
+    return null;
+  }
+}
+
+const SESSION_ID = loadAndValidateSessionId();
 
 if (SESSION_ID) {
   try {
     const encoded = SESSION_ID.replace('YOUSAF-MD_', '');
     const decoded = Buffer.from(encoded, 'base64').toString('utf8');
+    
+    // Parse JSON to ensure it's valid
+    const credentialsJson = JSON.parse(decoded);
+    
     const sessDir = SYSTEM.SESSION_DIR || './session';
     if (!existsSync(sessDir)) mkdirSync(sessDir, { recursive: true });
-    writeFileSync(`${sessDir}/creds.json`, decoded);
-    console.log(chalk.green('[SESSION] ✅ Session loaded successfully!'));
+    
+    writeFileSync(`${sessDir}/creds.json`, JSON.stringify(credentialsJson, null, 2));
+    console.log(chalk.green('[SESSION] ✅ Session loaded successfully and validated!'));
   } catch (e) {
-    console.error(chalk.red('[SESSION] ❌ Failed:'), e.message);
+    console.error(chalk.red('[SESSION] ❌ Failed to decode/parse SESSION_ID:'), e.message);
+    console.log(chalk.yellow('[SESSION] Falling back to QR/Pairing mode without throwing error...'));
   }
 } else {
-  console.log(chalk.yellow('[SESSION] No SESSION_ID found. Starting pairing/QR mode...'));
+  console.log(chalk.yellow('[SESSION] No valid SESSION_ID found. Starting pairing/QR mode...'));
 }
 
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 //  EXPRESS — KEEP ALIVE
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -95,16 +172,16 @@ app.listen(PORT, () =>
   console.log(chalk.green(`✅ Express server running on port ${PORT}`))
 );
 
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 //  GLOBALS
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 
 const logger  = pino({ level: 'silent' });
 const plugins = new Map();
 
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 //  PLUGIN LOADER
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 
 async function loadPlugins() {
   const pluginsDir = join(__dirname, SYSTEM.PLUGINS_DIR);
@@ -183,9 +260,9 @@ async function loadPlugins() {
   ));
 }
 
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 //  MSG HELPERS
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 
 function attachMsgHelpers(sock, msg) {
   const from = msg.key.remoteJid;
@@ -203,9 +280,9 @@ function attachMsgHelpers(sock, msg) {
   };
 }
 
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 //  MESSAGE HANDLER
-// ═══════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════���══════════════════════════════
 
 async function handleMessage(sock, msg) {
   try {
@@ -331,9 +408,9 @@ async function handleMessage(sock, msg) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 //  CONNECTED NOTIFICATION
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 
 async function sendConnectedNotification(sock) {
   try {
@@ -363,9 +440,9 @@ async function sendConnectedNotification(sock) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 //  WHATSAPP CONNECTION (PAIRING CODE & QR DUAL SUPPORT)
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 
 async function connectToWhatsApp() {
   const { state, saveCreds }  = await useMultiFileAuthState(SYSTEM.SESSION_DIR);
@@ -464,9 +541,9 @@ async function connectToWhatsApp() {
   return sock;
 }
 
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 //  START
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 
 console.log(chalk.green('[STARTUP] Starting YOUSAF-BALOCH-MD...'));
 
@@ -490,4 +567,3 @@ connectToWhatsApp().catch(err => {
 });
 
 export default connectToWhatsApp;
-
