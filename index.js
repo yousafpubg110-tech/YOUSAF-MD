@@ -1,9 +1,9 @@
 /**
- * ╔═══════════════════════════════════════════════════════════════════════════╗
- * ║         YOUSAF-BALOCH-MD — MAIN BOT ENGINE                               ║
- * ║         Created by: Muhammad Yousaf Baloch                               ║
- * ║         Platforms: Heroku, Railway, Render, Koyeb, VPS                   ║
- * ╚═══════════════════════════════════════════════════════════════════════════╝
+ * ╔══════════════════════════════════════════════════════════════════╗
+ * ║         YOUSAF-BALOCH-MD — MAIN BOT ENGINE                      ║
+ * ║         Created by: Muhammad Yousaf Baloch                      ║
+ * ║         Platforms: Heroku, Railway, Render, Koyeb, VPS          ║
+ * ╚══════════════════════════════════════════════════════════════════╝
  */
 
 import {
@@ -50,114 +50,37 @@ const require   = createRequire(import.meta.url);
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 const question = (text) => new Promise((resolve) => rl.question(text, resolve));
 
-// ════════════════════════════════════════════════════════════════════════════
-//  SESSION LOADER — ROBUST VALIDATION & ERROR HANDLING
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
+//  SESSION LOADER
+// ═══════════════════════════════════════════════════════════════════
 
-/**
- * Validates if a string is a valid base64-encoded JSON session
- * @param {string} encoded - The base64 string to validate
- * @returns {boolean} - True if valid base64 and valid JSON, false otherwise
- */
-function isValidBase64Json(encoded) {
-  try {
-    if (!encoded || typeof encoded !== 'string') return false;
-    // Check if it looks like base64 (rough check)
-    if (!/^[A-Za-z0-9+/=]+$/.test(encoded)) return false;
-    // Try to decode and parse as JSON
-    const decoded = Buffer.from(encoded, 'base64').toString('utf8');
-    JSON.parse(decoded);
-    return true;
-  } catch {
-    return false;
+const SESSION_ID = process.env.SESSION_ID || (() => {
+  const f = './session/SESSION_ID';
+  if (existsSync(f)) {
+    const val = readFileSync(f, 'utf8').trim();
+    if (val && val !== 'YOUR_SESSION_ID_HERE') return val;
   }
-}
-
-/**
- * Checks if a session ID is a placeholder (case-insensitive)
- * @param {string} sessionId - The session ID to check
- * @returns {boolean} - True if it's a placeholder like 'YOUR_SESSION_ID_HERE'
- */
-function isPlaceholder(sessionId) {
-  if (!sessionId || typeof sessionId !== 'string') return true;
-  const lower = sessionId.toLowerCase().trim();
-  return (
-    lower === 'your_session_id_here' ||
-    lower.includes('your_session_id') ||
-    lower.includes('placeholder') ||
-    lower.includes('example') ||
-    lower === '' ||
-    lower === 'undefined' ||
-    lower === 'null'
-  );
-}
-
-/**
- * Safely loads and validates SESSION_ID from environment or file
- * @returns {string|null} - Valid SESSION_ID or null if not found/invalid
- */
-function loadAndValidateSessionId() {
-  try {
-    // Try environment variable first
-    let sessionId = process.env.SESSION_ID || '';
-    
-    if (sessionId && !isPlaceholder(sessionId)) {
-      // Validate it's actually usable base64/JSON
-      if (isValidBase64Json(sessionId.replace('YOUSAF-MD_', ''))) {
-        console.log(chalk.green('[SESSION] ✅ Valid SESSION_ID loaded from environment'));
-        return sessionId;
-      }
-    }
-
-    // Try loading from file
-    const sessionFilePath = './session/SESSION_ID';
-    if (existsSync(sessionFilePath)) {
-      const fileContent = readFileSync(sessionFilePath, 'utf8').trim();
-      
-      if (fileContent && !isPlaceholder(fileContent)) {
-        // Validate the file content
-        if (isValidBase64Json(fileContent.replace('YOUSAF-MD_', ''))) {
-          console.log(chalk.green('[SESSION] ✅ Valid SESSION_ID loaded from file'));
-          return fileContent;
-        } else {
-          console.warn(chalk.yellow('[SESSION] ⚠️ SESSION_ID file exists but contains invalid base64/JSON. Falling back to QR/Pairing mode.'));
-        }
-      }
-    }
-
-    return null;
-  } catch (err) {
-    console.error(chalk.red('[SESSION] ❌ Error validating SESSION_ID:'), err.message);
-    return null;
-  }
-}
-
-const SESSION_ID = loadAndValidateSessionId();
+  return null;
+})();
 
 if (SESSION_ID) {
   try {
     const encoded = SESSION_ID.replace('YOUSAF-MD_', '');
     const decoded = Buffer.from(encoded, 'base64').toString('utf8');
-    
-    // Parse JSON to ensure it's valid
-    const credentialsJson = JSON.parse(decoded);
-    
     const sessDir = SYSTEM.SESSION_DIR || './session';
     if (!existsSync(sessDir)) mkdirSync(sessDir, { recursive: true });
-    
-    writeFileSync(`${sessDir}/creds.json`, JSON.stringify(credentialsJson, null, 2));
-    console.log(chalk.green('[SESSION] ✅ Session loaded successfully and validated!'));
+    writeFileSync(`${sessDir}/creds.json`, decoded);
+    console.log(chalk.green('[SESSION] ✅ Session loaded successfully!'));
   } catch (e) {
-    console.error(chalk.red('[SESSION] ❌ Failed to decode/parse SESSION_ID:'), e.message);
-    console.log(chalk.yellow('[SESSION] Falling back to QR/Pairing mode without throwing error...'));
+    console.error(chalk.red('[SESSION] ❌ Failed:'), e.message);
   }
 } else {
-  console.log(chalk.yellow('[SESSION] No valid SESSION_ID found. Starting pairing/QR mode...'));
+  console.log(chalk.yellow('[SESSION] No SESSION_ID found. Starting pairing/QR mode...'));
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 //  EXPRESS — KEEP ALIVE
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -172,16 +95,16 @@ app.listen(PORT, () =>
   console.log(chalk.green(`✅ Express server running on port ${PORT}`))
 );
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 //  GLOBALS
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 
 const logger  = pino({ level: 'silent' });
 const plugins = new Map();
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 //  PLUGIN LOADER
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 
 async function loadPlugins() {
   const pluginsDir = join(__dirname, SYSTEM.PLUGINS_DIR);
@@ -260,9 +183,49 @@ async function loadPlugins() {
   ));
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 //  MSG HELPERS
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════════
+//  TEXT / CAPTION / QUOTED EXTRACTION
+//  FIX: commands sent as the CAPTION of an image/video/document (the
+//  normal WhatsApp-bot UX — e.g. sending a photo with ".ocr" as the
+//  caption) used to be silently dropped because only conversation/
+//  extendedTextMessage were read. Also attaches msg.quoted / msg.from
+//  for plugins that expect them.
+// ═══════════════════════════════════════════════════════════════════
+
+function extractText(message, msgType) {
+  switch (msgType) {
+    case 'conversation':        return message.conversation || '';
+    case 'extendedTextMessage': return message.extendedTextMessage?.text || '';
+    case 'imageMessage':        return message.imageMessage?.caption || '';
+    case 'videoMessage':        return message.videoMessage?.caption || '';
+    case 'documentMessage':     return message.documentMessage?.caption || '';
+    default:                    return '';
+  }
+}
+
+function extractQuoted(msg, msgType) {
+  try {
+    const contextInfo   = msg.message?.[msgType]?.contextInfo;
+    const quotedMessage = contextInfo?.quotedMessage;
+    if (!quotedMessage) return null;
+
+    const qType = Object.keys(quotedMessage)[0];
+    const media = quotedMessage[qType];
+
+    return {
+      id:       contextInfo.stanzaId,
+      sender:   contextInfo.participant,
+      mimetype: media?.mimetype || '',
+      message:  quotedMessage,
+    };
+  } catch (_) {
+    return null;
+  }
+}
 
 function attachMsgHelpers(sock, msg) {
   const from = msg.key.remoteJid;
@@ -280,9 +243,9 @@ function attachMsgHelpers(sock, msg) {
   };
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 //  MESSAGE HANDLER
-// ═════════════════════════════════════════════���══════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 
 async function handleMessage(sock, msg) {
   try {
@@ -316,12 +279,10 @@ async function handleMessage(sock, msg) {
     }
 
     const msgType = Object.keys(msg.message)[0];
-    let text = '';
-    if (msgType === 'conversation') {
-      text = msg.message.conversation || '';
-    } else if (msgType === 'extendedTextMessage') {
-      text = msg.message.extendedTextMessage?.text || '';
-    }
+    const text    = extractText(msg.message, msgType);
+
+    msg.from   = from;
+    msg.quoted = extractQuoted(msg, msgType);
 
     if (!text) return;
 
@@ -408,9 +369,9 @@ async function handleMessage(sock, msg) {
   }
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 //  CONNECTED NOTIFICATION
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 
 async function sendConnectedNotification(sock) {
   try {
@@ -440,9 +401,9 @@ async function sendConnectedNotification(sock) {
   }
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 //  WHATSAPP CONNECTION (PAIRING CODE & QR DUAL SUPPORT)
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 
 async function connectToWhatsApp() {
   const { state, saveCreds }  = await useMultiFileAuthState(SYSTEM.SESSION_DIR);
@@ -465,6 +426,9 @@ async function connectToWhatsApp() {
     markOnlineOnConnect:            true,
   });
 
+  let phoneNumber = null;
+  let pairingRequested = false;
+
   if (!sock.authState.creds.registered) {
     console.log(chalk.yellow('\n========================================'));
     console.log(chalk.cyan('   📱 CHOOSE CONNECTION METHOD:'));
@@ -472,24 +436,13 @@ async function connectToWhatsApp() {
     console.log(chalk.yellow('   2. QR Code (Check logs below if needed)'));
     console.log(chalk.yellow('========================================\n'));
 
-    let phoneNumber = process.env.PHONE_NUMBER;
-    if (!phoneNumber) {
-      phoneNumber = await question(chalk.green('👉 Enter your WhatsApp number with country code for Pairing Code (e.g., 923075134110): '));
+    let inputNumber = process.env.PHONE_NUMBER;
+    if (!inputNumber) {
+      inputNumber = await question(chalk.green('👉 Enter your WhatsApp number with country code for Pairing Code (e.g., 923075134110): '));
     }
-    
-    if (phoneNumber && phoneNumber.trim().length > 5) {
-      phoneNumber = phoneNumber.replace(/[^0-9]/g, '');
-      setTimeout(async () => {
-        try {
-          console.log(chalk.blue('[PAIRING] Requesting pairing code for:'), phoneNumber);
-          let code = await sock.requestPairingCode(phoneNumber);
-          code = code?.match(/.{1,4}/g)?.join('-') || code;
-          console.log(chalk.bgCyan.black(`\n 🔑 YOUR PAIRING CODE IS: ${code} \n`));
-          console.log(chalk.yellow('Go to WhatsApp > Linked Devices > Link with phone number instead, and enter this code.\n'));
-        } catch (err) {
-          console.error(chalk.red('[PAIRING ERROR]:'), err.message);
-        }
-      }, 4000);
+
+    if (inputNumber && inputNumber.trim().length > 5) {
+      phoneNumber = inputNumber.replace(/[^0-9]/g, '');
     } else {
       console.log(chalk.yellow('[INFO] No phone number entered. Falling back / Listening for QR Code scan...'));
     }
@@ -499,6 +452,29 @@ async function connectToWhatsApp() {
 
   sock.ev.on('connection.update', async (update) => {
     const { connection, lastDisconnect, qr } = update;
+
+    // FIX: request the pairing code once Baileys actually signals the
+    // socket is connecting (or a QR has been issued) — not after a
+    // blind fixed delay. A fixed setTimeout(4000) fails on slower or
+    // mobile networks (e.g. Termux) where the handshake takes longer,
+    // producing "Connection Closed" every time. Official Baileys docs
+    // recommend requesting inside connection.update, gated on
+    // connection === 'connecting' || !!qr. See:
+    // https://baileys.wiki/docs/socket/connecting/
+    if (phoneNumber && !pairingRequested && !sock.authState.creds.registered &&
+        (connection === 'connecting' || qr)) {
+      pairingRequested = true;
+      try {
+        console.log(chalk.blue('[PAIRING] Requesting pairing code for:'), phoneNumber);
+        let code = await sock.requestPairingCode(phoneNumber);
+        code = code?.match(/.{1,4}/g)?.join('-') || code;
+        console.log(chalk.bgCyan.black(`\n 🔑 YOUR PAIRING CODE IS: ${code} \n`));
+        console.log(chalk.yellow('Go to WhatsApp > Linked Devices > Link with phone number instead, and enter this code.\n'));
+      } catch (err) {
+        console.error(chalk.red('[PAIRING ERROR]:'), err.message);
+        pairingRequested = false; // allow a retry on the next connecting/qr event
+      }
+    }
 
     if (qr) {
       console.log(chalk.yellow('[CONNECTION] QR Code generated. Scan it from WhatsApp if not using Pairing Code.'));
@@ -541,9 +517,9 @@ async function connectToWhatsApp() {
   return sock;
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 //  START
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 
 console.log(chalk.green('[STARTUP] Starting YOUSAF-BALOCH-MD...'));
 
@@ -567,3 +543,4 @@ connectToWhatsApp().catch(err => {
 });
 
 export default connectToWhatsApp;
+

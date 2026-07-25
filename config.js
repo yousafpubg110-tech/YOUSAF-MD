@@ -12,11 +12,13 @@ import { join } from 'path';
 
 config();
 
+const OWNER_NUM = (process.env.OWNER_NUMBER || '923710636110').replace(/[^0-9]/g, '');
+
 export const OWNER = Object.freeze({
   NAME:           'Yousaf Baloch',
   FULL_NAME:      'Muhammad Yousaf Baloch',
-  NUMBER:         '923710636110',
-  JID:            '923710636110@s.whatsapp.net',
+  NUMBER:         OWNER_NUM,
+  JID:            `${OWNER_NUM}@s.whatsapp.net`,
   BOT_NAME:       'YOUSAF-MD',
   VERSION:        '2.0.0',
   YEAR:           '2026',
@@ -25,7 +27,7 @@ export const OWNER = Object.freeze({
   TIKTOK:         'https://tiktok.com/@loser_boy.110',
   CHANNEL:        'https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j',
   GITHUB:         'https://github.com/yousafpubg110-tech',
-  WHATSAPP:       'https://wa.me/923710636110',
+  WHATSAPP:       `https://wa.me/${OWNER_NUM}`,
   REPO:           'https://github.com/yousafpubg110-tech/YOUSAF-MD',
   REPO_BALOCH_MD: 'https://github.com/yousafpubg110-tech/YOUSAF-BALOCH-MD',
 });

@@ -66,11 +66,24 @@ function toggleConfig(key, val) {
   }
 }
 
+// SECURITY: these commands change bot-wide behavior (every chat, every
+// group), not just the current group — so group admins are NOT enough.
+// Only Owner/Deployer may use them. Several of these handlers had no
+// permission check at all, meaning any user could flip global bot
+// settings for everyone.
+function requireOwnerOrDeployer(ctx) {
+  return !!(ctx?.isOwner || ctx?.isDeployer);
+}
+function denyMsg(feature) {
+  return `❌ *Owner/Deployer Only!*\n\nOnly the bot owner or deployer can change *${feature}*.\n${SYSTEM?.SHORT_WATERMARK || ''}`;
+}
+
 // ─── COMMAND HANDLERS ──────────────────────────────────────────────
 
 // 1. autostatus
 async function autostatusHandler(ctx) {
   try {
+    if (!requireOwnerOrDeployer(ctx)) return await safeReply(ctx, denyMsg('Auto Status View'));
     const { args } = ctx;
     const s = args?.[0]?.toLowerCase();
     const current = CONFIG?.AUTO_STATUS ? 'ON ✅' : 'OFF ❌';
@@ -104,6 +117,7 @@ async function autostatusHandler(ctx) {
 // 2. autolike
 async function autolikeHandler(ctx) {
   try {
+    if (!requireOwnerOrDeployer(ctx)) return await safeReply(ctx, denyMsg('Auto Like Status'));
     const { args } = ctx;
     const s = args?.[0]?.toLowerCase();
     const current = CONFIG?.AUTO_LIKE_STATUS ? 'ON ✅' : 'OFF ❌';
@@ -136,6 +150,7 @@ async function autolikeHandler(ctx) {
 // 3. autoreact
 async function autoreactHandler(ctx) {
   try {
+    if (!requireOwnerOrDeployer(ctx)) return await safeReply(ctx, denyMsg('Auto React'));
     const { args } = ctx;
     const s = args?.[0]?.toLowerCase();
     const current = CONFIG?.AUTO_REACT ? 'ON ✅' : 'OFF ❌';
@@ -168,6 +183,7 @@ async function autoreactHandler(ctx) {
 // 4. autoread
 async function autoreadHandler(ctx) {
   try {
+    if (!requireOwnerOrDeployer(ctx)) return await safeReply(ctx, denyMsg('Auto Read'));
     const { args } = ctx;
     const s = args?.[0]?.toLowerCase();
     const current = CONFIG?.AUTO_READ ? 'ON ✅' : 'OFF ❌';
@@ -200,6 +216,7 @@ async function autoreadHandler(ctx) {
 // 5. autotyping
 async function autotypingHandler(ctx) {
   try {
+    if (!requireOwnerOrDeployer(ctx)) return await safeReply(ctx, denyMsg('Auto Typing'));
     const { args } = ctx;
     const s = args?.[0]?.toLowerCase();
     const current = CONFIG?.AUTO_TYPING ? 'ON ✅' : 'OFF ❌';
@@ -232,6 +249,7 @@ async function autotypingHandler(ctx) {
 // 6. autorecording
 async function autorecordingHandler(ctx) {
   try {
+    if (!requireOwnerOrDeployer(ctx)) return await safeReply(ctx, denyMsg('Auto Recording'));
     const { args } = ctx;
     const s = args?.[0]?.toLowerCase();
     const current = CONFIG?.AUTO_RECORDING ? 'ON ✅' : 'OFF ❌';
@@ -264,6 +282,7 @@ async function autorecordingHandler(ctx) {
 // 7. autoreply
 async function autoreplyHandler(ctx) {
   try {
+    if (!requireOwnerOrDeployer(ctx)) return await safeReply(ctx, denyMsg('Auto Reply'));
     const { args } = ctx;
     const s = args?.[0]?.toLowerCase();
     const current = CONFIG?.AUTO_REPLY ? 'ON ✅' : 'OFF ❌';
@@ -369,59 +388,18 @@ async function antivvHandler(ctx) {
 }
 
 // 10. antilink
-async function antilinkHandler(ctx) {
-  try {
-    const { args, isAdmin, isDeployer, isOwner } = ctx;
-    const watermark = SYSTEM?.SHORT_WATERMARK || '';
-
-    if (!isAdmin && !isDeployer && !isOwner) {
-      return await safeReply(ctx,
-        `❌ *Admins Only!*\n\n` +
-        `Only admins can toggle Anti-Link.\n` +
-        `${watermark}`
-      );
-    }
-
-    const s = args?.[0]?.toLowerCase();
-    const current = CONFIG?.ANTI_LINK ? 'ON ✅' : 'OFF ❌';
-
-    if (!['on', 'off'].includes(s)) {
-      return await safeReply(ctx,
-        `⚙️ *Anti Link*\n\n` +
-        `*.antilink on*  — Delete links in group\n` +
-        `*.antilink off* — Disable\n\n` +
-        `Current: *${current}*\n` +
-        `${watermark}`
-      );
-    }
-
-    const state = s === 'on';
-    toggleConfig('ANTI_LINK', state);
-
-    await safeReact(ctx, state ? '✅' : '❌');
-    await safeReply(ctx,
-      `${state ? '✅ Anti Link *enabled*' : '❌ Anti Link *disabled*'}\n` +
-      `${watermark}`
-    );
-  } catch (e) {
-    await safeReact(ctx, '❌');
-    await safeReply(ctx, `❌ _${e.message}_\n${SYSTEM?.SHORT_WATERMARK || ''}`);
-  }
-}
+// NOTE: .antilink lives in group_v3.js (per-group, persists across
+// restarts, wired into warn-and-kick). The version that used to live
+// here only flipped a bot-wide CONFIG flag nothing else read, and was
+// silently shadowed by group_v3.js anyway — removed to fix that
+// command-name collision.
 
 // 11. antibad
 async function antibadHandler(ctx) {
   try {
-    const { args, isAdmin, isDeployer, isOwner } = ctx;
+    if (!requireOwnerOrDeployer(ctx)) return await safeReply(ctx, denyMsg('Anti Bad Words'));
+    const { args } = ctx;
     const watermark = SYSTEM?.SHORT_WATERMARK || '';
-
-    if (!isAdmin && !isDeployer && !isOwner) {
-      return await safeReply(ctx,
-        `❌ *Admins Only!*\n\n` +
-        `Only admins can toggle Anti Bad Words.\n` +
-        `${watermark}`
-      );
-    }
 
     const s = args?.[0]?.toLowerCase();
     const current = CONFIG?.ANTI_BAD ? 'ON ✅' : 'OFF ❌';
@@ -453,6 +431,7 @@ async function antibadHandler(ctx) {
 // 12. anticall
 async function anticallHandler(ctx) {
   try {
+    if (!requireOwnerOrDeployer(ctx)) return await safeReply(ctx, denyMsg('Anti Call'));
     const { args } = ctx;
     const s = args?.[0]?.toLowerCase();
     const current = CONFIG?.ANTI_CALL ? 'ON ✅' : 'OFF ❌';
@@ -485,12 +464,9 @@ async function anticallHandler(ctx) {
 // 13. welcome
 async function welcomeHandler(ctx) {
   try {
-    const { args, isAdmin, isDeployer, isOwner } = ctx;
+    if (!requireOwnerOrDeployer(ctx)) return await safeReply(ctx, denyMsg('Welcome Message'));
+    const { args } = ctx;
     const watermark = SYSTEM?.SHORT_WATERMARK || '';
-
-    if (!isAdmin && !isDeployer && !isOwner) {
-      return await safeReply(ctx, `❌ *Admins Only!*\n${watermark}`);
-    }
 
     const s = args?.[0]?.toLowerCase();
     const current = CONFIG?.WELCOME ? 'ON ✅' : 'OFF ❌';
@@ -522,12 +498,9 @@ async function welcomeHandler(ctx) {
 // 14. goodbye
 async function goodbyeHandler(ctx) {
   try {
-    const { args, isAdmin, isDeployer, isOwner } = ctx;
+    if (!requireOwnerOrDeployer(ctx)) return await safeReply(ctx, denyMsg('Goodbye Message'));
+    const { args } = ctx;
     const watermark = SYSTEM?.SHORT_WATERMARK || '';
-
-    if (!isAdmin && !isDeployer && !isOwner) {
-      return await safeReply(ctx, `❌ *Admins Only!*\n${watermark}`);
-    }
 
     const s = args?.[0]?.toLowerCase();
     const current = CONFIG?.GOODBYE ? 'ON ✅' : 'OFF ❌';
@@ -638,10 +611,10 @@ export default [
   { command: 'antidelete',     alias: [],                 name: 'antidelete',    category: 'Settings', description: 'Anti delete messages',    usage: '.antidelete on/off',    cooldown: 3, handler: antideleteHandler    },
   { command: 'antivv',         alias: ['antiviewonce'],   name: 'antivv',        category: 'Settings', description: 'Anti view once',          usage: '.antivv on/off',        cooldown: 3, handler: antivvHandler        },
   { command: 'antiviewonce',   alias: [],                 name: 'antivv',        category: 'Settings', description: 'Anti view once',          usage: '.antiviewonce on/off',  cooldown: 3, handler: antivvHandler        },
-  { command: 'antilink',       alias: [],                 name: 'antilink',      category: 'Settings', description: 'Anti link in groups',     usage: '.antilink on/off',      cooldown: 3, handler: antilinkHandler      },
   { command: 'antibad',        alias: [],                 name: 'antibad',       category: 'Settings', description: 'Anti bad words',          usage: '.antibad on/off',       cooldown: 3, handler: antibadHandler       },
   { command: 'anticall',       alias: [],                 name: 'anticall',      category: 'Settings', description: 'Anti call reject',        usage: '.anticall on/off',      cooldown: 3, handler: anticallHandler      },
   { command: 'welcome',        alias: [],                 name: 'welcome',       category: 'Settings', description: 'Welcome new members',     usage: '.welcome on/off',       cooldown: 3, handler: welcomeHandler       },
   { command: 'goodbye',        alias: [],                 name: 'goodbye',       category: 'Settings', description: 'Goodbye leaving members', usage: '.goodbye on/off',       cooldown: 3, handler: goodbyeHandler       },
   { command: 'cmdmode',        alias: [],                 name: 'cmdmode',       category: 'Settings', description: 'Set command access mode', usage: '.cmdmode owner/admin/all', cooldown: 3, handler: cmdmodeHandler },
-  { command: 'settings',       alias: ['setting'],        name: 'settings',      category: 'Settings', description: 'Show all bot settings',   usage: '.settings',
+  { command: 'settings',       alias: ['setting'],        name: 'settings',      category: 'Settings', description: 'Show all bot settings',   usage: '.settings',             cooldown: 3, handler: settingsHandler      },
+];

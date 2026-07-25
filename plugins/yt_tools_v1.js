@@ -113,21 +113,6 @@ async function engineOkatsu(url, isAudio) {
   return await getBuffer(dl);
 }
 
-async function engineY2Mate(url, isAudio) {
-  const r1 = await axios.post('https://www.y2mate.com/mates/analyzeV2/ajax', {
-    k_query: url, k_page: 'home', hl: 'en', q_auto: 0,
-  }, { timeout: 20000 });
-  const vid = r1.data?.vid;
-  if (!vid) throw new Error('Y2Mate: No VID');
-  const key = r1.data?.links?.[isAudio ? 'mp3' : 'mp4']?.['128']?.k || r1.data?.links?.[isAudio ? 'mp3' : 'mp4']?.['720']?.k || '';
-  const r2 = await axios.post('https://www.y2mate.com/mates/convertV2/index', {
-    vid, ftype: isAudio ? 'mp3' : 'mp4', fquality: isAudio ? '128' : '720', token: '', timeExpire: '', k: key,
-  }, { timeout: 20000 });
-  const dl = r2.data?.dlink;
-  if (!dl) throw new Error('Y2Mate: No Download Link');
-  return await getBuffer(dl);
-}
-
 async function engineSaveFrom(url, isAudio) {
   const res = await axios.get(`https://worker.sf-tools.com/savefrom.php?sf_url=${encodeURIComponent(url)}`, {
     timeout: 25000,
@@ -146,7 +131,6 @@ async function downloadMediaMaster(url, isAudio = false) {
     { name: 'Widipe Mirror Engine',      fn: () => engineWidipe(url, isAudio) },
     { name: 'Cobalt-Tools Direct Engine',fn: () => engineCobalt(url, isAudio) },
     { name: 'Okatsu High-Speed Engine',  fn: () => engineOkatsu(url, isAudio) },
-    { name: 'Y2Mate Fallback Engine',     fn: () => engineY2Mate(url, isAudio) },
     { name: 'SaveFrom Worker Engine',    fn: () => engineSaveFrom(url, isAudio) },
   ];
 
@@ -164,7 +148,7 @@ async function downloadMediaMaster(url, isAudio = false) {
       lastError = err.message;
     }
   }
-  throw new Error(`All 7 Download Servers were unable to fetch this video. Details: ${lastError}`);
+  throw new Error(`All 6 Download Servers were unable to fetch this video. Details: ${lastError}`);
 }
 
 // ═══════════════════════════════════════════════════════════════════

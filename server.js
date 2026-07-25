@@ -6,18 +6,13 @@
 
 'use strict';
 
-import express from 'express';
-import http from 'http';
-import { Server } from 'socket.io';
-import rateLimit from 'express-rate-limit';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import config from './config.js';
-import { generatePairingCode } from './lib/SessionManager.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const express    = require('express');
+const http       = require('http');
+const { Server } = require('socket.io');
+const rateLimit  = require('express-rate-limit');
+const path       = require('path');
+const config     = require('./config');
+const { generatePairingCode } = require('./lib/SessionManager');
 
 const app = express();
 app.set('trust proxy', 1);
@@ -455,4 +450,4 @@ server.listen(PORT, () => {
   console.log('[SERVER] Pairing dashboard running at port: ' + PORT);
 });
 
-export { app, notifyConnected };
+module.exports = { app, notifyConnected };

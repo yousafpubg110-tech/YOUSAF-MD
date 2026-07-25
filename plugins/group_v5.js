@@ -8,17 +8,22 @@
 */
 import { OWNER, SYSTEM } from '../config.js';
 
-async function settingsHandler({sock,msg,from,args,isAdmin,isBotAdmin,isOwner}) {
+// NOTE: this used to be registered as '.settings open|close', which collided
+// with auto_v1.js's '.settings' (bot feature status dump) — whichever file
+// loaded last silently won. Renamed to dedicated '.groupopen'/'.groupclose'
+// commands, matching what config.js's ADMIN_COMMANDS list and the bot menu
+// already expected.
+async function groupModeHandler(action, {sock,msg,from,isAdmin,isBotAdmin,isOwner}) {
   try {
     if (!isAdmin&&!isOwner) return msg.reply(`❌ Only admins can change group settings!\n${SYSTEM.SHORT_WATERMARK}`);
     if (!isBotAdmin) return msg.reply(`❌ Bot must be admin to change settings!\n${SYSTEM.SHORT_WATERMARK}`);
-    if (!args?.length) return msg.reply(`❌ Please specify a setting!\n\n.settings open — All members can send\n.settings close — Only admins can send\n${SYSTEM.SHORT_WATERMARK}`);
-    await msg.react('⏳'); const action=args[0].toLowerCase();
+    await msg.react('⏳');
     if (action==='open') { await sock.groupSettingUpdate(from,'not_announcement'); await msg.reply(`✅ Group is now *OPEN!*\n\nAll members can send messages.\n${SYSTEM.SHORT_WATERMARK}`); await msg.react('✅'); }
-    else if (action==='close') { await sock.groupSettingUpdate(from,'announcement'); await msg.reply(`✅ Group is now *CLOSED!*\n\nOnly admins can send messages.\n${SYSTEM.SHORT_WATERMARK}`); await msg.react('✅'); }
-    else { await msg.react('❌'); await msg.reply(`❌ Invalid option! Use *open* or *close*\n${SYSTEM.SHORT_WATERMARK}`); }
-  } catch (e) { console.error('[SETTINGS]',e.message); try { await msg.react('❌'); await msg.reply(`❌ _${e.message}_`); } catch (_) {} }
+    else { await sock.groupSettingUpdate(from,'announcement'); await msg.reply(`✅ Group is now *CLOSED!*\n\nOnly admins can send messages.\n${SYSTEM.SHORT_WATERMARK}`); await msg.react('✅'); }
+  } catch (e) { console.error('[GROUPMODE]',e.message); try { await msg.react('❌'); await msg.reply(`❌ _${e.message}_`); } catch (_) {} }
 }
+async function groupOpenHandler(ctx)  { return groupModeHandler('open', ctx); }
+async function groupCloseHandler(ctx) { return groupModeHandler('close', ctx); }
 
 async function muteHandler({sock,msg,from,isAdmin,isBotAdmin,isOwner}) {
   try {
@@ -62,7 +67,8 @@ async function inviteHandler({sock,msg,from,isAdmin,isBotAdmin,isOwner}) {
 }
 
 export default [
-  {command:['settings'],name:'settings',category:'Group',description:'Open/close group',usage:'.settings open|close',groupOnly:true,cooldown:5,handler:settingsHandler},
+  {command:['groupopen'], name:'groupopen', category:'Group',description:'Open group — all members can send',usage:'.groupopen',groupOnly:true,cooldown:5,handler:groupOpenHandler},
+  {command:['groupclose'],name:'groupclose',category:'Group',description:'Close group — admins only can send',usage:'.groupclose',groupOnly:true,cooldown:5,handler:groupCloseHandler},
   {command:['mute'],   name:'mute',   category:'Group',description:'Mute group',usage:'.mute',groupOnly:true,cooldown:5,handler:muteHandler},
   {command:['unmute'], name:'unmute', category:'Group',description:'Unmute group',usage:'.unmute',groupOnly:true,cooldown:5,handler:unmuteHandler},
   {command:['leave'],  name:'leave',  category:'Group',description:'Bot leaves group (owner only)',usage:'.leave',groupOnly:true,cooldown:5,handler:leaveGroupHandler},
