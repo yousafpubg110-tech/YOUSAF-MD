@@ -1,133 +1,81 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:FFD700,20:FF6B35,40:FF009D,60:9B00FF,80:00F2FE,100:00CC44&height=220&section=header&text=⚡%20YOUSAF-MD%20v3.0%20⚡&fontSize=65&fontColor=ffffff&fontAlignY=38&desc=🔥%20Personal%20WhatsApp%20Bot%20🔥&descAlignY=60&descColor=FFD700&animation=fadeIn&stroke=ffffff&strokeWidth=2" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:FF0080,25:FFD700,50:00FFFF,75:FF00FF,100:00FF00&height=400&section=header&text=YOUSAF-MD&fontSize=65&animation=twinkling&fontColor=FFFFFF&fontAlignY=35&desc=PREMIUM%20MULTI-DEVICE%20WHATSAPP%20BOT%20🚀&descSize=22&descAlignY=55&descAlign=50" width="100%"/>
 
-<img src="assets/banner.jpg" width="100%" alt="YOUSAF-MD Banner"/>
+<img src="assets/banner.jpg" width="100%" style="border-top: 6px solid #FFD700; border-bottom: 6px solid #FF00FF; display: block;"/>
 
-</div>
+<br>
 
----
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0080,16:FFD700,33:FF6600,50:00FF00,66:00FFFF,83:FF00FF,100:9B00FF&height=10&section=header" width="100%"/>
 
-<div align="center">
+<br>
 
-[![](https://img.shields.io/badge/⚡_YOUSAF--MD-v3.0-4facfe?style=for-the-badge&labelColor=000000)](https://github.com/yousafpubg110-tech/YOUSAF-MD)
-[![](https://img.shields.io/github/stars/yousafpubg110-tech/YOUSAF-MD?label=⭐_STARS&style=for-the-badge&color=FFD700&labelColor=000000)](https://github.com/yousafpubg110-tech/YOUSAF-MD/stargazers)
-[![](https://img.shields.io/github/forks/yousafpubg110-tech/YOUSAF-MD?label=🍴_FORKS&style=for-the-badge&color=00f2fe&labelColor=000000)](https://github.com/yousafpubg110-tech/YOUSAF-MD/network/members)
-[![](https://img.shields.io/github/repo-size/yousafpubg110-tech/YOUSAF-MD?label=📦_SIZE&style=for-the-badge&color=a18cd1&labelColor=000000)](https://github.com/yousafpubg110-tech/YOUSAF-MD)
-[![](https://komarev.com/ghpvc/?username=YOUSAF-MD&label=👁_VIEWS&style=for-the-badge&color=ff00ff&labelColor=000000)](https://github.com/yousafpubg110-tech/YOUSAF-MD)
+<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=900&size=45&duration=800&pause=300&color=FFD700&background=00000000&center=true&vCenter=true&repeat=true&width=900&lines=⚡+YOUSAF-MD+⚡;🔥+YOUSAF+BALOCH+🔥;💎+YOUSAF-MD+v3.0+💎;✨+YOUSAF+BALOCH+✨" />
 
-</div>
+<br>
 
----
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0080,14:FF6600,28:FFD700,42:00FF00,57:00FFFF,71:0066FF,85:FF00FF,100:9B00FF&height=130&text=⚡%20YOUSAF-MD%20⚡&fontSize=52&fontColor=FFFFFF&animation=twinkling&fontAlign=50&fontAlignY=50" width="100%"/>
 
-<div align="center">
+<br>
 
-<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=900&size=22&duration=2500&pause=700&color=00F2FE&center=true&vCenter=true&width=700&lines=MADE+BY+MR+YOUSAF+BALOCH+%E2%80%94+PERSONAL+WHATSAPP+BOT;ONE+DAY+YOU+WILL+MISS+ME..." alt="typing"/>
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0080,16:FFD700,33:FF6600,50:00FF00,66:00FFFF,83:FF00FF,100:9B00FF&height=10&section=header" width="100%"/>
 
-</div>
+<br>
 
-<div align="center">
+<p align="center">
+  <a href="https://github.com/yousafpubg110-tech/YOUSAF-MD">
+    <img src="https://img.shields.io/github/stars/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&color=FFD700&labelColor=0000FF&logoColor=FFD700" alt="Stars"/>
+  </a>
+  <a href="https://github.com/yousafpubg110-tech/YOUSAF-MD/fork">
+    <img src="https://img.shields.io/github/forks/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&color=00FFFF&labelColor=0000FF&logoColor=00FFFF" alt="Forks"/>
+  </a>
+  <a href="https://github.com/yousafpubg110-tech/YOUSAF-MD/issues">
+    <img src="https://img.shields.io/github/issues/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&color=FF0000&labelColor=0000FF&logoColor=FF0000" alt="Issues"/>
+  </a>
+  <a href="https://github.com/yousafpubg110-tech/YOUSAF-MD">
+    <img src="https://img.shields.io/github/repo-size/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&color=FF00FF&labelColor=0000FF" alt="Repo Size"/>
+  </a>
+</p>
 
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:4facfe,100:a18cd1&height=3&section=header" width="100%"/>
+<br>
 
-</div>
+<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="500">
 
----
+<br>
 
-<div align="center">
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0080,16:FFD700,33:FF6600,50:00FF00,66:00FFFF,83:FF00FF,100:9B00FF&height=130&text=💎%20POWERED%20BY%20MR%20YOUSAF%20BALOCH%20💎&fontSize=32&fontColor=FFFFFF&animation=twinkling&fontAlign=50&fontAlignY=50" width="100%"/>
 
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FFD700,50:FF6B35,100:FF009D&height=50&text=💎+POWERED+BY+MR+YOUSAF+BALOCH+💎&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
+<br>
 
-<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=700&size=18&duration=2000&pause=600&color=FFD700&center=true&vCenter=true&width=500&lines=Muhammad+Yousaf+Baloch;Lead+Architect+—+YOUSAF-MD+Platform;Developer+%7C+Creator+%7C+Owner" alt="dev"/>
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
-<br/>
+<br>
 
-[![](https://img.shields.io/badge/📞_WHATSAPP-Contact_Now-25D366?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=000000)](https://wa.me/923710636110)
-[![](https://img.shields.io/badge/💻_GITHUB-@yousafpubg110--tech-181717?style=for-the-badge&logo=github&logoColor=white&labelColor=000000)](https://github.com/yousafpubg110-tech/YOUSAF-MD)
+## <img src="https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png" width="40"/> WELCOME TO YOUSAF-MD <img src="https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png" width="40"/>
 
-<br/>
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
-[![](https://img.shields.io/badge/📢_WHATSAPP_CHANNEL-Join_For_Updates-25D366?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=000000)](https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j)
-[![](https://img.shields.io/badge/🎵_TIKTOK-@loser__boy.110-FF0050?style=for-the-badge&logo=tiktok&logoColor=white&labelColor=000000)](https://tiktok.com/@loser_boy.110)
-[![](https://img.shields.io/badge/📺_YOUTUBE-@Yousaf__Baloch__Tech-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=000000)](https://www.youtube.com/@Yousaf_Baloch_Tech)
+<br>
 
-</div>
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0080,14:FF6600,28:FFD700,42:00FF00,57:00FFFF,71:0066FF,85:FF00FF,100:9B00FF&height=100&text=🌟%20Created%20By%20Muhammad%20Yousaf%20Baloch%20🌟&fontSize=30&fontColor=FFFFFF&animation=twinkling&fontAlign=50&fontAlignY=50" width="100%"/>
 
----
+<br>
 
-<div align="center">
+<p align="center">
+  <a href="https://github.com/yousafpubg110-tech">
+    <img src="https://komarev.com/ghpvc/?username=yousafpubg110-tech&label=PROFILE+VIEWS&color=blueviolet&style=for-the-badge" />
+  </a>
+  <a href="https://github.com/yousafpubg110-tech">
+    <img src="https://img.shields.io/github/followers/yousafpubg110-tech?label=FOLLOWERS&style=for-the-badge&logo=github&color=00FF00&logoColor=00FF00" />
+  </a>
+  <a href="https://github.com/yousafpubg110-tech/YOUSAF-MD/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/LICENSE-PROPRIETARY-brightgreen?style=for-the-badge" />
+  </a>
+</p>
 
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:4facfe,50:a18cd1,100:00f2fe&height=50&text=⚛️+BOT+FEATURES+⚛️&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
+<br>
 
-| 🎯 CATEGORY | ✨ FEATURES | 📊 STATUS |
-|:---:|:---|:---:|
-| ![](https://img.shields.io/badge/⬇️_DOWNLOADERS-FF6B35?style=flat-square&logoColor=white) | YouTube, TikTok No-WM, Facebook, Instagram, GDrive | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
-| ![](https://img.shields.io/badge/🎨_STICKER_MAKER-FF00FF?style=flat-square&logoColor=white) | Photo→Sticker, Video→Sticker, TTP, ATTP, Enhance | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
-| ![](https://img.shields.io/badge/👥_GROUP_TOOLS-FF9900?style=flat-square&logoColor=white) | TagAll, HideTag, Kick, Add, Promote, Demote, AntiLink | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
-| ![](https://img.shields.io/badge/🛡️_AUTO_FEATURES-FF0000?style=flat-square&logoColor=white) | Auto-Status View, Anti-Delete, Anti-Call, Auto-Like | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
-| ![](https://img.shields.io/badge/🔧_SEARCH_ENGINE-00BFFF?style=flat-square&logoColor=white) | Google, YouTube, Wikipedia, Weather, Calculator | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
-| ![](https://img.shields.io/badge/🎵_MUSIC_TOOLS-9B59B6?style=flat-square&logoColor=white) | Play, Song, Audio Download, TTS Voice | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
-| ![](https://img.shields.io/badge/🤖_AI_AUTO_REPLY-4facfe?style=flat-square&logoColor=white) | Roman Urdu / Urdu / English — Claude AI Powered | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
-| ![](https://img.shields.io/badge/🔒_GROUP_PROTECT-E74C3C?style=flat-square&logoColor=white) | Anti-Link, Anti-Spam, Bot Admin Control Panel | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
-| ![](https://img.shields.io/badge/⚙️_SETTINGS-2ECC71?style=flat-square&logoColor=white) | .settings .set — Full Admin Control Panel | ![](https://img.shields.io/badge/✅_ACTIVE-00cc44?style=flat-square) |
-
-<br/>
-
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=16&duration=1500&pause=300&color=FFD700&center=true&vCenter=true&width=600&lines=💎+100%2B+COMMANDS+AVAILABLE!+💎" alt="commands"/>
-
-</div>
-
----
-
-<div align="center">
-
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:6B00FF,50:FF009D,100:FF6B35&height=50&text=🚀+DEPLOY+ON+ANY+PLATFORM&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
-
-[![](https://img.shields.io/badge/━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━-000000?style=for-the-badge)](https://github.com/yousafpubg110-tech/YOUSAF-MD)
-
-> # ⚠️ IMPORTANT — READ BEFORE PAIRING ⚠️
-> ## 🚨 DEPLOY FIRST — PAIRING PAGE COMES AFTER DEPLOY 🚨
-> ### DO NOT LOOK FOR PAIRING BEFORE DEPLOYING — DEPLOY FIRST, THEN OPEN `YOUR-APP-URL/pair` TO GET YOUR CODE
-> **Deploy the bot first (no pairing needed at deploy time) — once it's live, visit `https://your-app-url/pair` in any browser to link your WhatsApp number.**
-
-<br/>
-
-### 🔗 PAIR YOUR WHATSAPP (AFTER DEPLOYING)
-
-[![](https://img.shields.io/badge/🔗_OPEN_PAIRING_PAGE-yourapp.com%2Fpair-25D366?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=000000)](#-deploy-steps-all-platforms)
-
-*(Replace `yourapp.com` above with your own deployed app's URL — e.g. `https://yousaf-md.onrender.com/pair`)*
-
-<br/>
-
-### ☁️ CLOUD PLATFORMS — ONE CLICK DEPLOY
-
-[![](https://img.shields.io/badge/🟣_HEROKU-DEPLOY_NOW-430098?style=for-the-badge&logo=heroku&logoColor=white&labelColor=000000)](https://dashboard.heroku.com/new-app?template=https://github.com/yousafpubg110-tech/YOUSAF-MD)
-[![](https://img.shields.io/badge/🔴_KOYEB-DEPLOY_NOW-FF009D?style=for-the-badge&logo=koyeb&logoColor=white&labelColor=000000)](https://app.koyeb.com/deploy?type=git&repository=yousafpubg110-tech%2FYOUSAF-MD&branch=main)
-[![](https://img.shields.io/badge/🔵_RAILWAY-DEPLOY_NOW-6B00FF?style=for-the-badge&logo=railway&logoColor=white&labelColor=000000)](https://railway.app/new/github/yousafpubg110-tech/YOUSAF-MD)
-[![](https://img.shields.io/badge/🟢_RENDER-DEPLOY_NOW-4CAF50?style=for-the-badge&logo=render&logoColor=white&labelColor=000000)](https://render.com/deploy?repo=https://github.com/yousafpubg110-tech/YOUSAF-MD)
-
-<br/>
-
-[![](https://img.shields.io/badge/🔶_REPLIT-DEPLOY_NOW-F26207?style=for-the-badge&logo=replit&logoColor=white&labelColor=000000)](https://replit.com/github/yousafpubg110-tech/YOUSAF-MD)
-[![](https://img.shields.io/badge/⬛_VERCEL-DEPLOY_NOW-ffffff?style=for-the-badge&logo=vercel&logoColor=black&labelColor=000000)](https://vercel.com/new/clone?repository-url=https://github.com/yousafpubg110-tech/YOUSAF-MD)
-[![](https://img.shields.io/badge/🟡_GLITCH-DEPLOY_NOW-3333FF?style=for-the-badge&logo=glitch&logoColor=white&labelColor=000000)](https://glitch.com/edit/#!/import/github/yousafpubg110-tech/YOUSAF-MD)
-[![](https://img.shields.io/badge/🔷_CYCLIC-DEPLOY_NOW-0078D4?style=for-the-badge&logoColor=white&labelColor=000000)](https://app.cyclic.sh/api/app/deploy/yousafpubg110-tech/YOUSAF-MD)
-
-<br/>
-
-### 🖥️ VPS / DEDICATED SERVER PLATFORMS
-
-[![](https://img.shields.io/badge/🟠_DIGITALOCEAN-OPEN-0080FF?style=for-the-badge&logo=digitalocean&logoColor=white&labelColor=000000)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/yousafpubg110-tech/YOUSAF-MD)
-[![](https://img.shields.io/badge/🟡_AWS-OPEN-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white&labelColor=000000)](https://aws.amazon.com/getting-started/hands-on/deploy-nodejs-web-app)
-[![](https://img.shields.io/badge/🔵_AZURE-OPEN-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white&labelColor=000000)](https://azure.microsoft.com/en-us/products/app-service)
-[![](https://img.shields.io/badge/🔵_GOOGLE_CLOUD-OPEN-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white&labelColor=000000)](https://cloud.google.com/run)
-[![](https://img.shields.io/badge/🔴_ORACLE_CLOUD-OPEN_(FREE)-F80000?style=for-the-badge&logo=oracle&logoColor=white&labelColor=000000)](https://www.oracle.com/cloud/free)
-[![](https://img.shields.io/badge/🟥_CONTABO_VPS-OPEN-FF0000?style=for-the-badge&logoColor=white&labelColor=000000)](https://contabo.com)
-
-<br/>
-
-[![](https://img.shields.io/badge/━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━-000000?style=for-the-badge)](https://github.com/yousafpubg110-tech/YOUSAF-MD)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 </div>
 
@@ -135,45 +83,87 @@
 
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:00CC44,50:00F2FE,100:4facfe&height=50&text=📋+DEPLOY+STEPS+(ALL+PLATFORMS)&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
+## <img src="https://user-images.githubusercontent.com/74038190/212257467-871d32b7-e401-42e8-a166-fcfd7baa4c6b.gif" width="45"/> BOT FEATURES <img src="https://user-images.githubusercontent.com/74038190/212257467-871d32b7-e401-42e8-a166-fcfd7baa4c6b.gif" width="45"/>
 
-| # | STEP | ACTION |
-|:---:|:---|:---|
-| 1️⃣ | **Fork Repository** | Click the Fork button on GitHub |
-| 2️⃣ | **Choose Platform** | Select any platform from the buttons above |
-| 3️⃣ | **Deploy Bot** | Deploy the bot — **WITHOUT pairing** |
-| 4️⃣ | **Open Pairing Page** | Once deployed, open `https://your-app-url/pair` in your browser |
-| 5️⃣ | **Enter Phone Number** | Enter your WhatsApp number on the pairing page |
-| 6️⃣ | **Get Pairing Code** | Code will appear on screen (XXXX-XXXX) |
-| 7️⃣ | **Link WhatsApp** | WhatsApp → Linked Devices → Link a Device → Link with phone number |
-| 8️⃣ | **Bot Auto-Starts** | Bot connects automatically and starts replying — no restart needed ✅ |
+<img src="https://user-images.githubusercontent.com/74038190/212284115-f47cd8ff-2ffb-4b04-b5bf-4d1c14c0247f.gif" width="100%">
 
-> 💡 **Note:** Your pairing page is always at `/pair` — for example, if your app URL is `https://yousaf-md.onrender.com`, your pairing page is `https://yousaf-md.onrender.com/pair`.
+<br>
 
-</div>
+<table align="center" style="border-collapse: separate; border-spacing: 0; border-radius: 15px; overflow: hidden;">
+  <thead>
+    <tr style="background: linear-gradient(90deg, #FF0080, #7928CA, #FF0080);">
+      <th style="padding: 15px; color: #FFD700; font-size: 18px;">🎯 CATEGORY</th>
+      <th style="padding: 15px; color: #00FF00; font-size: 18px;">✨ FEATURES</th>
+      <th style="padding: 15px; color: #00FFFF; font-size: 18px;">📊 STATUS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background: #1a1a2e;">
+      <td><img src="https://img.shields.io/badge/🤖_AI_TOOLS-FF6B6B?style=for-the-badge&logoColor=white"/></td>
+      <td><b>GPT, Llama, Mistral, Image Generation (Flux/DALL-E)</b></td>
+      <td><img src="https://img.shields.io/badge/✅_ACTIVE-00FF00?style=for-the-badge"/></td>
+    </tr>
+    <tr style="background: #16213e;">
+      <td><img src="https://img.shields.io/badge/📥_DOWNLOADERS-4ECDC4?style=for-the-badge&logoColor=white"/></td>
+      <td><b>YouTube, TikTok, Instagram, Facebook, Spotify, MediaFire</b></td>
+      <td><img src="https://img.shields.io/badge/✅_ACTIVE-00FFFF?style=for-the-badge"/></td>
+    </tr>
+    <tr style="background: #1a1a2e;">
+      <td><img src="https://img.shields.io/badge/🎨_STICKER_MAKER-FF00FF?style=for-the-badge&logoColor=white"/></td>
+      <td><b>Photo to Sticker, Video to Sticker, Steal Sticker</b></td>
+      <td><img src="https://img.shields.io/badge/✅_ACTIVE-FF00FF?style=for-the-badge"/></td>
+    </tr>
+    <tr style="background: #16213e;">
+      <td><img src="https://img.shields.io/badge/👥_GROUP_TOOLS-FFA500?style=for-the-badge&logoColor=white"/></td>
+      <td><b>TagAll, Kick, Add, Promote, Demote, AntiLink, Welcome</b></td>
+      <td><img src="https://img.shields.io/badge/✅_ACTIVE-FFA500?style=for-the-badge"/></td>
+    </tr>
+    <tr style="background: #1a1a2e;">
+      <td><img src="https://img.shields.io/badge/🔒_AUTO_FEATURES-FF0000?style=for-the-badge&logoColor=white"/></td>
+      <td><b>Auto View Status, Anti-Delete, Auto Reply, Auto Read</b></td>
+      <td><img src="https://img.shields.io/badge/✅_ACTIVE-FF0000?style=for-the-badge"/></td>
+    </tr>
+    <tr style="background: #16213e;">
+      <td><img src="https://img.shields.io/badge/🎮_FUN_&_GAMES-FFFF00?style=for-the-badge&logoColor=black"/></td>
+      <td><b>Jokes, Memes, Truth/Dare, Hangman, TicTacToe, Trivia</b></td>
+      <td><img src="https://img.shields.io/badge/✅_ACTIVE-FFFF00?style=for-the-badge"/></td>
+    </tr>
+    <tr style="background: #1a1a2e;">
+      <td><img src="https://img.shields.io/badge/🔍_SEARCH_ENGINE-06D6A0?style=for-the-badge&logoColor=white"/></td>
+      <td><b>Google Image, Wikipedia, Weather, IMDb, News</b></td>
+      <td><img src="https://img.shields.io/badge/✅_ACTIVE-06D6A0?style=for-the-badge"/></td>
+    </tr>
+    <tr style="background: #16213e;">
+      <td><img src="https://img.shields.io/badge/🎵_MUSIC_TOOLS-9D4EDD?style=for-the-badge&logoColor=white"/></td>
+      <td><b>Play, Song, Lyrics, TTS Voice, Spotify Search</b></td>
+      <td><img src="https://img.shields.io/badge/✅_ACTIVE-9D4EDD?style=for-the-badge"/></td>
+    </tr>
+    <tr style="background: #1a1a2e;">
+      <td><img src="https://img.shields.io/badge/🛡️_GROUP_PROTECT-DC143C?style=for-the-badge&logoColor=white"/></td>
+      <td><b>Anti-Badword, Anti-Spam, Anti-Tag, Warn System</b></td>
+      <td><img src="https://img.shields.io/badge/✅_ACTIVE-DC143C?style=for-the-badge"/></td>
+    </tr>
+    <tr style="background: #16213e;">
+      <td><img src="https://img.shields.io/badge/⚙️_SETTINGS-2ECC71?style=for-the-badge&logoColor=white"/></td>
+      <td><b>Full Admin Control Panel, Sudo System, Mode Toggle</b></td>
+      <td><img src="https://img.shields.io/badge/✅_ACTIVE-2ECC71?style=for-the-badge"/></td>
+    </tr>
+  </tbody>
+</table>
 
-<div align="center">
+<br>
 
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF6B35,50:FF009D,100:6B00FF&height=50&text=🖥️+VPS+%2F+LINUX+MANUAL+DEPLOY&fontSize=20&fontColor=ffffff&animation=fadeIn" width="100%"/>
+<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="500">
 
-| STEP | COMMAND |
-|:---:|:---|
-| ![](https://img.shields.io/badge/1-UPDATE-FF6B35?style=for-the-badge) | `sudo apt update && sudo apt upgrade -y` |
-| ![](https://img.shields.io/badge/2-NODE.JS-FF009D?style=for-the-badge) | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo -E bash - && sudo apt install -y nodejs ffmpeg git imagemagick` |
-| ![](https://img.shields.io/badge/3-CLONE-9B00FF?style=for-the-badge) | `git clone https://github.com/yousafpubg110-tech/YOUSAF-MD.git && cd YOUSAF-MD` |
-| ![](https://img.shields.io/badge/4-INSTALL-0080FF?style=for-the-badge) | `npm install` |
-| ![](https://img.shields.io/badge/5-START-00CC44?style=for-the-badge) | `npm start` — then open `http://localhost:5000/pair` → Enter phone → Get Pairing Code |
-| ![](https://img.shields.io/badge/6-PM2_24%2F7-FFD700?style=for-the-badge) | `npm i -g pm2 && pm2 start index.js --name YOUSAF-MD && pm2 save && pm2 startup` |
+<h2>
+  <img src="https://user-images.githubusercontent.com/74038190/212257454-16e3712e-945a-4ca2-b238-408ad0bf87e6.gif" width="35"/>
+  📈 260+ PREMIUM COMMANDS AVAILABLE! 📈
+  <img src="https://user-images.githubusercontent.com/74038190/212257454-16e3712e-945a-4ca2-b238-408ad0bf87e6.gif" width="35"/>
+</h2>
 
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:00F2FE,50:FFD700,100:00CC44&height=50&text=⚙️+GITHUB+WORKFLOW+AUTO+DEPLOY&fontSize=20&fontColor=000000&animation=fadeIn" width="100%"/>
+<br>
 
-| | WORKFLOW CONFIG |
-|:---:|:---|
-| ![](https://img.shields.io/badge/NODE-20.x-00F2FE?style=for-the-badge&logo=nodedotjs) | `node-version: [20.x]` |
-| ![](https://img.shields.io/badge/OS-Ubuntu_Latest-FFD700?style=for-the-badge&logo=ubuntu&logoColor=black) | `runs-on: ubuntu-latest` |
-| ![](https://img.shields.io/badge/DEPS-FFmpeg+ImageMagick-00CC44?style=for-the-badge) | `sudo apt-get install -y ffmpeg imagemagick` |
-| ![](https://img.shields.io/badge/INSTALL-npm_install-FF6B35?style=for-the-badge&logo=npm) | `npm install` |
-| ![](https://img.shields.io/badge/START-npm_start-FF009D?style=for-the-badge) | `npm start` |
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 </div>
 
@@ -181,37 +171,94 @@
 
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0050,50:FF009D,100:FFD700&height=50&text=📱+SOCIAL+MEDIA+LINKS&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
+## <img src="https://user-images.githubusercontent.com/74038190/229223263-cf2e4b07-2615-4f87-9c38-e37600f8381a.gif" width="50"/> DEVELOPER <img src="https://user-images.githubusercontent.com/74038190/229223263-cf2e4b07-2615-4f87-9c38-e37600f8381a.gif" width="50"/>
 
-<table>
+<br>
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0080,14:FF6600,28:FFD700,42:00FF00,57:00FFFF,71:0066FF,85:FF00FF,100:9B00FF&height=130&text=👑%20MUHAMMAD%20YOUSAF%20BALOCH%20👑&fontSize=40&fontColor=FFFFFF&animation=twinkling&fontAlign=50&fontAlignY=50" width="100%"/>
+
+<br>
+
+![Developer Name Animation](https://readme-typing-svg.demolab.com?font=Orbitron&size=28&duration=800&pause=300&color=FF0080&background=00000000&center=true&vCenter=true&repeat=true&width=900&lines=👨‍💻+MUHAMMAD+YOUSAF+BALOCH;🚀+PREMIUM+BOT+DEVELOPER;⚡+WHATSAPP+AUTOMATION+EXPERT;💎+YOUSAF-MD+CREATOR;🔥+PROFESSIONAL+CODER;🌈+MUHAMMAD+YOUSAF+BALOCH+🌈)
+
+<br><br>
+
+<table align="center">
+  <tr>
+    <td align="center" width="200">
+      <a href="https://wa.me/923710636110">
+        <img src="https://img.shields.io/badge/WHATSAPP-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" height="50" style="box-shadow: 0 0 20px #25D366;"/>
+      </a>
+      <br>
+      <sub><b>Contact: +92 371 0636110</b></sub>
+    </td>
+    <td align="center" width="200">
+      <a href="https://github.com/yousafpubg110-tech">
+        <img src="https://img.shields.io/badge/GITHUB-181717?style=for-the-badge&logo=github&logoColor=white" height="50" style="box-shadow: 0 0 20px #ffffff;"/>
+      </a>
+      <br>
+      <sub><b>@yousafpubg110-tech</b></sub>
+    </td>
+  </tr>
+</table>
+
+<br>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<br>
+
+## <img src="https://user-images.githubusercontent.com/74038190/235294015-47a9e1ff-d4e4-447c-9a3e-c179e3b7a917.gif" width="50"/> SOCIAL MEDIA LINKS <img src="https://user-images.githubusercontent.com/74038190/235294015-47a9e1ff-d4e4-447c-9a3e-c179e3b7a917.gif" width="50"/>
+
+<br>
+
+<table align="center">
   <tr>
     <td align="center">
       <a href="https://www.youtube.com/@Yousaf_Baloch_Tech">
-        <img src="https://img.shields.io/badge/📺_YOUTUBE-SUBSCRIBE_NOW-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=000000" alt="YouTube"/>
-        <br/><sub><b>Subscribe to YouTube Channel</b></sub>
-        <br/><sub>Video tutorials & bot updates!</sub>
+        <img src="https://img.shields.io/badge/YOUTUBE-FF0000?style=for-the-badge&logo=youtube&logoColor=white" height="60" style="box-shadow: 0 0 25px #FF0000;"/>
       </a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://tiktok.com/@loser_boy.110">
-        <img src="https://img.shields.io/badge/🎵_TIKTOK-FOLLOW_NOW-FF0050?style=for-the-badge&logo=tiktok&logoColor=white&labelColor=000000" alt="TikTok"/>
-        <br/><sub><b>Follow on TikTok</b></sub>
-        <br/><sub>Short tutorials & bot demos!</sub>
+      <br><br>
+      <img src="https://user-images.githubusercontent.com/74038190/235294010-ec412ef5-e3da-4efa-b1d4-0ab4d4638755.gif" width="100">
+      <br>
+      <sub><b>🎬 Subscribe to YouTube Channel</b></sub>
+      <br>
+      <p>Detailed video tutorials available on my official channel!</p>
+      <br>
+      <a href="https://www.youtube.com/@Yousaf_Baloch_Tech?sub_confirmation=1">
+        <img src="https://img.shields.io/badge/SUBSCRIBE_NOW-FF0000?style=for-the-badge&logo=youtube&logoColor=white" height="45"/>
       </a>
     </td>
   </tr>
   <tr>
     <td align="center">
       <a href="https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j">
-        <img src="https://img.shields.io/badge/📢_WHATSAPP_CHANNEL-JOIN_NOW-25D366?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=000000" alt="WhatsApp"/>
-        <br/><sub><b>Join WhatsApp Channel</b></sub>
-        <br/><sub>Latest updates & announcements!</sub>
+        <img src="https://img.shields.io/badge/WHATSAPP_CHANNEL-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" height="60" style="box-shadow: 0 0 25px #25D366;"/>
       </a>
+      <br><br>
+      <img src="https://user-images.githubusercontent.com/74038190/235294019-40007353-6219-4ec5-b661-b3c35136dd0b.gif" width="100">
+      <br>
+      <sub><b>📢 Join WhatsApp Channel</b></sub>
+      <br>
+      <p>Official updates and bot announcements!</p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://tiktok.com/@loser_boy.110">
+        <img src="https://img.shields.io/badge/TIKTOK-000000?style=for-the-badge&logo=tiktok&logoColor=white" height="60" style="box-shadow: 0 0 25px #ffffff;"/>
+      </a>
+      <br><br>
+      <img src="https://user-images.githubusercontent.com/74038190/235294013-a33e5c43-a01c-43f6-b44d-a406d8b4ab75.gif" width="100">
+      <br>
+      <sub><b>🎵 Follow on TikTok: @loser_boy.110</b></sub>
     </td>
   </tr>
 </table>
+
+<br>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 </div>
 
@@ -219,26 +266,245 @@
 
 <div align="center">
 
-<img src="https://i.imgur.com/dBaSKWF.gif" height="35" width="100%"/>
+## <img src="https://user-images.githubusercontent.com/74038190/212257468-1e9a91f1-b626-4baa-b15d-5c385dfa7ed2.gif" width="60"/> DEPLOY YOUR BOT <img src="https://user-images.githubusercontent.com/74038190/212257468-1e9a91f1-b626-4baa-b15d-5c385dfa7ed2.gif" width="60"/>
 
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0000,50:FF6B35,100:FFD700&height=50&text=⚠️+DISCLAIMER&fontSize=22&fontColor=ffffff&animation=fadeIn" width="100%"/>
+<img src="https://user-images.githubusercontent.com/74038190/212257465-7ce8d493-cac5-494e-982a-5a9deb852c4b.gif" width="150">
 
-<div style="background:#000000;border-left:6px solid #00F2FE;padding:16px 20px;border-radius:0 16px 16px 0;box-shadow:0 0 30px #00F2FE44;text-align:left;max-width:600px">
-<h3 style="color:#FFD700;font-family:Orbitron,sans-serif;margin:0 0 10px 0">⚠️ IMPORTANT NOTICE</h3>
-<p style="color:#cccccc;margin:0;line-height:1.6">YOUSAF-MD is an independent open-source project. It is <b>not affiliated</b> with WhatsApp Inc. or Meta Platforms in any way. Use responsibly — automation misuse may result in account restrictions or bans.</p>
+<br>
+
+> # ⭐ STEP 1 — STAR THIS REPO FIRST ⭐
+> ### Please click the ⭐ Star button at the top of this page BEFORE forking or deploying. It helps the project grow and keeps you updated on new releases!
+
+<p align="center">
+  <a href="https://github.com/yousafpubg110-tech/YOUSAF-MD/stargazers">
+    <img src="https://img.shields.io/badge/⭐_STAR_THIS_REPO_NOW-FFD700?style=for-the-badge&logo=github&logoColor=black" height="55"/>
+  </a>
+</p>
+
+<br>
+
+> # 🍴 STEP 2 — FORK THE REPO
+> ### Click Fork so you have your own copy under your GitHub account.
+
+<p align="center">
+  <a href="https://github.com/yousafpubg110-tech/YOUSAF-MD/fork">
+    <img src="https://img.shields.io/badge/🍴_FORK_THIS_REPO-FF00FF?style=for-the-badge&logo=github&logoColor=white" height="55"/>
+  </a>
+</p>
+
+<br>
+
+> # 🚀 STEP 3 — DEPLOY ON ANY PLATFORM BELOW
+> ### Deploy WITHOUT pairing — the pairing page appears automatically after deploy completes.
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://dashboard.heroku.com/new-app?template=https://github.com/yousafpubg110-tech/YOUSAF-MD">
+        <img src="https://img.shields.io/badge/DEPLOY_ON_HEROKU-430098?style=for-the-badge&logo=heroku&logoColor=white" height="55"/>
+      </a>
+      <br>
+      <img src="https://user-images.githubusercontent.com/74038190/235294016-6556559a-ed58-4ca6-a4c9-c307cbe0b6b7.gif" width="80">
+    </td>
+    <td align="center">
+      <a href="https://railway.app/new/github/yousafpubg110-tech/YOUSAF-MD">
+        <img src="https://img.shields.io/badge/DEPLOY_ON_RAILWAY-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" height="55"/>
+      </a>
+      <br>
+      <img src="https://user-images.githubusercontent.com/74038190/235294019-40007353-6219-4ec5-b661-b3c35136dd0b.gif" width="80">
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://app.koyeb.com/deploy?type=git&repository=yousafpubg110-tech%2FYOUSAF-MD&branch=main">
+        <img src="https://img.shields.io/badge/DEPLOY_ON_KOYEB-121FCF?style=for-the-badge&logo=koyeb&logoColor=white" height="55"/>
+      </a>
+      <br>
+      <img src="https://user-images.githubusercontent.com/74038190/235294012-0a55e343-37ad-4b0f-924f-c8431d9d2483.gif" width="80">
+    </td>
+    <td align="center">
+      <a href="https://render.com/deploy?repo=https://github.com/yousafpubg110-tech/YOUSAF-MD">
+        <img src="https://img.shields.io/badge/DEPLOY_ON_RENDER-46E3B7?style=for-the-badge&logo=render&logoColor=white" height="55"/>
+      </a>
+      <br>
+      <img src="https://user-images.githubusercontent.com/74038190/235294015-47a9e1ff-d4e4-447c-9a3e-c179e3b7a917.gif" width="80">
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://replit.com/github/yousafpubg110-tech/YOUSAF-MD">
+        <img src="https://img.shields.io/badge/DEPLOY_ON_REPLIT-F26207?style=for-the-badge&logo=replit&logoColor=white" height="55"/>
+      </a>
+      <br>
+      <img src="https://user-images.githubusercontent.com/74038190/235294011-b8074c31-9097-4a65-a594-4151b58743a8.gif" width="80">
+    </td>
+    <td align="center">
+      <a href="#-vps--linux-manual-deploy">
+        <img src="https://img.shields.io/badge/DEPLOY_ON_VPS-FF6600?style=for-the-badge&logo=linux&logoColor=white" height="55"/>
+      </a>
+      <br>
+      <img src="https://user-images.githubusercontent.com/74038190/235294013-a33e5c43-a01c-43f6-b44d-a406d8b4ab75.gif" width="80">
+    </td>
+  </tr>
+</table>
+
+<br>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<br>
+
+## <img src="https://user-images.githubusercontent.com/74038190/216122065-2f028bae-25d6-4a3c-bc9f-175394ed5011.png" width="50"/> GET YOUR PAIRING CODE <img src="https://user-images.githubusercontent.com/74038190/216122065-2f028bae-25d6-4a3c-bc9f-175394ed5011.png" width="50"/>
+
+<br>
+
+<img src="https://img.shields.io/badge/🔐_OPEN_%2Fpair_ON_YOUR_DEPLOYED_APP-00FF00?style=for-the-badge&logoColor=white" height="70" style="box-shadow: 0 0 40px #00FF00; border-radius: 15px;"/>
+
+<br><br>
+
+<img src="https://user-images.githubusercontent.com/74038190/212284087-bbe7e430-757e-4901-90bf-4cd2ce3e1852.gif" width="300">
+
+<br>
+
+### ⚡ QUICK STEPS TO GET YOUR PAIRING CODE:
+
+1️⃣ Wait for your deployment to finish (Heroku/Railway/Koyeb/Render/VPS)  
+2️⃣ Open `https://YOUR-APP-URL/pair` in any browser  
+3️⃣ Enter your WhatsApp number  
+4️⃣ Get the pairing code instantly on screen  
+5️⃣ WhatsApp → Linked Devices → Link with phone number  
+6️⃣ Enter the code — bot connects and starts automatically ✅
+
+> 💡 Example: if your app URL is `https://yousaf-md.onrender.com`, your pairing page is `https://yousaf-md.onrender.com/pair`
+
+<br>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
 </div>
 
-<br/>
+---
 
-<img src="https://i.imgur.com/dBaSKWF.gif" height="35" width="100%"/>
+<div align="center">
 
-[![](https://readme-typing-svg.demolab.com?font=Fira+Code&size=15&duration=2500&pause=800&color=58A6FF&center=true&vCenter=true&width=500&lines=Thanks+To+All+Contributors+🙏;Star+⭐+The+Repo+If+You+Like+It!;Fork+🍴+And+Share+With+Friends!)](https://github.com/yousafpubg110-tech/YOUSAF-MD/graphs/contributors)
+## <img src="https://user-images.githubusercontent.com/74038190/216122069-5b8169d7-1d8e-4a13-b245-a8e4176c99f8.png" width="50"/> GITHUB STATISTICS <img src="https://user-images.githubusercontent.com/74038190/216122069-5b8169d7-1d8e-4a13-b245-a8e4176c99f8.png" width="50"/>
 
-[![Stars](https://img.shields.io/github/stars/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&color=FFD700&labelColor=000000)](https://github.com/yousafpubg110-tech/YOUSAF-MD/stargazers)
-[![Forks](https://img.shields.io/github/forks/yousafpubg110-tech/YOUSAF-MD?style=for-the-badge&logo=github&color=00F2FE&labelColor=000000)](https://github.com/yousafpubg110-tech/YOUSAF-MD/network/members)
+<br>
 
-<br/>
+<img src="https://github-readme-stats.vercel.app/api?username=yousafpubg110-tech&show_icons=true&theme=radical&hide_border=true&title_color=00FF00&icon_color=FFD700&text_color=FFFFFF&bg_color=0d1117" width="49%" />
+<img src="https://github-readme-streak-stats.herokuapp.com/?user=yousafpubg110-tech&theme=radical&hide_border=true&stroke=00FF00&ring=FFD700&fire=FF0000&currStreakLabel=00FFFF&background=0d1117" width="49%" />
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00CC44,20:00F2FE,40:9B00FF,60:FF009D,80:FF6B35,100:FFD700&height=130&section=footer&text=⚡%20YOUSAF-MD%20v3.0%20⚡&fontSize=30&fontColor=ffffff&fontAlignY=65&animation=fadeIn&stroke=ffffff&strokeWidth=1" width="100%"/>
+<br>
+
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=yousafpubg110-tech&layout=compact&theme=radical&hide_border=true&title_color=FFD700&text_color=00FFFF&bg_color=0d1117" width="49%"/>
+<img src="https://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=yousafpubg110-tech&theme=radical&utcOffset=5" width="49%"/>
+
+<br>
+
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=yousafpubg110-tech&custom_title=Contribution%20Graph&bg_color=0d1117&color=00FF00&line=FFD700&point=FF0000&area_color=00FFFF&area=true&hide_border=true" width="100%"/>
 
 </div>
+
+---
+
+<div align="center">
+
+## <img src="https://user-images.githubusercontent.com/74038190/216120974-24a76b31-7f39-41f1-a38f-b3c1377cc612.png" width="50"/> WHY CHOOSE YOUSAF-MD? <img src="https://user-images.githubusercontent.com/74038190/216120974-24a76b31-7f39-41f1-a38f-b3c1377cc612.png" width="50"/>
+
+<br>
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0080,14:FF6600,28:FFD700,42:00FF00,57:00FFFF,71:0066FF,85:FF00FF,100:9B00FF&height=100&text=⭐%20Star%20YOUSAF-MD%20On%20GitHub%20⭐&fontSize=32&fontColor=FFFFFF&animation=twinkling&fontAlign=50&fontAlignY=50" width="100%"/>
+
+<br>
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://github.com/yousafpubg110-tech/YOUSAF-MD/fork">
+        <img src="https://img.shields.io/badge/FORK_NOW-FF00FF?style=for-the-badge&logo=github&logoColor=white" height="50"/>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/yousafpubg110-tech/YOUSAF-MD/stargazers">
+        <img src="https://img.shields.io/badge/GIVE_STAR-FFD700?style=for-the-badge&logo=github&logoColor=black" height="50"/>
+      </a>
+    </td>
+  </tr>
+</table>
+
+<h3>💝 Support This Project:</h3>
+<p>If you like this project, please give it a ⭐ star on GitHub!</p>
+
+<a href="https://github.com/yousafpubg110-tech/YOUSAF-MD">
+  <img src="https://img.shields.io/github/stars/yousafpubg110-tech/YOUSAF-MD?style=social" alt="GitHub stars"/>
+</a>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+</div>
+
+---
+
+<div align="center">
+
+## <img src="https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png" width="50"/> LICENSE & CREDITS <img src="https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png" width="50"/>
+
+<img src="https://img.shields.io/badge/LICENSE-PROPRIETARY-brightgreen?style=for-the-badge" height="40"/>
+
+<p>
+This project is licensed under a <b>Permanent Proprietary License</b><br>
+Free to deploy and use — original ownership and credit stay with Muhammad Yousaf Baloch, always.
+</p>
+
+<h3>👨‍💻 Special Credits:</h3>
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0080,14:FF6600,28:FFD700,42:00FF00,57:00FFFF,71:0066FF,85:FF00FF,100:9B00FF&height=100&text=🏆%20Lead%20Developer%3A%20Muhammad%20Yousaf%20Baloch%20🏆&fontSize=28&fontColor=FFFFFF&animation=twinkling&fontAlign=50&fontAlignY=50" width="100%"/>
+
+<br>
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://user-images.githubusercontent.com/74038190/235294011-b8074c31-9097-4a65-a594-4151b58743a8.gif" width="60">
+      <br><br>
+      <b>Muhammad Yousaf Baloch</b>
+      <br>
+      <sub>Lead Developer & Owner</sub>
+    </td>
+    <td align="center">
+      <img src="https://user-images.githubusercontent.com/74038190/235294012-0a55e343-37ad-4b0f-924f-c8431d9d2483.gif" width="60">
+      <br><br>
+      <b>All Contributors</b>
+      <br>
+      <sub>Community Support</sub>
+    </td>
+  </tr>
+</table>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=6,11,20&height=120&text=🕌%20بِسْمِ%20اللَّهِ%20الرَّحْمَٰنِ%20الرَّحِيمِ%20🕌&fontSize=35&fontColor=FFD700&fontAlign=50&fontAlignY=50" width="100%"/>
+
+<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="600">
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=1,2,3,4,5,6&height=120&text=✨%20ALLAH%20IS%20GREAT%20✨&fontSize=48&fontColor=FFFFFF&animation=twinkling&fontAlign=50&fontAlignY=50" width="100%"/>
+
+<br>
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:006400,50:008000,100:006400&height=120&text=💚%20I%20LOVE%20PROPHET%20MUHAMMAD%20(ﷺ)%20💚&fontSize=36&fontColor=FFFFFF&animation=twinkling&fontAlign=50&fontAlignY=50" width="100%"/>
+
+<br>
+
+<img src="https://user-images.githubusercontent.com/74038190/212284115-f47cd8ff-2ffb-4b04-b5bf-4d1c14c0247f.gif" width="100%">
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:FF0080,14:FF6600,28:FFD700,42:00FF00,57:00FFFF,71:0066FF,85:FF00FF,100:9B00FF&height=140&text=⚡%20POWERED%20BY%20MR%20YOUSAF%20BALOCH%20©%202026%20⚡&fontSize=36&fontColor=FFFFFF&animation=twinkling&fontAlign=50&fontAlignY=50" width="100%"/>
+
+<br>
+
+<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="500">
+
+<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=900&size=22&duration=800&pause=200&color=FF0080&background=00000000&center=true&vCenter=true&repeat=true&width=900&lines=🌟+Made+with+❤️+by+Muhammad+Yousaf+Baloch+🌟;⚡+YOUSAF-MD+⚡+Follow+for+more+amazing+projects!;💎+Muhammad+Yousaf+Baloch+💎+Full+Stack+Developer+Pakistan" />
+
+</div>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:FF0080,25:FFD700,50:00FFFF,75:FF00FF,100:00FF00&height=150&section=footer" width="100%"/>
