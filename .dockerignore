@@ -1,0 +1,12 @@
+node_modules
+.git
+.gitignore
+session
+temp
+tmp
+*.db
+*.db-wal
+*.db-shm
+.env
+.DS_Store
+README-OLD-BACKUP.md

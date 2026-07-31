@@ -1,10 +1,18 @@
-FROM quay.io/qasimtech/mega-md:latest
+FROM node:20-bullseye
 
-WORKDIR /root/mega-md
+RUN apt-get update && apt-get install -y \
+    ffmpeg imagemagick python3 python3-pip \
+    build-essential g++ git curl \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/GlobalTechInfo/MEGA-MD . && \
-    npm install
+WORKDIR /app
 
+COPY package.json package-lock.json* ./
+RUN npm install --legacy-peer-deps --omit=dev || npm install --legacy-peer-deps
+
+COPY . .
+
+EXPOSE 7860
 EXPOSE 5000
 
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
