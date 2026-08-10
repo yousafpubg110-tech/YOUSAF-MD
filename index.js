@@ -367,10 +367,13 @@ async function startYousafBot() {
             phoneNumberInput = phoneNumberInput.replace(/[^0-9]/g, '');
             const pn = PhoneNumber(`+${ phoneNumberInput}`);
             if (!pn.valid) {
-                printLog('error', 'Invalid phone number format');
-                if (rl && !rlClosed)
-                    rl.close();
-                process.exit(1);
+                // The local validation library's number-range database can be
+                // out of date (e.g. newer carrier prefixes it doesn't know
+                // about yet), even though WhatsApp itself accepts the number.
+                // So we only warn here and let WhatsApp's own servers be the
+                // final authority — if it's genuinely wrong, requestPairingCode
+                // below will fail with a clear WhatsApp-side error instead.
+                printLog('warning', `Number format looks unusual for a recognized region, but continuing — WhatsApp's own servers will validate it.`);
             }
             const doPairing = async (num, attempt = 1) => {
                 try {
