@@ -351,6 +351,7 @@ async function startYousafBot() {
             if (useMobile)
                 throw new Error('Cannot use pairing code with mobile api');
             let phoneNumberInput;
+            let skipAutoPairing = false;
             if (config.pairingNumber) {
                 phoneNumberInput = config.pairingNumber;
             }
@@ -362,7 +363,8 @@ async function startYousafBot() {
             }
             else {
                 phoneNumberInput = phoneNumber;
-                printLog('info', `Using default phone number: ${phoneNumberInput}`);
+                skipAutoPairing = true;
+                printLog('warning', 'No PAIRING_NUMBER configured on this platform — skipping automatic pairing. Visit /pair in your browser to pair manually.');
             }
             phoneNumberInput = phoneNumberInput.replace(/[^0-9]/g, '');
             const pn = PhoneNumber(`+${ phoneNumberInput}`);
@@ -400,7 +402,11 @@ async function startYousafBot() {
                     }
                 }
             };
-            setTimeout(() => doPairing(phoneNumberInput), 3000);
+            if (!skipAutoPairing) {
+                setTimeout(() => doPairing(phoneNumberInput), 3000);
+            } else {
+                printLog('info', 'Waiting for manual pairing via the /pair web page...');
+            }
         }
         else if (isRegistered) {
             if (rl && !rlClosed) {
