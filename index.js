@@ -16,6 +16,7 @@ import makeWASocket, { useMultiFileAuthState, DisconnectReason, fetchLatestBaile
 import NodeCache from 'node-cache';
 import pino from 'pino';
 import config from './config.js';
+if (!process.env.CHANNEL_JID) { process.env.CHANNEL_JID = config.channelJid; }
 import store from './lib/lightweight_store.js';
 import SaveCreds from './lib/session.js';
 import { server, PORT } from './lib/server.js';

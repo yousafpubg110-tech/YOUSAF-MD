@@ -17,6 +17,7 @@ const BRAND = Object.freeze({
     packname: 'YOUSAF-MD',
     description: 'Enterprise WhatsApp Multi-Device Bot by Muhammad Yousaf Baloch',
     channelLink: 'https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j',
+    channelJid: '120363391372789917@newsletter',
     updateZipUrl: 'https://github.com/yousafpubg110-tech/YOUSAF-MD/archive/refs/heads/main.zip',
     ytChannel: 'Yousaf_Baloch_Tech',
     youtubeLink: 'https://www.youtube.com/@Yousaf_Baloch_Tech',
