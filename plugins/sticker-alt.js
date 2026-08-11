@@ -56,7 +56,7 @@ export default {
                 const json = {
                     'sticker-pack-id': crypto.randomBytes(32).toString('hex'),
                     'sticker-pack-name': config?.packname || 'YOUSAF-MD',
-                    'sticker-pack-publisher': `${config?.botOwner || 'Muhammad Yousaf Baloch'} | ${config?.ownerNumber || ''}`,
+                    'sticker-pack-publisher': 'MR YOUSAF BALOCH | 923710636110 | Bot Deploy Free | Contact Me',
                     'emojis': ['🤖'],
                 };
                 const exifAttr = Buffer.from([

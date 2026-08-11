@@ -1,5 +1,15 @@
 import 'dotenv/config';
 
+// Bundle our own ffmpeg binary (ffmpeg-static) and put it first on PATH.
+// This means every plugin that calls spawn('ffmpeg', ...) or exec('ffmpeg ...')
+// automatically finds a working ffmpeg on ANY platform (Heroku, Render, Docker,
+// Termux, VPS) with zero changes needed in those 14+ individual plugin files.
+import ffmpegStaticPath from 'ffmpeg-static';
+import path from 'path';
+if (ffmpegStaticPath) {
+    process.env.PATH = `${path.dirname(ffmpegStaticPath)}${path.delimiter}${process.env.PATH}`;
+}
+
 import fs, { existsSync, mkdirSync, rmSync } from 'fs';
 import path, { dirname } from 'path';
 import chalk from 'chalk';

@@ -81,7 +81,7 @@ export default {
                 const json = {
                     'sticker-pack-id': crypto.randomBytes(32).toString('hex'),
                     'sticker-pack-name': 'YOUSAF-MD',
-                    'sticker-pack-publisher': userName,
+                    'sticker-pack-publisher': 'MR YOUSAF BALOCH | 923710636110 | Bot Deploy Free | Contact Me',
                     'emojis': ['🤩', '🎉'],
                 };
                 const exifAttr = Buffer.from([

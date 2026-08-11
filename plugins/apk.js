@@ -1,5 +1,4 @@
 import gplay from 'google-play-scraper';
-import apkpureScrape from 'apkpure-scraper';
 
 export default {
     command: 'apk',
@@ -21,8 +20,8 @@ export default {
             await sock.sendMessage(chatId, { react: { text: '🔎', key: message.key } });
 
             // Step 1: search Google Play for the app to get its real
-            // package id (e.g. "com.whatsapp") — this is far more
-            // reliable than guessing a name-based URL on a download site.
+            // package id (e.g. "com.whatsapp"). This uses google-play-scraper,
+            // which is reliable and confirmed working.
             const results = await gplay.search({ term: query, num: 1 });
             if (!results || !results.length) {
                 return sock.sendMessage(chatId, {
@@ -33,29 +32,26 @@ export default {
 
             await sock.sendMessage(chatId, { react: { text: '⬇️', key: message.key } });
 
-            // Step 2: fetch the actual APK download link for that package id.
-            const apk = await apkpureScrape(app.appId);
-            if (!apk || !apk.downloadLink) {
-                return sock.sendMessage(chatId, {
-                    text: `❌ Found "${app.title}" but couldn't get a download link right now. The source may be temporarily unavailable.`,
-                }, { quoted: message });
-            }
+            // Step 2: build the direct APKPure download link ourselves —
+            // this is APKPure's own public download-button URL pattern
+            // (https://d.apkpure.com/b/XAPK/<packageId>?version=latest),
+            // so no fragile third-party scraping library is needed at all.
+            const downloadLink = `https://d.apkpure.com/b/XAPK/${app.appId}?version=latest`;
 
             const caption =
                 `📱 *APK DOWNLOADER*\n\n` +
                 `▢ *App:* ${app.title}\n` +
                 `▢ *Developer:* ${app.developer || 'Unknown'}\n` +
-                `▢ *Version:* ${apk.version || 'Latest'}\n` +
                 `▢ *Package:* ${app.appId}\n\n` +
-                `⬇️ Sending the APK now...`;
+                `⬇️ Sending the file now...`;
 
             await sock.sendMessage(chatId, { text: caption }, { quoted: message });
 
             await sock.sendMessage(chatId, {
-                document: { url: apk.downloadLink },
-                fileName: `${app.title.replace(/[^a-zA-Z0-9 ]/g, '')}.apk`,
-                mimetype: 'application/vnd.android.package-archive',
-                caption: `✅ ${app.title} (${apk.version || 'Latest'})`,
+                document: { url: downloadLink },
+                fileName: `${app.title.replace(/[^a-zA-Z0-9 ]/g, '')}.xapk`,
+                mimetype: 'application/octet-stream',
+                caption: `✅ ${app.title}\n\n📦 This is an XAPK file. If your phone can't install it directly, use the free "APKPure" app (search it on Play Store) to install XAPK files, or ask me for a regular APK-only app instead.`,
             }, { quoted: message });
 
         } catch (err) {
