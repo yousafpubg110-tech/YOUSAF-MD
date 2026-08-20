@@ -1,0 +1,54 @@
+import { downloadMediaMessage } from '@whiskeysockets/baileys';
+import { channelInfo } from '../lib/messageConfig.js';
+// sharp is lazy-loaded inside the handler (see below) so that platforms
+// without its native binary (e.g. Termux/Android) don't crash the whole
+// bot on startup — only this one command becomes unavailable there.
+export default {
+    command: 'blur',
+    aliases: ['blurimg', 'blurpic'],
+    category: 'tools',
+    description: 'Apply a blur effect to an image',
+    usage: '.blur (reply to an image or send image with caption)',
+    async handler(sock, message, args, context) {
+        const chatId = context.chatId || message.key.remoteJid;
+        const quotedMessage = message.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        try {
+            let imageBuffer;
+            if (quotedMessage?.imageMessage) {
+                const quoted = { message: { imageMessage: quotedMessage.imageMessage } };
+                imageBuffer = await downloadMediaMessage(quoted, 'buffer', {});
+            }
+            else if (message.message?.imageMessage) {
+                imageBuffer = await downloadMediaMessage(message, 'buffer', {}, {});
+            }
+            else {
+                await sock.sendMessage(chatId, {
+                    text: 'Please reply to an image or send an image with caption `.blur`'
+                }, { quoted: message });
+                return;
+            }
+            const { default: sharp } = await import('sharp');
+            const resizedImage = await sharp(imageBuffer)
+                .resize(800, 800, {
+                fit: 'inside',
+                withoutEnlargement: true
+            })
+                .jpeg({ quality: 80 })
+                .toBuffer();
+            const blurredImage = await sharp(resizedImage)
+                .blur(10)
+                .toBuffer();
+            await sock.sendMessage(chatId, {
+                image: blurredImage,
+                caption: '✨ *Image Blurred Successfully!*',
+                ...channelInfo
+            }, { quoted: message });
+        }
+        catch (error) {
+            console.error('Error in blur command:', error);
+            await sock.sendMessage(chatId, {
+                text: '❌ Failed to blur image. Please try again later.'
+            }, { quoted: message });
+        }
+    }
+};
