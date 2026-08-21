@@ -4,7 +4,7 @@
  *                                                                           *
  *  🌐  GitHub   : https://github.com/MR YOUSAF BALOCH                         *
  *  ▶️  YouTube  : https://youtube.com/@MR YOUSAF BALOCH                       *
- *  💬  WhatsApp : https://whatsapp.com/channel/0029VagJIAr3bbVBCpEkAM07     *
+ *  💬  WhatsApp : https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j     *
  *                                                                           *
  *    © 2026 MR YOUSAF BALOCH. All rights reserved.                            *
  *                                                                           *
@@ -52,7 +52,7 @@ export default {
  *                                                                           *
  *  🌐  GitHub   : https://github.com/MR YOUSAF BALOCH                         *
  *  ▶️  YouTube  : https://youtube.com/@MR YOUSAF BALOCH                       *
- *  💬  WhatsApp : https://whatsapp.com/channel/0029VagJIAr3bbVBCpEkAM07     *
+ *  💬  WhatsApp : https://whatsapp.com/channel/0029Vb3Uzps6buMH2RvGef0j     *
  *                                                                           *
  *    © 2026 MR YOUSAF BALOCH. All rights reserved.                            *
  *                                                                           *
