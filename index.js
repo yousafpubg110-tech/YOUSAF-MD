@@ -304,7 +304,7 @@ async function startYousafBot() {
                                 forwardingScore: 1,
                                 isForwarded: true,
                                 forwardedNewsletterMessageInfo: {
-                                    newsletterJid: (process.env.CHANNEL_JID || 'YOUR_CHANNEL_JID_HERE@newsletter'),
+                                    newsletterJid: (process.env.CHANNEL_JID || '120363391372789917@newsletter'),
                                     newsletterName: 'YOUSAF-MD Official',
                                     serverMessageId: -1
                                 }
@@ -484,7 +484,7 @@ async function startYousafBot() {
                             forwardingScore: 1,
                             isForwarded: true,
                             forwardedNewsletterMessageInfo: {
-                                newsletterJid: (process.env.CHANNEL_JID || 'YOUR_CHANNEL_JID_HERE@newsletter'),
+                                newsletterJid: (process.env.CHANNEL_JID || '120363391372789917@newsletter'),
                                 newsletterName: 'YOUSAF-MD Official',
                                 serverMessageId: -1
                             }
