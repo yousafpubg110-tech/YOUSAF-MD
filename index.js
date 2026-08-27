@@ -27,7 +27,7 @@ import pino from 'pino';
 import config from './config.js';
 if (!process.env.CHANNEL_JID) { process.env.CHANNEL_JID = config.channelJid; }
 import store from './lib/lightweight_store.js';
-import SaveCreds from './lib/session.js';
+import SaveCreds, { backupCredsToGist, restoreCredsFromGist } from './lib/session.js';
 import { server, PORT } from './lib/server.js';
 import socketRegistry from './lib/socketRegistry.js';
 import { printLog } from './lib/print.js';
@@ -46,7 +46,7 @@ setInterval(() => {
     const used = process.memoryUsage().rss / 1024 / 1024;
     if (used > 400) {
         printLog('warning', 'RAM too high (>400MB), restarting bot...');
-        process.exit(1);
+        backupCredsToGist().finally(() => process.exit(1));
     }
 }, 30000);
 const phoneNumber = config.pairingNumber || config.ownerNumber || "923051391005";
@@ -161,6 +161,9 @@ function hasValidSession() {
 }
 async function initializeSession() {
     ensureSessionDirectory();
+    if (!hasValidSession()) {
+        await restoreCredsFromGist();
+    }
     const txt = config.sessionId;
     if (!txt) {
         if (hasValidSession()) {
@@ -269,6 +272,7 @@ async function startYousafBot() {
             return ghostMode && ghostMode.enabled;
         };
         YousafBot.ev.on('creds.update', _saveCreds);
+    YousafBot.ev.on('creds.update', backupCredsToGist);
         store.bind(YousafBot.ev);
         YousafBot.ev.on('messages.upsert', async (chatUpdate) => {
             try {
@@ -560,7 +564,7 @@ async function main() {
         printLog('error', `Fatal error: ${error.message}`);
         if (rl && !rlClosed)
             rl.close();
-        process.exit(1);
+        backupCredsToGist().finally(() => process.exit(1));
     });
 }
 main();
